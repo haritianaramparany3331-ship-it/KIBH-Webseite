@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/index.php/e-rechnung", "destination": "/e-rechnung/", "permanent": true },
+    { "source": "/index.php/ergebnisse", "destination": "/ergebnisse/", "permanent": true },
+    { "source": "/index.php/potenzial-analyse", "destination": "/ergebnisse/potenzial-analyse/", "permanent": true },
+    { "source": "/index.php/kommunikation", "destination": "/ergebnisse/kommunikation/", "permanent": true },
+    { "source": "/index.php/u2care", "destination": "/ergebnisse/u2care/", "permanent": true },
+    { "source": "/index.php/automatische-rechnungsprufung", "destination": "/ergebnisse/automatische-rechnungspruefung/", "permanent": true },
+    { "source": "/index.php/kontakt", "destination": "/kontakt/", "permanent": true },
+    { "source": "/index.php/Kontakt", "destination": "/kontakt/", "permanent": true },
+    { "source": "/index.php/impressum", "destination": "/impressum/", "permanent": true },
+    { "source": "/index.php/elementor-page-689", "destination": "/vertraulichkeit/", "permanent": true },
+    { "source": "/datenschutz", "destination": "/vertraulichkeit/", "permanent": true },
+    { "source": "/index.php", "destination": "/", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}
