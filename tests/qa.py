@@ -19,6 +19,7 @@ SHOTS = pathlib.Path(__file__).parent / "screenshots"
 PAGES = [
     "/",
     "/e-rechnung/",
+    "/deep-reading-engine/",
     "/ergebnisse/",
     "/ergebnisse/potenzial-analyse/",
     "/ergebnisse/kommunikation/",
@@ -32,6 +33,9 @@ PAGES = [
 VIEWPORTS = {
     "mobile": (390, 844),
     "tablet": (900, 1200),
+    # Just above the nav's drawer breakpoint. The old 900/1440 pair straddled
+    # this band, so a header that overflowed only between them went unseen.
+    "laptop": (1040, 900),
     "desktop": (1440, 1000),
 }
 

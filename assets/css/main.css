@@ -152,6 +152,12 @@ p {
   overflow-wrap: break-word;
 }
 
+/* Same break-word safety net as <p>. Without it a long German compound in a
+   testimonial or a bullet punches out of a narrow card at laptop widths. */
+blockquote, li, dd {
+  overflow-wrap: break-word;
+}
+
 ul, ol {
   margin: 0;
   padding: 0;
@@ -729,6 +735,13 @@ button {
   display: flex;
   gap: var(--sp-3);
   align-items: flex-start;
+  /* The label is an anonymous flex item, so it has no box to put min-width:0
+     on. Its min-content contribution is the longest word, which overflows a
+     narrow .pillar ("Unternehmensprozesse"). `anywhere` (not `break-word`) is
+     what shrinks that contribution, so the word wraps inside the card instead
+     of punching out of it. `hyphens: auto` was tried instead and rejected: it
+     hyphenated every line in the card and still failed on that word. */
+  overflow-wrap: anywhere;
 }
 .ticks li::before {
   content: "✓";
@@ -1005,6 +1018,56 @@ button {
 }
 .chip--ask::before { content: "?"; background: var(--c-accent-soft); color: var(--c-teal-dark); }
 
+/* --- Deep Reading Engine ------------------------------------------------ */
+
+/* The five-step pipeline reads as a sequence, so it gets one narrow column
+   rather than the full 1240px measure. */
+.pipeline {
+  max-width: 46rem;
+  margin-inline: auto;
+  padding: var(--sp-6);
+  background: var(--c-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Ausgangslage / Lösung / Ergebnis inside a use-case card */
+.facts { margin: 0; }
+.facts dt {
+  font-size: var(--fs-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-accent-dark);
+}
+.facts dd {
+  margin: var(--sp-1) 0 var(--sp-4);
+  font-size: var(--fs-small);
+  color: var(--c-text-muted);
+}
+.facts dd:last-of-type { margin-bottom: 0; }
+
+/* Homepage teaser. Runs on .section--dark, where the muted greys that .eyebrow
+   and .ticks use by default would drop below contrast. */
+.teaser h2 {
+  font-size: var(--fs-h2);
+  margin-top: var(--sp-3);
+}
+.teaser p {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-body-lg);
+}
+.teaser .ticks {
+  font-size: var(--fs-body);
+  gap: var(--sp-4);
+}
+
+.section--dark p { color: rgba(255, 255, 255, 0.78); }
+.section--dark .eyebrow { color: var(--c-accent); }
+.section--dark .ticks { color: rgba(255, 255, 255, 0.78); }
+.section--dark .ticks li::before { color: var(--c-accent); }
+
 /* --- Booking placeholder ------------------------------------------------ */
 
 .booking {
@@ -1158,8 +1221,11 @@ button {
   }
 }
 
-@media (max-width: 900px) {
-  /* Collapse to the mobile drawer before the nav can crowd the logo */
+@media (max-width: 1024px) {
+  /* Collapse to the mobile drawer before the nav can crowd the logo. Raised
+     from 900px when "Deep Reading Engine" became the fifth nav item: at five
+     items the row pushed the CTA button off-screen up to ~1023px. 1024px is
+     also the design system's own tablet breakpoint. */
   .nav-toggle { display: flex; }
 
   .nav {
