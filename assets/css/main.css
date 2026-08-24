@@ -45,7 +45,11 @@
   --fs-h2: 2.375rem;       /* 38 */
   --fs-h1: 3rem;           /* 48 */
   --fs-display: 3.25rem;   /* 52 */
-  --fs-hero: 4rem;         /* 64 */
+  /* Fluid between the tablet size and 64px. Fixed at 64px, "maßgeschneiderte"
+     did not fit the hero's 1.1fr column between 1025px and ~1097px and got
+     chopped mid-word. Lower bound matches the <=1024px value so there is no
+     jump at that breakpoint. */
+  --fs-hero: clamp(3.25rem, 5.4vw, 4rem);
   --fs-numeral: 10.625rem; /* 170 */
 
   /* Spacing */
@@ -147,6 +151,29 @@ h1, h2, h3, h4, h5, h6 {
   hyphens: manual;
 }
 
+/*
+  Card titles are the exception. They sit in columns ~250px wide, where single
+  German compounds ("Digitalisierungsbeauftragter", "Automatisierungskompetenz")
+  are simply wider than the box. Hyphenation is the normal German answer at
+  this size and beats break-word chopping the word with no hyphen at all. It
+  stays off for display headings, where it broke "maß-geschneiderte".
+*/
+.card h3,
+.case h3,
+.tier h3 {
+  hyphens: auto;
+  /*
+    Unconstrained, `auto` hyphenates whenever it packs a line better, not only
+    when a word will not fit -- it split "Human-in-the-Loop" into "Hu-man".
+    Require a long word and a substantial fragment on each side, so only the
+    compounds that genuinely overflow get broken.
+  */
+  -webkit-hyphenate-limit-before: 5;
+  -webkit-hyphenate-limit-after: 4;
+  -webkit-hyphenate-limit-lines: 2;
+  hyphenate-limit-chars: 10 5 4;
+}
+
 p {
   margin: 0;
   overflow-wrap: break-word;
@@ -156,6 +183,14 @@ p {
    testimonial or a bullet punches out of a narrow card at laptop widths. */
 blockquote, li, dd {
   overflow-wrap: break-word;
+}
+
+/* The UA gives blockquote `margin: 1em 40px`. Nothing here wants that: both
+   quote treatments carry their own padding and left border, and the 40px was
+   silently squeezing testimonials into a column too narrow for German
+   compounds. */
+blockquote {
+  margin: 0;
 }
 
 ul, ol {
@@ -624,6 +659,16 @@ button {
   .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+/* Four across, or two — never three. Left to auto-fit, the four "Warum wir?"
+   pillars land 3+1 with an orphan, and the three-column tracks are too narrow
+   for "Unternehmensprozesse" to fit on a line. */
+@media (min-width: 560px) and (max-width: 1099px) {
+  .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1100px) {
+  .grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -654,19 +699,6 @@ button {
 
 /* push the trailing link to the bottom so cards align regardless of copy length */
 .card__foot { margin-top: auto; padding-top: var(--sp-3); }
-
-.card__icon {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: var(--c-accent-soft);
-  color: var(--c-accent-dark);
-  font-size: var(--fs-lead);
-  font-weight: 600;
-  flex-shrink: 0;
-}
 
 /* Testimonial / case-study card */
 .case {
@@ -715,7 +747,9 @@ button {
   display: flex;
   flex-direction: column;
   gap: var(--sp-3);
-  padding: var(--sp-6);
+  /* Tighter than the other cards on purpose: these sit four-across, and at
+     32px the column got too narrow for "Unternehmensprozesse" to fit. */
+  padding: var(--sp-5);
   height: 100%;
   background: var(--c-white);
   border: 1px solid var(--c-border);

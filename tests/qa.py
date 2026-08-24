@@ -32,6 +32,9 @@ PAGES = [
 
 VIEWPORTS = {
     "mobile": (390, 844),
+    # 768 is one pixel above the <=767px type scale, so it renders desktop-sized
+    # text in a narrow column -- the worst case for German compounds.
+    "tablet-sm": (768, 1024),
     "tablet": (900, 1200),
     # Just above the nav's drawer breakpoint. The old 900/1440 pair straddled
     # this band, so a header that overflowed only between them went unseen.
@@ -106,6 +109,51 @@ def audit_overflow(page):
     )
 
 
+def audit_wordfit(page):
+    """Report text whose longest unbreakable unit is wider than its own box.
+
+    overflow-wrap keeps such text inside the box, so the element-level overflow
+    check above stays silent -- but the browser has to chop the word with no
+    hyphen, which reads as broken. German compounds in narrow card columns hit
+    this constantly. Elements that opt into `hyphens: auto` are excluded: there
+    the browser breaks at a real hyphenation point, which is correct.
+    """
+    return page.evaluate(
+        """() => {
+        const cx = document.createElement('canvas').getContext('2d');
+        const out = [];
+        for (const el of document.querySelectorAll(
+                'h1,h2,h3,h4,h5,h6,p,li,dd,dt,blockquote,strong')) {
+            if (el.classList.contains('visually-hidden')) continue;
+            const own = [...el.childNodes].filter(n => n.nodeType === 3)
+                                          .map(n => n.textContent).join(' ').trim();
+            if (!own) continue;
+            const cs = getComputedStyle(el);
+            if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+            if (cs.hyphens === 'auto') continue;
+            cx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+            // A hyphen or slash is already a break opportunity, so the
+            // unbreakable unit is the segment between them.
+            const units = own.split(/[\\s\\u00a0]+/)
+                             .flatMap(w => w.split(/(?<=[-\\u2013\\/])/));
+            let worst = '', ww = 0;
+            for (const u of units) {
+                const m = cx.measureText(u).width;
+                if (m > ww) { ww = m; worst = u; }
+            }
+            const avail = el.clientWidth - parseFloat(cs.paddingLeft)
+                                         - parseFloat(cs.paddingRight);
+            if (avail > 0 && ww > avail + 0.5) {
+                out.push(`"${worst}" in ${el.tagName.toLowerCase()}.` +
+                         String(el.className).trim() +
+                         ` needs ${Math.round(ww)}px, has ${Math.round(avail)}px`);
+            }
+        }
+        return [...new Set(out)].slice(0, 8);
+    }"""
+    )
+
+
 def main():
     SHOTS.mkdir(exist_ok=True)
 
@@ -137,6 +185,9 @@ def main():
                     problems.append(f"{path} [{vp_name}] text clipped in {c}")
                 for o in ov["overflowing"]:
                     problems.append(f"{path} [{vp_name}] overflows its box: {o}")
+
+                for w in audit_wordfit(page):
+                    problems.append(f"{path} [{vp_name}] word broken mid-word: {w}")
 
                 for e in errors:
                     problems.append(f"{path} [{vp_name}] console: {e}")
