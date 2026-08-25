@@ -11,11 +11,12 @@
  *   <!--{ "title": "...", "description": "...", "url": "/e-rechnung/" }-->
  *
  * Placeholders available in partials and pages:
- *   {{title}} {{description}} {{url}} {{content}} {{nav:<slug>}}
+ *   {{title}} {{description}} {{url}} {{content}} {{cssHref}} {{jsSrc}}
  */
 
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 const ROOT = __dirname;
 const SRC = path.join(ROOT, "src");
@@ -82,6 +83,22 @@ function build() {
   // static assets copied verbatim
   fs.cpSync(path.join(ROOT, "assets"), path.join(DIST, "assets"), { recursive: true });
 
+  // The stylesheet and script are served with a one-year immutable
+  // Cache-Control (see vercel.json). That is only safe if the filename changes
+  // when the contents do -- otherwise a returning visitor keeps the old file
+  // for a year and never sees a deploy. So both get a content hash.
+  const fingerprint = (rel) => {
+    const abs = path.join(DIST, rel);
+    const hash = crypto.createHash("sha1").update(fs.readFileSync(abs)).digest("hex").slice(0, 8);
+    const ext = path.extname(rel);
+    const out = rel.slice(0, -ext.length) + "." + hash + ext;
+    fs.renameSync(abs, path.join(DIST, out));
+    return "/" + out.split(path.sep).join("/");
+  };
+
+  const cssHref = fingerprint(path.join("assets", "css", "main.css"));
+  const jsSrc = fingerprint(path.join("assets", "js", "main.js"));
+
   const built = [];
 
   for (const file of pages) {
@@ -93,6 +110,8 @@ function build() {
       description: meta.description || "",
       url: meta.url || "/",
       bodyClass: meta.bodyClass || "",
+      cssHref,
+      jsSrc,
     };
 
     let header = markActiveNav(partials.header, meta.nav || slug);
