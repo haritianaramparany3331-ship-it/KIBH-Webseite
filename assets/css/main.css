@@ -1053,6 +1053,21 @@ button {
 /* --- shared section furniture ------------------------------------------- */
 
 .er-section { padding-block: 5rem; }
+
+/* Black ground with the neon bloom along the bottom, same artwork as the hero.
+   The live site has lost this background on all three of these bands, which is
+   why their white type renders on white and the sections read as empty; the
+   decorative shape in the questions band is drawn with `plus-lighter`, so it
+   only resolves against a dark ground at all. */
+.er-section--ask,
+.er-section--solutions,
+.er-section--cta {
+  background: #000 url("/assets/img/erechnung/bg-1.png") 50% 100% / cover no-repeat;
+  color: var(--c-white);
+}
+.er-section--ask .er-h2,
+.er-section--solutions .er-h2,
+.er-section--cta .er-cta__title { color: var(--c-white); }
 .er-section--risk { padding-block: 5rem 6rem; }
 .er-section--detail { padding-block: 0 5rem; }
 .er-section--cta { padding-block: 7.5rem; text-align: center; }
@@ -1129,7 +1144,7 @@ button {
 
 /* --- the four questions ------------------------------------------------- */
 
-.er-section--ask { position: relative; }
+.er-section--ask { position: relative; isolation: isolate; }
 /* Decorative shape, bleeding off the left edge exactly as on the original.
    The clipping frame is itself absolutely positioned and inset to the band, so
    the oversized image never enlarges the section's own scroll box. */
@@ -1163,11 +1178,11 @@ button {
   align-items: start;
   min-width: 0;
 }
-.er-asks .ico { color: var(--c-teal-muted); }
+.er-asks .ico { color: rgba(255, 255, 255, 0.75); }
 .er-asks p {
   font-size: 0.875rem;
   line-height: 1.05;
-  color: var(--c-text-muted);
+  color: rgba(255, 255, 255, 0.75);
 }
 .er-asks__close {
   max-width: 52rem;
@@ -1176,7 +1191,7 @@ button {
   font-weight: 500;
   line-height: 1.35;
   text-align: center;
-  color: var(--c-text);
+  color: var(--c-white);
 }
 
 /* --- image + icon-list rows --------------------------------------------- */
@@ -1268,7 +1283,14 @@ button {
 .er-card__more .ico { transition: transform var(--transition); }
 .er-card__more:hover .ico { transform: translateY(2px); }
 
-.er-card--big { border-color: var(--c-lime); background: rgba(214, 216, 79, 0.25); }
+/* The bloom behind this band runs straight through the right-hand card, so the
+   cards get an opaque base under their tint instead of letting it read
+   through. Over white on the original the tint alone was already opaque. */
+.er-card { background-color: rgba(0, 0, 0, 0.5); }
+.er-card--big {
+  border-color: var(--c-lime);
+  background-image: linear-gradient(rgba(214, 216, 79, 0.25), rgba(214, 216, 79, 0.25));
+}
 .er-card--big h3,
 .er-card--big h4 { color: var(--c-lime); }
 /* Low contrast, but this is the original's own treatment for the card copy. */
@@ -1276,7 +1298,10 @@ button {
 .er-card--big .er-card__more { color: rgba(214, 216, 79, 0.5); }
 .er-card--big .er-card__more:hover { color: var(--c-lime); }
 
-.er-card--small { border-color: var(--c-accent); background: rgba(118, 171, 174, 0.25); }
+.er-card--small {
+  border-color: var(--c-accent);
+  background-image: linear-gradient(rgba(118, 171, 174, 0.25), rgba(118, 171, 174, 0.25));
+}
 .er-card--small h3,
 .er-card--small h4 { color: var(--c-accent); }
 .er-card--small p { color: rgba(118, 171, 174, 0.75); }
