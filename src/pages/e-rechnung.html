@@ -1,23 +1,117 @@
 <!--{
   "title": "E-Rechnung - KI Beratung Hessen",
-  "description": "Seit dem 01.01.2025 müssen Unternehmen in Deutschland E-Rechnungen empfangen können. Wir prüfen Ihre Systeme und begleiten die Umstellung – bis zu 50 % staatlich förderfähig.",
+  "description": "Seit dem 01.01.2025 müssen Unternehmen in Deutschland E-Rechnungen empfangen können. Wir prüfen Ihre Systeme und begleiten die Umstellung – bis zu 50% staatlich förderfähig.",
   "url": "/e-rechnung/"
 }-->
 
-<section class="page-hero">
+<!-- Icon sprite. The live page draws these from the Jeg icon webfont (jki-*);
+     inlining equivalent shapes keeps the decoration without loading a font. -->
+<svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+  <defs>
+    <symbol id="i-minus-circle" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/>
+      <path d="M7.5 12h9" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-times-circle" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/>
+      <path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-exclamation-circle" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/>
+      <path d="M12 6.75v6" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="12" cy="16.75" r="1.2" fill="#fff" stroke="none"/>
+    </symbol>
+    <symbol id="i-document" viewBox="0 0 24 24">
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/>
+      <path d="M14 3v5h5M8.5 13h7M8.5 16.5h7"/>
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="6.5"/>
+      <path d="M15.8 15.8 20 20"/>
+    </symbol>
+    <symbol id="i-target" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"/>
+      <circle cx="12" cy="12" r="4.5"/>
+      <circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="i-book-open" viewBox="0 0 24 24">
+      <path d="M12 6.5S10 4.5 4.5 4.5v13C10 17.5 12 19.5 12 19.5s2-2 7.5-2v-13C14 4.5 12 6.5 12 6.5Z"/>
+      <path d="M12 6.5v13"/>
+    </symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24">
+      <path d="M11.4 3.5H4.5v6.9c0 .3.1.5.3.7l8.6 8.6c.4.4 1 .4 1.4 0l5.5-5.5c.4-.4.4-1 0-1.4l-8.6-8.6a1 1 0 0 0-.7-.3Z"/>
+      <circle cx="8.2" cy="8.2" r="1.4"/>
+    </symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24">
+      <path d="M20 3.9C15.2 3.2 10.3 5.6 7.6 9.7l-2.7 4.2 5.2 5.2 4.2-2.7c4.1-2.7 6.5-7.6 5.7-12.5Z"/>
+      <circle cx="14.3" cy="9.7" r="1.9"/>
+      <path d="M6.6 17.4 4 20"/>
+    </symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="m15.5 8.5-2 5.2-5.2 2 2-5.2 5.2-2Z"/>
+    </symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3.2"/>
+      <path d="M12 2.6h0a1.7 1.7 0 0 1 1.7 1.7v.4a1.4 1.4 0 0 0 .9 1.3 1.4 1.4 0 0 0 1.5-.3l.3-.3a1.7 1.7 0 1 1 2.4 2.4l-.3.3a1.4 1.4 0 0 0-.3 1.5 1.4 1.4 0 0 0 1.3.9h.4a1.7 1.7 0 1 1 0 3.4h-.4a1.4 1.4 0 0 0-1.3.9 1.4 1.4 0 0 0 .3 1.5l.3.3a1.7 1.7 0 1 1-2.4 2.4l-.3-.3a1.4 1.4 0 0 0-1.5-.3 1.4 1.4 0 0 0-.9 1.3v.4a1.7 1.7 0 1 1-3.4 0v-.4a1.4 1.4 0 0 0-.9-1.3 1.4 1.4 0 0 0-1.5.3l-.3.3a1.7 1.7 0 1 1-2.4-2.4l.3-.3a1.4 1.4 0 0 0 .3-1.5 1.4 1.4 0 0 0-1.3-.9h-.4a1.7 1.7 0 1 1 0-3.4h.4a1.4 1.4 0 0 0 1.3-.9 1.4 1.4 0 0 0-.3-1.5l-.3-.3a1.7 1.7 0 1 1 2.4-2.4l.3.3a1.4 1.4 0 0 0 1.5.3 1.4 1.4 0 0 0 .9-1.3v-.4A1.7 1.7 0 0 1 12 2.6Z"/>
+    </symbol>
+    <symbol id="i-comments" viewBox="0 0 24 24">
+      <path d="M15.5 12.6a1.7 1.7 0 0 1-1.7 1.7H6.9L3.5 17.7V6.7A1.7 1.7 0 0 1 5.2 5h8.6a1.7 1.7 0 0 1 1.7 1.7v5.9Z"/>
+      <path d="M18.8 9.1h.3a1.7 1.7 0 0 1 1.7 1.7v10L17.4 17h-4.6"/>
+    </symbol>
+    <symbol id="i-lightbulb" viewBox="0 0 24 24">
+      <path d="M12 2.8a6.2 6.2 0 0 0-3.6 11.3c.6.5 1 1.2 1 2v.4h5.2v-.4c0-.8.4-1.5 1-2A6.2 6.2 0 0 0 12 2.8Z" fill="currentColor" stroke="none"/>
+      <path d="M9.7 19h4.6M10.4 21.4h3.2"/>
+    </symbol>
+    <symbol id="i-list-alt" viewBox="0 0 24 24">
+      <path d="m3.5 6.8 1.6 1.6 2.6-2.9M3.5 12.4 5.1 14l2.6-2.9M3.5 18l1.6 1.6 2.6-2.9"/>
+      <path d="M11 7h9.5M11 12.6h9.5M11 18.2h9.5"/>
+    </symbol>
+    <symbol id="i-box" viewBox="0 0 24 24">
+      <path d="M20.5 8.2 12 3.4 3.5 8.2v7.6L12 20.6l8.5-4.8V8.2Z"/>
+      <path d="M3.7 8.1 12 12.8l8.3-4.7M12 12.8v7.8"/>
+    </symbol>
+    <symbol id="i-cloud-check" viewBox="0 0 24 24">
+      <path d="M7 18.5h10a4 4 0 0 0 .5-8 5.5 5.5 0 0 0-10.6-1.2A3.8 3.8 0 0 0 7 18.5Z"/>
+      <path d="m9.8 13.6 1.8 1.8 3.4-3.6"/>
+    </symbol>
+    <symbol id="i-thumbs-up" viewBox="0 0 24 24">
+      <path d="M6.8 20.5V10.2h2.5l2.2-6a1.9 1.9 0 0 1 3.6 1l-.8 3.6h4.1a1.9 1.9 0 0 1 1.8 2.4l-1.7 6.6a2.4 2.4 0 0 1-2.3 1.7H6.8Z"/>
+      <path d="M6.8 10.2H3.5v10.3h3.3"/>
+    </symbol>
+    <symbol id="i-list-1" viewBox="0 0 24 24">
+      <path d="M9.5 6.8h11M9.5 12.4h11M9.5 18h11"/>
+      <path d="M4.4 4.9h1.2v4.1M3.9 9h2.4M3.8 14.7a1.4 1.4 0 1 1 2.1 1.2L3.8 18.2h2.6"/>
+    </symbol>
+    <symbol id="i-file-pdf" viewBox="0 0 24 24">
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/>
+      <path d="M14 3v5h5"/>
+      <path d="M8.6 17.6c2.4-1 4-4.1 3.5-5.6-.5-1.4-1.8-.6-1.4 1.1.5 2 3 4.1 4.9 4.2"/>
+    </symbol>
+    <symbol id="i-users" viewBox="0 0 24 24">
+      <path d="M16 20.5v-1.8a3.6 3.6 0 0 0-3.6-3.6H6.6A3.6 3.6 0 0 0 3 18.7v1.8"/>
+      <circle cx="9.5" cy="7.7" r="3.6"/>
+      <path d="M21.5 20.5v-1.8a3.6 3.6 0 0 0-2.7-3.5M15.4 4.2a3.6 3.6 0 0 1 0 7"/>
+    </symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24">
+      <path d="m6 9.5 6 6 6-6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<section class="page-hero page-hero--dark">
   <div class="container container--wide">
-    <h1>E-Rechnung wird Pflicht! Sind Sie bereit?</h1>
-    <p class="lead">
+    <h1>E-Rechnung wird Pflicht!<br>Sind Sie bereit?</h1>
+    <p class="page-hero__lead">
       Seit dem 01.01.2025 müssen alle* Unternehmen in Deutschland elektronische
-      Rechnungen empfangen können. Ab 2027 wird das klassische PDF/Papier
-      komplett durch das neue E-Rechnungsformat ersetzt.
+      Rechnungen empfangen können.<br>
+      <b>Ab 2027</b> wird das klassische PDF/Papier
+      <b>komplett durch das neue E-Rechnungsformat ersetzt.</b>
     </p>
-    <div class="btn-row">
-      <a class="btn btn--primary" href="/kontakt/">Beratung zur E-Rechnungspflicht buchen</a>
+    <div class="btn-row btn-row--center">
+      <a class="btn btn--light" href="#loesungen">Beratung zur E-Rechnungspflicht buchen</a>
     </div>
-    <p style="margin-top:var(--sp-5);font-size:var(--fs-caption);color:var(--c-text-muted)">
-      *Alle Unternehmen mit mehr als 800.000&nbsp;€ Umsatz im Vorjahr
-    </p>
+    <p class="page-hero__note">*Alle Unternehmen mit mehr als 800.000&nbsp;€ Umsatz im Vorjahr</p>
   </div>
 </section>
 
@@ -26,36 +120,62 @@
     <div class="section-head section-head--center">
       <h2>Was passiert, wenn Sie nicht rechtzeitig umstellen?</h2>
     </div>
-    <ul class="chips">
-      <li class="chip">Kundenrechnungen werden abgelehnt</li>
-      <li class="chip">Kein Vorsteuerabzug möglich</li>
-      <li class="chip">Bußgelder und Verzögerungen drohen</li>
-      <li class="chip">Manueller Mehraufwand frisst Zeit &amp; Geld</li>
+    <ul class="tiles">
+      <li class="tile">
+        <svg class="ico ico--lg ico--risk" aria-hidden="true"><use href="#i-minus-circle"></use></svg>
+        <p>Kundenrechnungen werden abgelehnt</p>
+      </li>
+      <li class="tile">
+        <svg class="ico ico--lg ico--risk" aria-hidden="true"><use href="#i-times-circle"></use></svg>
+        <p>Kein Vorsteuerabzug möglich</p>
+      </li>
+      <li class="tile">
+        <svg class="ico ico--lg ico--risk" aria-hidden="true"><use href="#i-exclamation-circle"></use></svg>
+        <p>Bußgelder und Verzögerungen drohen</p>
+      </li>
+      <li class="tile">
+        <svg class="ico ico--lg ico--risk" aria-hidden="true"><use href="#i-exclamation-circle"></use></svg>
+        <p>Manuellen Mehraufwand frisst Zeit &amp; Geld</p>
+      </li>
     </ul>
   </div>
 </section>
 
-<section class="section section--surface">
+<!-- The live version of this band renders white type on a white background,
+     which makes the whole section unreadable. The type is white by design, so
+     the band is given its dark ground back rather than the text recoloured. -->
+<section class="section section--dark section--glow">
   <div class="container container--wide">
     <div class="section-head section-head--center">
       <h2>Was bedeutet das konkret für Sie?</h2>
     </div>
-    <ul class="chips">
-      <li class="chip chip--ask">Funktioniert euer aktuelles System überhaupt mit der neuen E-Rechnungs-Pflicht?</li>
-      <li class="chip chip--ask">Weiß eure Buchhaltung und IT, was zu tun ist?</li>
-      <li class="chip chip--ask">Muss ein neues System her – oder kann man das aktuelle System einfach erweitern?</li>
-      <li class="chip chip--ask">Wie schafft ihr das Ganze, ohne euer Team umzuschulen oder den Alltag zu stören?</li>
+
+    <ul class="asks">
+      <li>
+        <svg class="ico ico--lg" aria-hidden="true"><use href="#i-document"></use></svg>
+        <p>Funktioniert euer aktuelles System überhaupt mit der neuen E-Rechnungs-Pflicht?</p>
+      </li>
+      <li>
+        <svg class="ico ico--lg" aria-hidden="true"><use href="#i-search"></use></svg>
+        <p>Weiß eure Buchhaltung und IT was zu tun ist?</p>
+      </li>
+      <li>
+        <svg class="ico ico--lg" aria-hidden="true"><use href="#i-target"></use></svg>
+        <p>Muss ein neues System her– oder kann man das aktuelle System einfach erweitern?</p>
+      </li>
+      <li>
+        <svg class="ico ico--lg" aria-hidden="true"><use href="#i-book-open"></use></svg>
+        <p>Wie schafft ihr das Ganze, ohne euer Team umzuschulen oder den Alltag zu stören?</p>
+      </li>
     </ul>
 
-    <div class="section-head section-head--center" style="margin-top:var(--sp-7);margin-bottom:0">
-      <p>
-        Viele Tools versprechen eine Komplettlösung – doch kein Tool passt von
-        Haus aus perfekt zum individuellen Workflow. Die richtige Entscheidung
-        zu treffen ist kompliziert, und jede Umstellung kostet Zeit und Aufwand.
-        Deshalb ist eine unabhängige Beratung für die meisten der sinnvollste
-        Schritt.
-      </p>
-    </div>
+    <p class="asks__close">
+      Viele Tools versprechen eine Komplettlösung – doch kein Tool passt von
+      Haus aus perfekt zum individuellen Workflow.<br>
+      Die richtige Entscheidung zu treffen ist kompliziert, und jede Umstellung
+      kostet Zeit und Aufwand.<br>
+      Deshalb ist eine unabhängige Beratung für die meisten der sinnvollste Schritt.
+    </p>
 
     <div class="btn-row btn-row--center">
       <a class="btn btn--primary" href="/kontakt/">Jetzt System-Check starten</a>
@@ -65,202 +185,286 @@
 
 <section class="section">
   <div class="container container--wide">
-    <div class="section-head section-head--center">
-      <h2>Die Vorteile durch unsere Beratung</h2>
-    </div>
-
-    <div class="grid grid--3">
-      <article class="card">
-        <h3>Bis zu 50 % staatlich förderfähig</h3>
-        <p>
-          Es gibt zahlreiche Förderprogramme für Digitalisierung. Wir helfen
-          Ihnen, das passende Programm zu identifizieren, die Voraussetzungen zu
-          prüfen und den Antrag zu stellen.
-        </p>
-      </article>
-
-      <article class="card">
-        <h3>KI-gestützte Automatisierungskompetenz</h3>
-        <p>
-          Unsere KI-Expertise ermöglicht Lösungen, die auf langfristige
-          Automatisierung und Integration ausgelegt sind – von der ersten
-          Handlungsempfehlung bis zur vollautomatisierten Umsetzung.
-        </p>
-      </article>
-
-      <article class="card">
-        <h3>Praxisorientierte Vorgehensweise</h3>
-        <p>
-          Statt theoretischer Analysen liefern wir klare Handlungsempfehlungen
-          und funktionierende Prototypen, die direkt im Alltag Wirkung zeigen.
-        </p>
-      </article>
-
-      <article class="card">
-        <h3>Skalierbarer Ansatz</h3>
-        <p>
-          Ob schnelle Handlungsempfehlung oder vollintegrierte Lösung – unser
-          Ansatz wächst mit deinem Bedarf und Budget.
-        </p>
-      </article>
-
-      <article class="card">
-        <h3>Direkte Zusammenarbeit</h3>
-        <p>
-          Kurze Wege, klare Kommunikation und persönliche Betreuung – ohne
-          Konzernbürokratie.
-        </p>
-      </article>
+    <div class="split split--media">
+      <div class="split__media">
+        <div class="ph" style="aspect-ratio:4/5">Bild: Beratungsgespräch</div>
+      </div>
+      <div>
+        <h2 class="split__title">Die Vorteile durch unsere Beratung</h2>
+        <ul class="features">
+          <li>
+            <svg class="ico" aria-hidden="true"><use href="#i-tag"></use></svg>
+            <div>
+              <strong>Bis zu 50% staatlich förderfähig</strong>
+              <span>Es gibt zahlreiche Förderprogramme für Digitalisierung. Wir helfen
+                Ihnen, das passende Programm zu identifizieren, die Voraussetzungen zu
+                prüfen und den Antrag zu stellen.</span>
+            </div>
+          </li>
+          <li>
+            <svg class="ico" aria-hidden="true"><use href="#i-rocket"></use></svg>
+            <div>
+              <strong>KI-gestützte Automatisierungskompetenz</strong>
+              <span>Unsere KI-Expertise ermöglicht Lösungen, die auf langfristige
+                Automatisierung und Integration ausgelegt sind – von der ersten
+                Handlungsempfehlung bis zur vollautomatisierten Umsetzung.</span>
+            </div>
+          </li>
+          <li>
+            <svg class="ico" aria-hidden="true"><use href="#i-compass"></use></svg>
+            <div>
+              <strong>Praxisorientierte Vorgehensweise</strong>
+              <span>Statt theoretischer Analysen liefern wir klare Handlungsempfehlungen
+                und funktionierende Prototypen, die direkt im Alltag Wirkung zeigen.</span>
+            </div>
+          </li>
+          <li>
+            <svg class="ico" aria-hidden="true"><use href="#i-settings"></use></svg>
+            <div>
+              <strong>Skalierbarer Ansatz</strong>
+              <span>Ob schnelle Handlungsempfehlung oder vollintegrierte Lösung – unser
+                Ansatz wächst mit deinem Bedarf und Budget.</span>
+            </div>
+          </li>
+          <li>
+            <svg class="ico" aria-hidden="true"><use href="#i-comments"></use></svg>
+            <div>
+              <strong>Direkte Zusammenarbeit</strong>
+              <span>Kurze Wege, klare Kommunikation und persönliche Betreuung – ohne
+                Konzernbürokratie.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="section section--surface">
+<section class="section section--dark section--glow" id="loesungen">
   <div class="container container--wide">
     <div class="section-head section-head--center">
       <h2>Unsere Lösungen</h2>
     </div>
 
     <div class="grid grid--2">
-      <article class="tier tier--featured">
-        <p class="tier__label">Große Lösung</p>
-        <h3>Prozessautomatisierung &amp; Umsetzung</h3>
-        <h4>End-to-End</h4>
+      <article class="solution solution--big">
+        <h3>
+          <svg class="ico ico--lg" aria-hidden="true"><use href="#i-settings"></use></svg>
+          Große Lösung
+        </h3>
+        <h4>Prozessautomatisierung &amp; Umsetzung (End-to-End)</h4>
         <p>
           Für Unternehmen, die ihre Rechnungsprozesse langfristig digitalisieren
           und automatisieren wollen, um Aufwand, Fehlerquote und Durchlaufzeiten
           deutlich zu reduzieren.
         </p>
-
-        <div>
-          <h4>Beschreibung</h4>
-          <p>
-            Ziel ist eine vollintegrierte, automatisierte Lösung für
-            Rechnungseingang, Prüfung und Verarbeitung – inklusive
-            Benutzerführung und Dokumentation.
-          </p>
-        </div>
-
-        <div>
-          <h4>Ablauf</h4>
-          <p>
-            Hier entwickeln wir gemeinsam das Zielbild für deinen
-            Rechnungsprozess, bauen einen Proof of Concept und setzen die Lösung
-            produktiv um. Ziel ist, dass nach dem Projekt nahezu alle Schritte
-            automatisiert ablaufen – von der Eingangsprüfung bis zur Buchung.
-          </p>
-        </div>
-
-        <div>
-          <h4>Leistungsumfang</h4>
-          <ol class="numbered">
-            <li>
-              <div>
-              <strong>Scoping &amp; Planung</strong>
-              <span>Ziele, Beteiligte und Erfolgskriterien definieren. Projekt strukturiert planen und Aufgaben priorisieren.</span>
-            </div>
-            </li>
-            <li>
-              <div>
-              <strong>Prozessanalyse &amp; Anforderungen</strong>
-              <span>Aktuelle Abläufe aufnehmen, Schwachstellen erkennen und Anforderungen aller Fachbereiche dokumentieren.</span>
-            </div>
-            </li>
-            <li>
-              <div>
-              <strong>Lösungsdesign &amp; Proof of Concept</strong>
-              <span>Entwicklung und Test eines funktionsfähigen Prototyps zur Veranschaulichung und Validierung der künftigen Lösung.</span>
-            </div>
-            </li>
-            <li>
-              <div>
-              <strong>Umsetzung &amp; Validierung</strong>
-              <span>Lösung im ERP-System (z.&nbsp;B. Odoo) umsetzen, testen und für den realen Einsatz vorbereiten.</span>
-            </div>
-            </li>
-            <li>
-              <div>
-              <strong>Abschluss &amp; Übergabe</strong>
-              <span>Ergebnisse zusammenfassen, Anwenderdokumentation bereitstellen und Empfehlungen für den weiteren Ausbau geben.</span>
-            </div>
-            </li>
-          </ol>
-        </div>
-
-        <p class="card__foot">
-          <a class="btn btn--primary" href="/kontakt/">Kostenloses Erstgespräch buchen</a>
-        </p>
+        <button class="solution__more" type="button" data-tab-jump="gross">
+          Mehr erfahren
+          <svg class="ico ico--sm" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
+        </button>
       </article>
 
-      <article class="tier">
-        <p class="tier__label">Kleine Lösung</p>
-        <h3>Handlungsempfehlung</h3>
-        <h4>ohne Umsetzung</h4>
+      <article class="solution solution--small">
+        <h3>
+          <svg class="ico ico--lg" aria-hidden="true"><use href="#i-lightbulb"></use></svg>
+          Kleine Lösung
+        </h3>
+        <h4>Handlungsempfehlung (ohne Umsetzung)</h4>
         <p>
           Für Unternehmen, die die E-Rechnungspflicht schnell, günstig und mit
           minimalem Aufwand erfüllen möchten.
         </p>
-
-        <div>
-          <h4>Beschreibung</h4>
-          <p>
-            Wir analysieren den aktuellen Rechnungsprozess, dokumentieren den
-            IST-Zustand und erstellen eine präzise Schritt-für-Schritt-Anleitung,
-            wie dein Unternehmen die Pflichtanforderungen mit geringstem Aufwand
-            und Budget umsetzen kann.
-          </p>
-        </div>
-
-        <div>
-          <h4>Leistungsumfang</h4>
-          <ol class="numbered">
-            <li>
-              <div>
-              <strong>IST-Aufnahme &amp; Dokumentation</strong>
-              <span>Überblick über bestehende Abläufe</span>
-            </div>
-            </li>
-            <li>
-              <div>
-              <strong>Pflichtencheck</strong>
-              <span>Prüfung der Anforderungen (ZUGFeRD / XRechnung)</span>
-            </div>
-            </li>
-            <li>
-              <div>
-              <strong>Empfehlung „Minimal-Plan“</strong>
-              <span>Schritt-für-Schritt-Anleitung für die Umsetzung</span>
-            </div>
-            </li>
-            <li>
-              <div>
-              <strong>Ergebnisdokumentation</strong>
-              <span>Kompakter PDF-Report oder Confluence-Seite</span>
-            </div>
-            </li>
-            <li>
-              <div>
-              <strong>(Optional) Angebot</strong>
-              <span>für die Umsetzung der Handlungsempfehlung durch unser Team</span>
-            </div>
-            </li>
-          </ol>
-        </div>
-
-        <p class="card__foot">
-          <a class="btn btn--outline" href="/kontakt/">Kostenloses Erstgespräch buchen</a>
-        </p>
+        <button class="solution__more" type="button" data-tab-jump="klein">
+          Mehr erfahren
+          <svg class="ico ico--sm" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
+        </button>
       </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="loesungen-detail">
+  <div class="container container--wide">
+    <div class="tabs" data-tabs>
+      <div class="tabs__list" role="tablist" aria-label="Lösungen im Detail">
+        <button class="tabs__btn" type="button" role="tab" id="tab-gross"
+                aria-controls="panel-gross" aria-selected="true" data-tab="gross">
+          Große Lösung
+        </button>
+        <button class="tabs__btn" type="button" role="tab" id="tab-klein"
+                aria-controls="panel-klein" aria-selected="false" data-tab="klein">
+          Kleine Lösung
+        </button>
+      </div>
+
+      <div class="tabs__panel" role="tabpanel" id="panel-gross"
+           aria-labelledby="tab-gross" data-panel="gross">
+
+        <div class="split split--media">
+          <div>
+            <h3>Beschreibung</h3>
+            <p>
+              Ziel ist eine <b>vollintegrierte, automatisierte Lösung</b> für
+              Rechnungseingang, Prüfung und Verarbeitung – inklusive
+              Benutzerführung und Dokumentation.
+            </p>
+          </div>
+          <div class="split__media">
+            <div class="ph" style="aspect-ratio:800/508">Bild: Rechnungsprüfung im Team</div>
+          </div>
+        </div>
+
+        <div class="split split--media split--reverse">
+          <div class="split__media">
+            <div class="ph" style="aspect-ratio:800/508">Bild: Prozess-Workshop</div>
+          </div>
+          <div>
+            <h3>Ablauf</h3>
+            <p>
+              Hier entwickeln wir gemeinsam das Zielbild für deinen
+              Rechnungsprozess, bauen einen <b>Proof of Concept</b>, und setzen
+              die Lösung produktiv um. Ziel ist, dass nach dem Projekt
+              <b>nahezu alle Schritte automatisiert ablaufen</b> – von der
+              Eingangsprüfung bis zur Buchung.
+            </p>
+          </div>
+        </div>
+
+        <div class="split split--media">
+          <div>
+            <h3>Leistungsumfang</h3>
+            <ul class="features">
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-search"></use></svg>
+                <div>
+                  <strong>Scoping &amp; Planung</strong>
+                  <span>Ziele, Beteiligte und Erfolgskriterien definieren. Projekt
+                    strukturiert planen und Aufgaben priorisieren.</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-list-alt"></use></svg>
+                <div>
+                  <strong>Prozessanalyse &amp; Anforderungen</strong>
+                  <span>Aktuelle Abläufe aufnehmen, Schwachstellen erkennen und
+                    Anforderungen aller Fachbereiche dokumentieren.</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-rocket"></use></svg>
+                <div>
+                  <strong>Lösungsdesign &amp; Proof of Concept</strong>
+                  <span>Entwicklung und Test eines funktionsfähigen Prototyps zur
+                    Veranschaulichung und Validierung der künftigen Lösung.</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-box"></use></svg>
+                <div>
+                  <strong>Umsetzung &amp; Validierung</strong>
+                  <span>Lösung im ERP-System (z.&nbsp;B. Odoo) umsetzen, testen und für
+                    den realen Einsatz vorbereiten.</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-cloud-check"></use></svg>
+                <div>
+                  <strong>Abschluss &amp; Übergabe</strong>
+                  <span>Ergebnisse zusammenfassen, Anwenderdokumentation bereitstellen
+                    und Empfehlungen für den weiteren Ausbau geben.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="split__media">
+            <div class="ph" style="aspect-ratio:800/508">Bild: Auswertung am Laptop</div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <a class="btn btn--primary" href="/kontakt/">Kostenloses Erstgespräch buchen</a>
+        </div>
+      </div>
+
+      <div class="tabs__panel" role="tabpanel" id="panel-klein"
+           aria-labelledby="tab-klein" data-panel="klein" hidden>
+
+        <div class="split split--media">
+          <div>
+            <h3>Beschreibung</h3>
+            <p>
+              Wir analysieren den aktuellen Rechnungsprozess, dokumentieren den
+              IST-Zustand und erstellen eine
+              <b>präzise Schritt-für-Schritt-Anleitung</b>, wie dein Unternehmen
+              die Pflichtanforderungen mit <b>geringstem Aufwand und Budget</b>
+              umsetzen kann.
+            </p>
+          </div>
+          <div class="split__media">
+            <div class="ph" style="aspect-ratio:800/508">Bild: Dokumentation des IST-Zustands</div>
+          </div>
+        </div>
+
+        <div class="split split--media split--reverse">
+          <div class="split__media">
+            <div class="ph" style="aspect-ratio:800/508">Bild: Minimal-Plan</div>
+          </div>
+          <div>
+            <h3>Leistungsumfang</h3>
+            <ul class="features">
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-search"></use></svg>
+                <div>
+                  <strong>IST-Aufnahme &amp; Dokumentation</strong>
+                  <span>Überblick über bestehende Abläufe</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-thumbs-up"></use></svg>
+                <div>
+                  <strong>Pflichtencheck</strong>
+                  <span>Prüfung der Anforderungen (ZUGFeRD / XRechnung)</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-list-1"></use></svg>
+                <div>
+                  <strong>Empfehlung „Minimal-Plan“</strong>
+                  <span>Schritt-für-Schritt-Anleitung für die Umsetzung</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-file-pdf"></use></svg>
+                <div>
+                  <strong>Ergebnisdokumentation</strong>
+                  <span>Kompakter PDF-Report oder Confluence-Seite</span>
+                </div>
+              </li>
+              <li>
+                <svg class="ico" aria-hidden="true"><use href="#i-users"></use></svg>
+                <div>
+                  <strong>(Optional) Angebot</strong>
+                  <span>für die Umsetzung der Handlungsempfehlung durch unser Team</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <a class="btn btn--primary" href="/kontakt/">Kostenloses Erstgespräch buchen</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="cta">
   <div class="container">
-    <h2>Bereit für die E-Rechnungspflicht?</h2>
-    <p>Wir prüfen Ihre Systeme und zeigen den kürzesten Weg zur Umstellung.</p>
+    <h2><span class="cta__accent">KI Beratung</span> Hessen<br>
+      Ihr Weg zur <span class="cta__accent">KI-Exzellence</span></h2>
     <div class="btn-row btn-row--center">
-      <a class="btn btn--primary" href="/kontakt/">Termin buchen</a>
+      <a class="btn btn--light" href="/kontakt/">Termin buchen</a>
     </div>
   </div>
 </section>

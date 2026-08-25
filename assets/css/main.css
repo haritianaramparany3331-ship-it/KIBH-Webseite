@@ -253,6 +253,15 @@ button {
   background: var(--c-primary);
   color: var(--c-secondary);
 }
+/* Dark band with the teal bloom the live site paints in as a decorative
+   image. Reproduced in CSS so no extra asset has to load. */
+.section--glow {
+  background:
+    radial-gradient(ellipse 70% 110% at 82% 50%, rgba(118, 171, 174, 0.32), transparent 62%),
+    radial-gradient(ellipse 50% 90% at 10% 90%, rgba(118, 171, 174, 0.12), transparent 60%),
+    var(--c-teal-deep);
+}
+
 .section--dark h1,
 .section--dark h2,
 .section--dark h3,
@@ -365,6 +374,17 @@ button {
   background: var(--c-white);
   border-color: var(--c-white);
   color: var(--c-primary);
+}
+
+.btn--light {
+  background: var(--c-white);
+  border-color: var(--c-white);
+  color: var(--c-text);
+}
+.btn--light:hover {
+  background: var(--c-secondary);
+  border-color: var(--c-secondary);
+  color: var(--c-text);
 }
 
 .btn--ghost {
@@ -863,6 +883,20 @@ button {
   align-items: center;
 }
 
+/* Alternating text/media rows (E-Rechnung). */
+.split--media { align-items: center; }
+.split--media + .split--media { margin-top: var(--sp-9); }
+.split__media { min-width: 0; }
+.split__title {
+  font-size: var(--fs-h2);
+  margin-bottom: var(--sp-6);
+}
+/* The reversed row puts the media first in the source so it lands left on
+   desktop; stacked, the text should still lead. */
+@media (max-width: 767px) {
+  .split--reverse .split__media { order: 2; }
+}
+
 /* --- Prose (legal + case-study body) ------------------------------------ */
 
 .prose {
@@ -918,6 +952,36 @@ button {
   max-width: 46rem;
 }
 
+/* E-Rechnung leads with a full-bleed dark hero rather than the light band the
+   other inner pages use. */
+.page-hero--dark {
+  padding-block: var(--sp-10);
+  background:
+    radial-gradient(ellipse 80% 90% at 88% 75%, rgba(118, 171, 174, 0.45), transparent 62%),
+    radial-gradient(ellipse 60% 70% at 8% 95%, rgba(118, 171, 174, 0.14), transparent 60%),
+    #05090a;
+  color: rgba(255, 255, 255, 0.82);
+  text-align: center;
+}
+.page-hero--dark h1 {
+  max-width: none;
+  font-size: var(--fs-hero);
+  line-height: 1.08;
+  color: var(--c-white);
+}
+.page-hero__lead {
+  max-width: 60rem;
+  margin: var(--sp-7) auto 0;
+  font-size: var(--fs-body-lg);
+  color: rgba(255, 255, 255, 0.82);
+}
+.page-hero__lead b { color: var(--c-white); }
+.page-hero__note {
+  margin-top: var(--sp-8);
+  font-size: var(--fs-caption);
+  color: rgba(255, 255, 255, 0.65);
+}
+
 /* --- Quote block -------------------------------------------------------- */
 
 .quote {
@@ -947,34 +1011,203 @@ button {
 }
 .quote .quote__company { color: var(--c-text-muted); }
 
-/* --- Tier cards (E-Rechnung) -------------------------------------------- */
+/* --- E-Rechnung page ---------------------------------------------------- */
 
-.tier {
+/* The sprite only carries <symbol> definitions; it must occupy no space but
+   stay in the layout tree, so `display: none` is deliberately not used. */
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.ico {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ico--lg { width: 2.5rem; height: 2.5rem; }
+.ico--sm { width: 1rem; height: 1rem; stroke-width: 2; }
+.ico--risk { color: #d50000; }
+
+/* Consequences of missing the deadline: four flat tiles, centred. */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--sp-5);
+  list-style: none;
+}
+@media (min-width: 560px) and (max-width: 1099px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1100px) {
+  .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  height: 100%;
+  padding: var(--sp-6) var(--sp-5);
+  background: var(--c-surface-alt);
+  border-radius: var(--radius);
+  text-align: center;
+}
+.tile p {
+  font-size: var(--fs-body-lg);
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+/* The four questions on the dark band. */
+.asks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--sp-6);
+  list-style: none;
+}
+@media (min-width: 560px) and (max-width: 1099px) {
+  .asks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1100px) {
+  .asks { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.asks li {
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
-  padding: var(--sp-7);
+  min-width: 0;
+}
+.asks li .ico { color: rgba(255, 255, 255, 0.75); }
+.asks li p {
+  font-size: var(--fs-caption);
+  color: rgba(255, 255, 255, 0.75);
+}
+.asks__close {
+  max-width: 52rem;
+  margin: var(--sp-8) auto 0;
+  font-size: var(--fs-body-lg);
+  font-weight: 500;
+  text-align: center;
+}
+.section--dark .asks__close { color: var(--c-white); }
+
+/* Icon + title + description rows (Vorteile, Leistungsumfang). */
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  list-style: none;
+}
+.features li {
+  display: grid;
+  /* Two tracks only: the icon, and one wrapper holding all the text. Siblings
+     placed directly in the row would wrap into the narrow icon column. */
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: var(--sp-4);
+  align-items: start;
+}
+.features li > div { min-width: 0; }
+.features .ico { color: var(--c-accent); }
+.features strong {
+  display: block;
+  font-size: var(--fs-body-lg);
+  color: var(--c-text);
+}
+.features span {
+  display: block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-small);
+  color: var(--c-text-muted);
+}
+
+/* The two solution cards. Each keeps its own accent through border, tint and
+   headings, matching the live page. */
+.solution {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
   height: 100%;
-  background: var(--c-white);
-  border: 1px solid var(--c-border);
+  padding: var(--sp-7);
+  border: 2px solid;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
 }
-.tier--featured {
+.solution h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-h2);
+}
+.solution h4 { font-size: var(--fs-body-lg); }
+.solution p {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-small);
+}
+.solution__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  align-self: flex-start;
+  margin-top: auto;
+  padding: var(--sp-4) 0 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: var(--fs-body);
+  cursor: pointer;
+}
+.solution__more .ico { transition: transform var(--transition); }
+.solution__more:hover .ico { transform: translateY(2px); }
+
+.solution--big {
+  border-color: var(--c-lime);
+  background: rgba(214, 216, 79, 0.16);
+}
+.solution--small {
   border-color: var(--c-accent);
-  border-width: 2px;
-  box-shadow: var(--shadow-md);
+  background: rgba(118, 171, 174, 0.16);
 }
-.tier__label {
-  font-size: var(--fs-eyebrow);
+/* Written long-hand because `.section--dark h3` would otherwise win. */
+.section--dark .solution--big h3,
+.section--dark .solution--big h4,
+.section--dark .solution--big .solution__more { color: var(--c-lime); }
+.section--dark .solution--small h3,
+.section--dark .solution--small h4,
+.section--dark .solution--small .solution__more { color: var(--c-accent); }
+.section--dark .solution p { color: rgba(255, 255, 255, 0.8); }
+
+/* Tabs holding the detail for each solution. */
+.tabs__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.tabs__btn {
+  padding: var(--sp-5) var(--sp-4);
+  background: none;
+  border: 1px solid var(--c-accent);
+  border-radius: 5px;
+  font: inherit;
+  font-size: var(--fs-body-lg);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--c-accent-dark);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
 }
-.tier h3 { font-size: var(--fs-h3); }
-.tier h4 { font-size: var(--fs-body-lg); color: var(--c-teal-dark); }
-.tier p { color: var(--c-text-muted); font-size: var(--fs-small); }
+.tabs__btn[aria-selected="true"] {
+  background: var(--c-accent);
+  color: var(--c-white);
+}
+.tabs__panel { padding-top: var(--sp-9); }
+.tabs__panel h3 { font-size: var(--fs-h3); }
+.tabs__panel > .split p { margin-top: var(--sp-5); color: var(--c-text-muted); }
+.tabs__panel > .split p b { color: var(--c-text); }
 
 .numbered {
   display: flex;
@@ -1050,7 +1283,6 @@ button {
   color: var(--c-ink);
   font-size: var(--fs-caption);
 }
-.chip--ask::before { content: "?"; background: var(--c-accent-soft); color: var(--c-teal-dark); }
 
 /* --- Deep Reading Engine ------------------------------------------------ */
 
@@ -1145,6 +1377,9 @@ button {
   max-width: 20ch;
   margin-inline: auto;
 }
+.cta__accent { color: var(--c-lime); }
+.cta h2:has(.cta__accent) { max-width: none; }
+
 .cta p {
   margin-top: var(--sp-4);
   color: rgba(255, 255, 255, 0.75);
