@@ -1,7 +1,8 @@
 <!--{
   "title": "E-Rechnung - KI Beratung Hessen",
   "description": "Seit dem 01.01.2025 müssen Unternehmen in Deutschland E-Rechnungen empfangen können. Wir prüfen Ihre Systeme und begleiten die Umstellung – bis zu 50% staatlich förderfähig.",
-  "url": "/e-rechnung/"
+  "url": "/e-rechnung/",
+  "bodyClass": "page-erechnung"
 }-->
 
 <!-- Icon sprite. The live page draws these from the Jeg icon webfont (jki-*);
@@ -96,80 +97,83 @@
     <symbol id="i-chevron-down" viewBox="0 0 24 24">
       <path d="m6 9.5 6 6 6-6"/>
     </symbol>
+    <symbol id="i-arrow-ne" viewBox="0 0 24 24">
+      <path d="M7 17 17 7M8.5 7H17v8.5"/>
+    </symbol>
   </defs>
 </svg>
 
-<section class="page-hero page-hero--dark">
-  <div class="container container--wide">
-    <h1>E-Rechnung wird Pflicht!<br>Sind Sie bereit?</h1>
-    <p class="page-hero__lead">
+<section class="er-hero">
+  <div class="container">
+    <h1 data-anim="up">E-Rechnung wird <span class="er-hero__mark">Pflicht!</span><br>Sind Sie bereit?</h1>
+    <p class="er-hero__lead" data-anim="up">
       Seit dem 01.01.2025 müssen alle* Unternehmen in Deutschland elektronische
       Rechnungen empfangen können.<br>
       <b>Ab 2027</b> wird das klassische PDF/Papier
       <b>komplett durch das neue E-Rechnungsformat ersetzt.</b>
     </p>
-    <div class="btn-row btn-row--center">
-      <a class="btn btn--light" href="#loesungen">Beratung zur E-Rechnungspflicht buchen</a>
+    <div class="er-btn-row" data-anim="up">
+      <a class="er-btn er-btn--white" href="#loesungen">Beratung zur E-Rechnungspflicht buchen <svg class="ico ico--sm er-btn__arrow" aria-hidden="true"><use href="#i-arrow-ne"></use></svg></a>
     </div>
-    <p class="page-hero__note">*Alle Unternehmen mit mehr als 800.000&nbsp;€ Umsatz im Vorjahr</p>
+    <p class="er-hero__note" data-anim="up">*Alle Unternehmen mit mehr als 800.000€ Umsatz im Vorjahr</p>
   </div>
 </section>
 
-<section class="section">
-  <div class="container container--wide">
-    <div class="section-head section-head--center">
-      <h2>Was passiert, wenn Sie nicht rechtzeitig umstellen?</h2>
-    </div>
-    <ul class="tiles">
-      <li class="tile">
-        <svg class="ico ico--lg ico--risk" aria-hidden="true"><use href="#i-minus-circle"></use></svg>
+<section class="er-section er-section--risk">
+  <div class="container">
+    <h2 class="er-h2" data-anim="up">Was passiert, wenn Sie nicht rechtzeitig umstellen?</h2>
+    <ul class="er-tiles">
+      <li class="er-tile" data-anim="up">
+        <svg class="ico ico--40 ico--risk" aria-hidden="true"><use href="#i-minus-circle"></use></svg>
         <p>Kundenrechnungen werden abgelehnt</p>
       </li>
-      <li class="tile">
-        <svg class="ico ico--lg ico--risk" aria-hidden="true"><use href="#i-times-circle"></use></svg>
+      <li class="er-tile" data-anim="up">
+        <svg class="ico ico--40 ico--risk" aria-hidden="true"><use href="#i-times-circle"></use></svg>
         <p>Kein Vorsteuerabzug möglich</p>
       </li>
-      <li class="tile">
-        <svg class="ico ico--lg ico--risk" aria-hidden="true"><use href="#i-exclamation-circle"></use></svg>
+      <li class="er-tile" data-anim="up">
+        <svg class="ico ico--40 ico--risk" aria-hidden="true"><use href="#i-exclamation-circle"></use></svg>
         <p>Bußgelder und Verzögerungen drohen</p>
       </li>
-      <li class="tile">
-        <svg class="ico ico--lg ico--risk" aria-hidden="true"><use href="#i-exclamation-circle"></use></svg>
+      <li class="er-tile" data-anim="up">
+        <svg class="ico ico--40 ico--risk" aria-hidden="true"><use href="#i-exclamation-circle"></use></svg>
         <p>Manuellen Mehraufwand frisst Zeit &amp; Geld</p>
       </li>
     </ul>
   </div>
 </section>
 
-<!-- The live version of this band renders white type on a white background,
-     which makes the whole section unreadable. The type is white by design, so
-     the band is given its dark ground back rather than the text recoloured. -->
-<section class="section section--dark section--glow">
-  <div class="container container--wide">
-    <div class="section-head section-head--center">
-      <h2>Was bedeutet das konkret für Sie?</h2>
-    </div>
+<!-- The live version of this band sets its type in white on a white ground, so
+     the heading, the four questions and the closing line are invisible there.
+     Everything else - the white band, the blurred shape bleeding off the left
+     edge, the layout - is reproduced; only the text colour is corrected. -->
+<section class="er-section er-section--ask">
+  <div class="er-blob-wrap" aria-hidden="true">
+    <img class="er-blob" src="/assets/img/erechnung/ss.svg" alt="" width="1112" height="726">
+  </div>
+  <div class="container">
+    <h2 class="er-h2 er-h2--lg" data-anim="up">Was bedeutet das konkret für Sie?</h2>
 
-    <ul class="asks">
-      <li>
-        <svg class="ico ico--lg" aria-hidden="true"><use href="#i-document"></use></svg>
+    <ul class="er-asks">
+      <li data-anim="up">
+        <svg class="ico ico--42" aria-hidden="true"><use href="#i-document"></use></svg>
         <p>Funktioniert euer aktuelles System überhaupt mit der neuen E-Rechnungs-Pflicht?</p>
       </li>
-      <li>
-        <svg class="ico ico--lg" aria-hidden="true"><use href="#i-search"></use></svg>
+      <li data-anim="up">
+        <svg class="ico ico--42" aria-hidden="true"><use href="#i-search"></use></svg>
         <p>Weiß eure Buchhaltung und IT was zu tun ist?</p>
       </li>
-      <li>
-        <svg class="ico ico--lg" aria-hidden="true"><use href="#i-target"></use></svg>
+      <li data-anim="up">
+        <svg class="ico ico--42" aria-hidden="true"><use href="#i-target"></use></svg>
         <p>Muss ein neues System her– oder kann man das aktuelle System einfach erweitern?</p>
       </li>
-      <li>
-        <svg class="ico ico--lg" aria-hidden="true"><use href="#i-book-open"></use></svg>
+      <li data-anim="up">
+        <svg class="ico ico--42" aria-hidden="true"><use href="#i-book-open"></use></svg>
         <p>Wie schafft ihr das Ganze, ohne euer Team umzuschulen oder den Alltag zu stören?</p>
       </li>
     </ul>
 
-    <p class="asks__close">
+    <p class="er-asks__close" data-anim="up">
       Viele Tools versprechen eine Komplettlösung – doch kein Tool passt von
       Haus aus perfekt zum individuellen Workflow.<br>
       Die richtige Entscheidung zu treffen ist kompliziert, und jede Umstellung
@@ -177,61 +181,61 @@
       Deshalb ist eine unabhängige Beratung für die meisten der sinnvollste Schritt.
     </p>
 
-    <div class="btn-row btn-row--center">
-      <a class="btn btn--primary" href="/kontakt/">Jetzt System-Check starten</a>
+    <div class="er-btn-row" data-anim="up">
+      <a class="er-btn er-btn--teal" href="/kontakt/">Jetzt System-Check starten <svg class="ico ico--sm er-btn__arrow" aria-hidden="true"><use href="#i-arrow-ne"></use></svg></a>
     </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="container container--wide">
-    <div class="split split--media">
-      <div class="split__media">
-        <div class="ph" style="aspect-ratio:4/5">Bild: Beratungsgespräch</div>
-      </div>
+<section class="er-section er-section--benefits">
+  <div class="container">
+    <div class="er-media-split">
+      <figure class="er-shot er-shot--tall" data-anim="left">
+        <img src="/assets/img/erechnung/image-1.png" alt="" width="399" height="499" loading="lazy">
+      </figure>
       <div>
-        <h2 class="split__title">Die Vorteile durch unsere Beratung</h2>
-        <ul class="features">
+        <h2 class="er-h3" data-anim="up">Die Vorteile durch unsere Beratung</h2>
+        <ul class="er-features" data-anim="up">
           <li>
-            <svg class="ico" aria-hidden="true"><use href="#i-tag"></use></svg>
+            <svg class="ico ico--40" aria-hidden="true"><use href="#i-tag"></use></svg>
             <div>
-              <strong>Bis zu 50% staatlich förderfähig</strong>
-              <span>Es gibt zahlreiche Förderprogramme für Digitalisierung. Wir helfen
+              <p class="er-features__title">Bis zu 50% staatlich förderfähig</p>
+              <p>Es gibt zahlreiche Förderprogramme für Digitalisierung. Wir helfen
                 Ihnen, das passende Programm zu identifizieren, die Voraussetzungen zu
-                prüfen und den Antrag zu stellen.</span>
+                prüfen und den Antrag zu stellen.</p>
             </div>
           </li>
           <li>
-            <svg class="ico" aria-hidden="true"><use href="#i-rocket"></use></svg>
+            <svg class="ico ico--40" aria-hidden="true"><use href="#i-rocket"></use></svg>
             <div>
-              <strong>KI-gestützte Automatisierungskompetenz</strong>
-              <span>Unsere KI-Expertise ermöglicht Lösungen, die auf langfristige
+              <p class="er-features__title">KI-gestützte Automatisierungskompetenz</p>
+              <p>Unsere KI-Expertise ermöglicht Lösungen, die auf langfristige
                 Automatisierung und Integration ausgelegt sind – von der ersten
-                Handlungsempfehlung bis zur vollautomatisierten Umsetzung.</span>
+                Handlungsempfehlung bis zur vollautomatisierten Umsetzung.</p>
             </div>
           </li>
           <li>
-            <svg class="ico" aria-hidden="true"><use href="#i-compass"></use></svg>
+            <svg class="ico ico--40" aria-hidden="true"><use href="#i-compass"></use></svg>
             <div>
-              <strong>Praxisorientierte Vorgehensweise</strong>
-              <span>Statt theoretischer Analysen liefern wir klare Handlungsempfehlungen
-                und funktionierende Prototypen, die direkt im Alltag Wirkung zeigen.</span>
+              <p class="er-features__title">Praxisorientierte Vorgehensweise</p>
+              <p>Statt theoretischer Analysen liefern wir klare Handlungsempfehlungen
+                und funktionierende Prototypen, die direkt im Alltag Wirkung zeigen.</p>
             </div>
           </li>
           <li>
-            <svg class="ico" aria-hidden="true"><use href="#i-settings"></use></svg>
+            <svg class="ico ico--40" aria-hidden="true"><use href="#i-settings"></use></svg>
             <div>
-              <strong>Skalierbarer Ansatz</strong>
-              <span>Ob schnelle Handlungsempfehlung oder vollintegrierte Lösung – unser
-                Ansatz wächst mit deinem Bedarf und Budget.</span>
+              <p class="er-features__title">Skalierbarer Ansatz</p>
+              <p>Ob schnelle Handlungsempfehlung oder vollintegrierte Lösung – unser
+                Ansatz wächst mit deinem Bedarf und Budget.</p>
             </div>
           </li>
           <li>
-            <svg class="ico" aria-hidden="true"><use href="#i-comments"></use></svg>
+            <svg class="ico ico--40" aria-hidden="true"><use href="#i-comments"></use></svg>
             <div>
-              <strong>Direkte Zusammenarbeit</strong>
-              <span>Kurze Wege, klare Kommunikation und persönliche Betreuung – ohne
-                Konzernbürokratie.</span>
+              <p class="er-features__title">Direkte Zusammenarbeit</p>
+              <p>Kurze Wege, klare Kommunikation und persönliche Betreuung – ohne
+                Konzernbürokratie.</p>
             </div>
           </li>
         </ul>
@@ -240,16 +244,16 @@
   </div>
 </section>
 
-<section class="section section--dark section--glow" id="loesungen">
-  <div class="container container--wide">
-    <div class="section-head section-head--center">
-      <h2>Unsere Lösungen</h2>
-    </div>
+<!-- Same white-on-white defect as the band above: only the heading colour is
+     corrected, the white ground and the card treatment are as on the original. -->
+<section class="er-section er-section--solutions" id="loesungen">
+  <div class="container">
+    <h2 class="er-h2" data-anim="up">Unsere Lösungen</h2>
 
-    <div class="grid grid--2">
-      <article class="solution solution--big">
+    <div class="er-cards">
+      <article class="er-card er-card--big" data-anim="up">
         <h3>
-          <svg class="ico ico--lg" aria-hidden="true"><use href="#i-settings"></use></svg>
+          <svg class="ico ico--38" aria-hidden="true"><use href="#i-settings"></use></svg>
           Große Lösung
         </h3>
         <h4>Prozessautomatisierung &amp; Umsetzung (End-to-End)</h4>
@@ -258,15 +262,15 @@
           und automatisieren wollen, um Aufwand, Fehlerquote und Durchlaufzeiten
           deutlich zu reduzieren.
         </p>
-        <button class="solution__more" type="button" data-tab-jump="gross">
+        <button class="er-card__more" type="button" data-tab-jump="gross">
           Mehr erfahren
           <svg class="ico ico--sm" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
         </button>
       </article>
 
-      <article class="solution solution--small">
+      <article class="er-card er-card--small" data-anim="up">
         <h3>
-          <svg class="ico ico--lg" aria-hidden="true"><use href="#i-lightbulb"></use></svg>
+          <svg class="ico ico--38" aria-hidden="true"><use href="#i-lightbulb"></use></svg>
           Kleine Lösung
         </h3>
         <h4>Handlungsempfehlung (ohne Umsetzung)</h4>
@@ -274,7 +278,7 @@
           Für Unternehmen, die die E-Rechnungspflicht schnell, günstig und mit
           minimalem Aufwand erfüllen möchten.
         </p>
-        <button class="solution__more" type="button" data-tab-jump="klein">
+        <button class="er-card__more" type="button" data-tab-jump="klein">
           Mehr erfahren
           <svg class="ico ico--sm" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
         </button>
@@ -283,44 +287,40 @@
   </div>
 </section>
 
-<section class="section" id="loesungen-detail">
-  <div class="container container--wide">
-    <div class="tabs" data-tabs>
-      <div class="tabs__list" role="tablist" aria-label="Lösungen im Detail">
-        <button class="tabs__btn" type="button" role="tab" id="tab-gross"
-                aria-controls="panel-gross" aria-selected="true" data-tab="gross">
-          Große Lösung
-        </button>
-        <button class="tabs__btn" type="button" role="tab" id="tab-klein"
-                aria-controls="panel-klein" aria-selected="false" data-tab="klein">
-          Kleine Lösung
-        </button>
+<section class="er-section er-section--detail">
+  <div class="container">
+    <div class="er-tabs" data-tabs data-anim="up">
+      <div class="er-tabs__list" role="tablist" aria-label="Lösungen im Detail">
+        <button class="er-tabs__btn" type="button" role="tab" id="tab-gross"
+                aria-controls="panel-gross" aria-selected="true" data-tab="gross">Große Lösung</button>
+        <button class="er-tabs__btn" type="button" role="tab" id="tab-klein"
+                aria-controls="panel-klein" aria-selected="false" data-tab="klein">Kleine Lösung</button>
       </div>
 
-      <div class="tabs__panel" role="tabpanel" id="panel-gross"
+      <div class="er-tabs__panel" role="tabpanel" id="panel-gross"
            aria-labelledby="tab-gross" data-panel="gross">
 
-        <div class="split split--media">
+        <div class="er-row">
           <div>
-            <h3>Beschreibung</h3>
-            <p>
+            <h3 class="er-h4">Beschreibung</h3>
+            <p class="er-body">
               Ziel ist eine <b>vollintegrierte, automatisierte Lösung</b> für
               Rechnungseingang, Prüfung und Verarbeitung – inklusive
               Benutzerführung und Dokumentation.
             </p>
           </div>
-          <div class="split__media">
-            <div class="ph" style="aspect-ratio:800/508">Bild: Rechnungsprüfung im Team</div>
-          </div>
+          <figure class="er-shot" data-anim="right">
+            <img src="/assets/img/erechnung/image-2.png" alt="" width="550" height="350" loading="lazy">
+          </figure>
         </div>
 
-        <div class="split split--media split--reverse">
-          <div class="split__media">
-            <div class="ph" style="aspect-ratio:800/508">Bild: Prozess-Workshop</div>
-          </div>
+        <div class="er-row er-row--flip">
+          <figure class="er-shot" data-anim="left">
+            <img src="/assets/img/erechnung/image-4.png" alt="" width="550" height="350" loading="lazy">
+          </figure>
           <div>
-            <h3>Ablauf</h3>
-            <p>
+            <h3 class="er-h4">Ablauf</h3>
+            <p class="er-body">
               Hier entwickeln wir gemeinsam das Zielbild für deinen
               Rechnungsprozess, bauen einen <b>Proof of Concept</b>, und setzen
               die Lösung produktiv um. Ziel ist, dass nach dem Projekt
@@ -330,69 +330,69 @@
           </div>
         </div>
 
-        <div class="split split--media">
+        <div class="er-row">
           <div>
-            <h3>Leistungsumfang</h3>
-            <ul class="features">
+            <h3 class="er-h4">Leistungsumfang</h3>
+            <ul class="er-features">
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-search"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-search"></use></svg>
                 <div>
-                  <strong>Scoping &amp; Planung</strong>
-                  <span>Ziele, Beteiligte und Erfolgskriterien definieren. Projekt
-                    strukturiert planen und Aufgaben priorisieren.</span>
+                  <p class="er-features__title">Scoping &amp; Planung</p>
+                  <p>Ziele, Beteiligte und Erfolgskriterien definieren. Projekt
+                    strukturiert planen und Aufgaben priorisieren.</p>
                 </div>
               </li>
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-list-alt"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-list-alt"></use></svg>
                 <div>
-                  <strong>Prozessanalyse &amp; Anforderungen</strong>
-                  <span>Aktuelle Abläufe aufnehmen, Schwachstellen erkennen und
-                    Anforderungen aller Fachbereiche dokumentieren.</span>
+                  <p class="er-features__title">Prozessanalyse &amp; Anforderungen</p>
+                  <p>Aktuelle Abläufe aufnehmen, Schwachstellen erkennen und
+                    Anforderungen aller Fachbereiche dokumentieren.</p>
                 </div>
               </li>
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-rocket"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-rocket"></use></svg>
                 <div>
-                  <strong>Lösungsdesign &amp; Proof of Concept</strong>
-                  <span>Entwicklung und Test eines funktionsfähigen Prototyps zur
-                    Veranschaulichung und Validierung der künftigen Lösung.</span>
+                  <p class="er-features__title">Lösungsdesign &amp; Proof of Concept</p>
+                  <p>Entwicklung und Test eines funktionsfähigen Prototyps zur
+                    Veranschaulichung und Validierung der künftigen Lösung.</p>
                 </div>
               </li>
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-box"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-box"></use></svg>
                 <div>
-                  <strong>Umsetzung &amp; Validierung</strong>
-                  <span>Lösung im ERP-System (z.&nbsp;B. Odoo) umsetzen, testen und für
-                    den realen Einsatz vorbereiten.</span>
+                  <p class="er-features__title">Umsetzung &amp; Validierung</p>
+                  <p>Lösung im ERP-System (z.&nbsp;B. Odoo) umsetzen, testen und für
+                    den realen Einsatz vorbereiten.</p>
                 </div>
               </li>
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-cloud-check"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-cloud-check"></use></svg>
                 <div>
-                  <strong>Abschluss &amp; Übergabe</strong>
-                  <span>Ergebnisse zusammenfassen, Anwenderdokumentation bereitstellen
-                    und Empfehlungen für den weiteren Ausbau geben.</span>
+                  <p class="er-features__title">Abschluss &amp; Übergabe</p>
+                  <p>Ergebnisse zusammenfassen, Anwenderdokumentation bereitstellen
+                    und Empfehlungen für den weiteren Ausbau geben.</p>
                 </div>
               </li>
             </ul>
           </div>
-          <div class="split__media">
-            <div class="ph" style="aspect-ratio:800/508">Bild: Auswertung am Laptop</div>
-          </div>
+          <figure class="er-shot" data-anim="right">
+            <img src="/assets/img/erechnung/image-3.png" alt="" width="550" height="350" loading="lazy">
+          </figure>
         </div>
 
-        <div class="btn-row">
-          <a class="btn btn--primary" href="/kontakt/">Kostenloses Erstgespräch buchen</a>
+        <div class="er-btn-row er-btn-row--start" data-anim="up">
+          <a class="er-btn er-btn--teal er-btn--sm" href="/kontakt/">Kostenloses Erstgespräch buchen <svg class="ico ico--sm er-btn__arrow" aria-hidden="true"><use href="#i-arrow-ne"></use></svg></a>
         </div>
       </div>
 
-      <div class="tabs__panel" role="tabpanel" id="panel-klein"
+      <div class="er-tabs__panel" role="tabpanel" id="panel-klein"
            aria-labelledby="tab-klein" data-panel="klein" hidden>
 
-        <div class="split split--media">
+        <div class="er-row">
           <div>
-            <h3>Beschreibung</h3>
-            <p>
+            <h3 class="er-h4">Beschreibung</h3>
+            <p class="er-body">
               Wir analysieren den aktuellen Rechnungsprozess, dokumentieren den
               IST-Zustand und erstellen eine
               <b>präzise Schritt-für-Schritt-Anleitung</b>, wie dein Unternehmen
@@ -400,71 +400,75 @@
               umsetzen kann.
             </p>
           </div>
-          <div class="split__media">
-            <div class="ph" style="aspect-ratio:800/508">Bild: Dokumentation des IST-Zustands</div>
-          </div>
+          <figure class="er-shot" data-anim="right">
+            <img src="/assets/img/erechnung/image-2.png" alt="" width="550" height="350" loading="lazy">
+          </figure>
         </div>
 
-        <div class="split split--media split--reverse">
-          <div class="split__media">
-            <div class="ph" style="aspect-ratio:800/508">Bild: Minimal-Plan</div>
-          </div>
+        <div class="er-row er-row--flip">
+          <figure class="er-shot" data-anim="left">
+            <img src="/assets/img/erechnung/image-3.png" alt="" width="550" height="350" loading="lazy">
+          </figure>
           <div>
-            <h3>Leistungsumfang</h3>
-            <ul class="features">
+            <h3 class="er-h4">Leistungsumfang</h3>
+            <ul class="er-features">
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-search"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-search"></use></svg>
                 <div>
-                  <strong>IST-Aufnahme &amp; Dokumentation</strong>
-                  <span>Überblick über bestehende Abläufe</span>
+                  <p class="er-features__title">IST-Aufnahme &amp; Dokumentation</p>
+                  <p>Überblick über bestehende Abläufe</p>
                 </div>
               </li>
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-thumbs-up"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-thumbs-up"></use></svg>
                 <div>
-                  <strong>Pflichtencheck</strong>
-                  <span>Prüfung der Anforderungen (ZUGFeRD / XRechnung)</span>
+                  <p class="er-features__title">Pflichtencheck</p>
+                  <p>Prüfung der Anforderungen (ZUGFeRD / XRechnung)</p>
                 </div>
               </li>
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-list-1"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-list-1"></use></svg>
                 <div>
-                  <strong>Empfehlung „Minimal-Plan“</strong>
-                  <span>Schritt-für-Schritt-Anleitung für die Umsetzung</span>
+                  <p class="er-features__title">Empfehlung „Minimal-Plan“</p>
+                  <p>Schritt-für-Schritt-Anleitung für die Umsetzung</p>
                 </div>
               </li>
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-file-pdf"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-file-pdf"></use></svg>
                 <div>
-                  <strong>Ergebnisdokumentation</strong>
-                  <span>Kompakter PDF-Report oder Confluence-Seite</span>
+                  <p class="er-features__title">Ergebnisdokumentation</p>
+                  <p>Kompakter PDF-Report oder Confluence-Seite</p>
                 </div>
               </li>
               <li>
-                <svg class="ico" aria-hidden="true"><use href="#i-users"></use></svg>
+                <svg class="ico ico--40" aria-hidden="true"><use href="#i-users"></use></svg>
                 <div>
-                  <strong>(Optional) Angebot</strong>
-                  <span>für die Umsetzung der Handlungsempfehlung durch unser Team</span>
+                  <p class="er-features__title">(Optional) Angebot</p>
+                  <p>für die Umsetzung der Handlungsempfehlung durch unser Team</p>
                 </div>
               </li>
             </ul>
           </div>
         </div>
 
-        <div class="btn-row">
-          <a class="btn btn--primary" href="/kontakt/">Kostenloses Erstgespräch buchen</a>
+        <div class="er-btn-row er-btn-row--start" data-anim="up">
+          <a class="er-btn er-btn--teal er-btn--sm" href="/kontakt/">Kostenloses Erstgespräch buchen <svg class="ico ico--sm er-btn__arrow" aria-hidden="true"><use href="#i-arrow-ne"></use></svg></a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="cta">
+<!-- White-on-white again on the original; the non-accent words are darkened so
+     the line reads. Layout, colours and the white ground are unchanged. -->
+<section class="er-section er-section--cta">
   <div class="container">
-    <h2><span class="cta__accent">KI Beratung</span> Hessen<br>
-      Ihr Weg zur <span class="cta__accent">KI-Exzellence</span></h2>
-    <div class="btn-row btn-row--center">
-      <a class="btn btn--light" href="/kontakt/">Termin buchen</a>
+    <p class="er-cta__title" data-anim="up">
+      <span class="er-accent">KI Beratung</span> Hessen<br>
+      Ihr Weg zur <span class="er-accent">KI-Exzellence</span>
+    </p>
+    <div class="er-btn-row" data-anim="up">
+      <a class="er-btn er-btn--white" href="/kontakt/">Termin buchen <svg class="ico ico--sm er-btn__arrow" aria-hidden="true"><use href="#i-arrow-ne"></use></svg></a>
     </div>
   </div>
 </section>

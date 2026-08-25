@@ -17,11 +17,14 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,500;6..12,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,500;6..12,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="/assets/css/main.css">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 </head>
-<body>
+<body class="{{bodyClass}}">
+<!-- Arms the scroll-in animations before first paint, so the page never
+     flashes its content and then hides it. No JS, no hiding. -->
+<script>document.documentElement.className += " js-anim";</script>
 <a class="skip-link" href="#content">Zum Inhalt springen</a>
 {{header}}
 <main id="content">

@@ -95,3 +95,40 @@
     });
   });
 })();
+
+/* Scroll-in animations. Mirrors the entrance animations the WordPress original
+   plays on the E-Rechnung page: blocks fade up, images slide in from the side
+   they sit on. Elements stay put until the observer reveals them, and the
+   `js-anim` class on <html> means nothing is hidden when JS is unavailable. */
+(function () {
+  "use strict";
+
+  var items = document.querySelectorAll("[data-anim]");
+  if (!items.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    Array.prototype.forEach.call(items, function (el) { el.classList.add("is-in"); });
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("is-in");
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: "0px 0px -12% 0px", threshold: 0.05 });
+
+  Array.prototype.forEach.call(items, function (el) { io.observe(el); });
+
+  // A panel revealed by a tab switch was never on screen, so its own elements
+  // never intersected. Reveal whatever the newly shown panel contains.
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-tab], [data-tab-jump]");
+    if (!btn) return;
+    window.setTimeout(function () {
+      document.querySelectorAll("[data-panel]:not([hidden]) [data-anim]")
+        .forEach(function (el) { el.classList.add("is-in"); });
+    }, 30);
+  });
+})();

@@ -67,6 +67,8 @@ def audit_overflow(page):
         // the document alone would miss.
         for (const el of document.querySelectorAll('body *')) {
             if (el.classList.contains('visually-hidden')) continue;
+            // decorative-only subtrees are allowed to be clipped
+            if (el.getAttribute('aria-hidden') === 'true') continue;
             // An absolutely-positioned descendant (the nav dropdown) is meant to
             // extend past its parent; that inflates scrollWidth without being a
             // layout defect.
@@ -97,6 +99,7 @@ def audit_overflow(page):
             const cs = getComputedStyle(el);
             if (el.scrollHeight > el.clientHeight + 2 && el.clientHeight > 0 &&
                 cs.overflowY === 'hidden' &&
+                el.getAttribute('aria-hidden') !== 'true' &&
                 !el.classList.contains('visually-hidden')) {
                 out.clipped.push(el.tagName.toLowerCase() + '.' +
                     String(el.className).trim().split(/\\s+/).join('.'));
@@ -174,6 +177,16 @@ def main():
                 resp = page.goto(url, wait_until="networkidle")
                 if resp.status != 200:
                     problems.append(f"{path} [{vp_name}] HTTP {resp.status}")
+
+                # Settle the scroll-in animations. Their start state is
+                # deliberately offset, which is not a layout defect -- the audit
+                # is about where the page comes to rest.
+                # Dropping `js-anim` switches the whole rule set off rather
+                # than waiting out a 1.2s transition per element.
+                page.evaluate(
+                    "() => document.documentElement.classList.remove('js-anim')"
+                )
+                page.wait_for_timeout(60)
 
                 ov = audit_overflow(page)
                 if ov["docScroll"]:
