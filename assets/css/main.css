@@ -258,6 +258,10 @@ button {
 .section--dark h2,
 .section--dark h3,
 .section--dark h4 { color: var(--c-white); }
+.section--dark p { color: rgba(255, 255, 255, 0.78); }
+.section--dark .eyebrow { color: var(--c-accent); }
+.section--dark .ticks { color: rgba(255, 255, 255, 0.78); }
+.section--dark .ticks li::before { color: var(--c-accent); }
 
 .skip-link {
   position: absolute;
@@ -864,6 +868,21 @@ button {
   align-items: center;
 }
 
+/* --- Homepage teaser band ------------------------------------------------ */
+
+.teaser h2 {
+  font-size: var(--fs-h2);
+  margin-top: var(--sp-3);
+}
+.teaser p {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-body-lg);
+}
+.teaser .ticks {
+  font-size: var(--fs-body);
+  gap: var(--sp-4);
+}
+
 /* --- Prose (legal + case-study body) ------------------------------------ */
 
 .prose {
@@ -948,26 +967,7 @@ button {
 }
 .quote .quote__company { color: var(--c-text-muted); }
 
-/* --- E-Rechnung page ---------------------------------------------------- */
-
-/* Everything below is scoped to this page. It is the one page rebuilt pixel-
-   for-pixel against the live WordPress version, which uses its own typeface,
-   container width and type scale -- none of which match the rest of the site.
-   Values here come from measuring the rendered original, not from the tokens. */
-
-.page-erechnung main {
-  /* The live E-Rechnung page is set in Plus Jakarta Sans; the rest of the site
-     is Nunito Sans. Scoped to <main> so header and footer keep the site face. */
-  font-family: "Plus Jakarta Sans", var(--font-sans);
-  color: var(--c-text);
-  /* the slide-in animations start off-canvas */
-  overflow-x: clip;
-}
-
-/* The original lays this page out on a 1140px content measure, 100px narrower
-   than the rest of the site's wide container and with no inner padding at
-   desktop widths. Widening the box by the gutter reproduces it exactly. */
-.page-erechnung main .container { max-width: 1188px; }
+/* --- Motion & icons (shared) -------------------------------------------- */
 
 /* The sprite only carries <symbol> definitions; it must occupy no space but
    stay in the layout tree, so `display: none` is deliberately not used. */
@@ -1010,6 +1010,207 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .js-anim [data-anim] { opacity: 1; transform: none; transition: none; }
 }
+
+/* --- Deep Reading Engine page ------------------------------------------- */
+
+/* The slide-in animations start off-canvas. */
+.page-dre main { overflow-x: clip; }
+
+.dre-hero {
+  position: relative;
+  padding-block: var(--sp-10) var(--sp-9);
+  background:
+    radial-gradient(ellipse 75% 85% at 78% 108%, rgba(118, 171, 174, 0.42), transparent 62%),
+    radial-gradient(ellipse 55% 70% at 6% -12%, rgba(214, 216, 79, 0.13), transparent 60%),
+    var(--c-ink);
+  color: rgba(255, 255, 255, 0.82);
+  overflow: hidden;
+}
+/* a hairline of the accent bloom, so the band ends on a lit edge */
+.dre-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(118, 171, 174, 0.55), transparent);
+}
+.dre-hero h1 {
+  /* Wide enough that the sentence lands on three lines rather than five. */
+  max-width: 30ch;
+  font-size: clamp(2.25rem, 4.4vw, 3.5rem);
+  line-height: 1.1;
+  color: var(--c-white);
+}
+/* The product name leads the sentence; giving it its own line and the accent
+   colour is typography, the wording is untouched. */
+.dre-hero__name {
+  display: block;
+  color: var(--c-accent);
+}
+.dre-hero__lead {
+  max-width: 44rem;
+  margin-top: var(--sp-6);
+  font-size: var(--fs-lead);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.dre-section { padding-block: var(--sp-9); }
+.dre-section--arch { background: var(--c-surface); }
+.dre-section--cases {
+  position: relative;
+  background:
+    radial-gradient(ellipse 70% 95% at 88% 0%, rgba(118, 171, 174, 0.28), transparent 62%),
+    var(--c-teal-deep);
+  color: rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+}
+
+.dre-intro { max-width: 52rem; }
+.dre-h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.15;
+  color: var(--c-primary);
+}
+.dre-lede {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-body-lg);
+  color: var(--c-text-muted);
+}
+.dre-section--cases .dre-h2 { color: var(--c-white); }
+.dre-section--cases .dre-lede { color: rgba(255, 255, 255, 0.75); }
+
+/* --- the four architecture points ---------------------------------------- */
+
+.dre-pillars {
+  margin-top: var(--sp-8);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-5);
+  list-style: none;
+}
+/* The reveal wrapper and the hovered card are deliberately separate elements.
+   `[data-anim].is-in` sets `transform: none` at a higher specificity than a
+   component's own `:hover`, so a card that is its own reveal target silently
+   loses its hover lift. */
+.dre-pillars > li,
+.dre-cases > div { display: grid; }
+.js-anim .dre-pillars > li:nth-child(2),
+.js-anim .dre-cases > div:nth-child(2) { transition-delay: 0.08s; }
+.js-anim .dre-pillars > li:nth-child(3),
+.js-anim .dre-cases > div:nth-child(3) { transition-delay: 0.16s; }
+.js-anim .dre-pillars > li:nth-child(4) { transition-delay: 0.24s; }
+
+.dre-pillar {
+  height: 100%;
+  display: grid;
+  /* Two tracks only: the icon, and one wrapper holding all the text. */
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--sp-5);
+  align-items: start;
+  padding: var(--sp-6);
+  background: var(--c-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition),
+    border-color var(--transition);
+}
+.dre-pillar:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--c-accent);
+}
+.dre-pillar .ico {
+  color: var(--c-accent);
+  transition: transform var(--transition);
+}
+.dre-pillar:hover .ico { transform: scale(1.09); }
+.dre-pillar p {
+  font-size: var(--fs-small);
+  color: var(--c-text-muted);
+}
+/* The lead-in runs into its own sentence, so it stays inline rather than
+   becoming a heading -- that would mean moving the colon out of the copy. */
+.dre-pillar strong {
+  color: var(--c-text);
+  font-weight: 600;
+}
+
+/* --- the three worked examples ------------------------------------------- */
+
+.dre-cases {
+  margin-top: var(--sp-8);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-5);
+}
+.dre-case {
+  position: relative;
+  height: 100%;
+  padding: var(--sp-6);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform var(--transition), background var(--transition),
+    border-color var(--transition);
+}
+.dre-case::before {
+  content: "";
+  position: absolute;
+  left: var(--sp-6);
+  top: 0;
+  width: 2.25rem;
+  height: 2px;
+  background: var(--c-accent);
+  transition: width var(--transition);
+}
+.dre-case:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(118, 171, 174, 0.7);
+}
+.dre-case:hover::before { width: 5rem; }
+.dre-case h3 {
+  font-size: var(--fs-body-lg);
+  color: var(--c-white);
+}
+.dre-case p {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-small);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 1023px) {
+  /* Three across would leave an orphan at two columns, so it drops straight
+     to one. */
+  .dre-cases { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 767px) {
+  .dre-pillars { grid-template-columns: minmax(0, 1fr); }
+  .dre-hero { padding-block: var(--sp-9) var(--sp-8); }
+}
+
+/* --- E-Rechnung page ---------------------------------------------------- */
+
+/* Everything below is scoped to this page. It is the one page rebuilt pixel-
+   for-pixel against the live WordPress version, which uses its own typeface,
+   container width and type scale -- none of which match the rest of the site.
+   Values here come from measuring the rendered original, not from the tokens. */
+
+.page-erechnung main {
+  /* The live E-Rechnung page is set in Plus Jakarta Sans; the rest of the site
+     is Nunito Sans. Scoped to <main> so header and footer keep the site face. */
+  font-family: "Plus Jakarta Sans", var(--font-sans);
+  color: var(--c-text);
+  /* the slide-in animations start off-canvas */
+  overflow-x: clip;
+}
+
+/* The original lays this page out on a 1140px content measure, 100px narrower
+   than the rest of the site's wide container and with no inner padding at
+   desktop widths. Widening the box by the gutter reproduces it exactly. */
+.page-erechnung main .container { max-width: 1188px; }
 
 /* --- hero --------------------------------------------------------------- */
 
