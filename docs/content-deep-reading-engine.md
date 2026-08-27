@@ -6,19 +6,19 @@ Excel-Tabellen oder komplexen Widerspruchsverfahren scheitert, liefert
 unsere Deep Reading Engine belastbare, auditierbare Ergebnisse.
 
 Das Geheimnis liegt in unserer Architektur
-Gängige KI workflows scheitern an komplexen Aufgaben weil sowohl Lese
-und Prompt Kontext überfordert wird. Wer ahnung von diesem Thema hat,
-weißt dass KI kein reales verständniss hat und somit keine aufgaben
-erledigen kann die eine gewisse Kombinationsgabe brauchen. Genau hier
-kommt unser Know-How ins spiel: Mit unsere Deep-Reading-Engine
+Gängige KI-Workflows scheitern an komplexen Aufgaben, weil sowohl Lese-
+als auch Prompt-Kontext überfordert werden. Wer Ahnung von diesem Thema hat,
+weiß, dass KI kein reales Verständnis hat und somit keine Aufgaben
+erledigen kann, die eine gewisse Kombinationsgabe brauchen. Genau hier
+kommt unser Know-how ins Spiel: Mit unserer Deep-Reading-Engine
 zerlegen wir komplexe Aufgaben in ein Netzwerk deterministischer
 Einzelschritte. Durch präzises Multi-Stage Prompt Engineering und
 gegenseitige Validierungsschleifen entstehen belastbare, auditierbare
 Ergebnisse inklusive Quellennachweis:
 
 * Pipeline-Orchestrierung statt Single-Prompt: Dokumente werden nicht
-  einfach „in den Chat geworfen". Unser Engine zerlegt 1.000-seitige
-  Akten in deterministische Micro-Tasks (z. B. Klauselprüfung,
+  einfach „in den Chat geworfen“. Unsere Engine zerlegt 1.000-seitige
+  Akten in deterministische Micro-Tasks (z.B. Klauselprüfung,
   Fristenextraktion, Zahlenabgleich).
 * Multi-Stage Prompt Engineering: Hochgradig spezialisierte
   System-Prompts für jeden Einzelschritt garantieren, dass das Modell
@@ -27,14 +27,14 @@ Ergebnisse inklusive Quellennachweis:
   LLM-Durchläufe prüfen die Zwischenergebnisse wechselseitig auf
   Widersprüche, Rechenfehler und Logikbrüche.
 * Confidence Scoring: Die Architektur bewertet die Konsistenz der
-  Ergebnisse. Unsicherheiten werden transparent markiert, statt blind
-  halluziniert.
+  Ergebnisse. Unsicherheiten werden transparent markiert, statt blind zu
+  halluzinieren.
 
 Reale Anwendungsbeispiele:
-Die deep Reading Engine wurde schon in eine vielzahl unterschiedlicher
-umgebungen auf die probe gestellt:
+Die Deep Reading Engine wurde schon in einer Vielzahl unterschiedlicher
+Umgebungen auf die Probe gestellt:
 
-1.Ausschreibungen im Speditionswesen
+1. Ausschreibungen im Speditionswesen
 Ausschreibungsunterlagen automatisiert analysieren, mit einem
 individuellen Fragenkatalog abgleichen und relevante Anforderungen
 bewerten. Daraus wird innerhalb weniger Minuten eine
