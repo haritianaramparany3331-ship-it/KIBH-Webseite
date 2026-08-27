@@ -372,17 +372,6 @@ button {
   color: var(--c-primary);
 }
 
-.btn--light {
-  background: var(--c-white);
-  border-color: var(--c-white);
-  color: var(--c-text);
-}
-.btn--light:hover {
-  background: var(--c-lime);
-  border-color: var(--c-lime);
-  color: var(--c-ink);
-}
-
 .btn--ghost {
   padding-inline: 0;
   color: var(--c-accent-dark);
@@ -1200,35 +1189,6 @@ button {
 @media (max-width: 767px) {
   .dre-pillars { grid-template-columns: minmax(0, 1fr); }
   .dre-hero { padding-block: var(--sp-9) var(--sp-8); }
-}
-
-/* --- Deep Reading Engine: closing band ---------------------------------- */
-
-/* Same shape as the E-Rechnung close: black ground, neon bloom rising from the
-   bottom edge, the name split across two lines with lime accents. */
-.dre-cta {
-  padding-block: var(--sp-10);
-  background:
-    radial-gradient(ellipse 65% 100% at 50% 125%, rgba(118, 171, 174, 0.5), transparent 62%),
-    #05090a;
-  text-align: center;
-}
-.dre-cta__title {
-  font-size: var(--fs-h2);
-  line-height: 1.3;
-  font-weight: 600;
-  color: var(--c-white);
-}
-.dre-accent { color: var(--c-lime); }
-.dre-cta__row {
-  display: flex;
-  justify-content: center;
-  margin-top: var(--sp-7);
-}
-
-@media (max-width: 639px) {
-  .dre-cta { padding-block: var(--sp-9); }
-  .dre-cta__title { font-size: var(--fs-h2-sm); }
 }
 
 /* --- E-Rechnung page ---------------------------------------------------- */
