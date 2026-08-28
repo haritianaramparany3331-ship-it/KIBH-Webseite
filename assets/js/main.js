@@ -132,3 +132,73 @@
     }, 30);
   });
 })();
+
+/* --------------------------------------------------------------------------
+   Disclosure: "Mehr" over the last three homepage solution cards.
+
+   The live page hides them behind the same toggle. CSS does the hiding and
+   only under .js-anim, so with JS off every card is visible and the button
+   is not rendered at all.
+   -------------------------------------------------------------------------- */
+(function () {
+  var btns = document.querySelectorAll("[data-disclosure]");
+  if (!btns.length) return;
+
+  Array.prototype.forEach.call(btns, function (btn) {
+    var target = document.getElementById(btn.getAttribute("data-disclosure"));
+    if (!target) return;
+
+    btn.addEventListener("click", function () {
+      var open = target.classList.toggle("is-expanded");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      btn.textContent = btn.getAttribute(open ? "data-label-less" : "data-label-more");
+
+      // The cards were display:none, so they never intersected the observer
+      // and are still sitting at their animation start state.
+      if (open) {
+        target.querySelectorAll("[data-more] [data-anim], [data-more][data-anim]")
+          .forEach(function (el) { el.classList.add("is-in"); });
+      }
+    });
+  });
+})();
+
+/* --------------------------------------------------------------------------
+   Rotating word in the three-step headline, as on the live page.
+   -------------------------------------------------------------------------- */
+(function () {
+  var els = document.querySelectorAll("[data-rotate]");
+  if (!els.length) return;
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (reduced.matches) return;
+
+  Array.prototype.forEach.call(els, function (el) {
+    var words = el.getAttribute("data-rotate").split("|");
+    var slot = el.querySelector(".rotator__word");
+    if (!slot || words.length < 2) return;
+
+    // Reserve the width of the longest word so the headline does not reflow
+    // on every tick.
+    var probe = document.createElement("span");
+    probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap";
+    probe.className = slot.className;
+    el.appendChild(probe);
+    var widest = 0;
+    words.forEach(function (w) {
+      probe.textContent = w;
+      widest = Math.max(widest, probe.getBoundingClientRect().width);
+    });
+    el.removeChild(probe);
+    el.style.minWidth = Math.ceil(widest) + "px";
+
+    var i = 0;
+    window.setInterval(function () {
+      i = (i + 1) % words.length;
+      var next = slot.cloneNode(false);
+      next.textContent = words[i];
+      slot.parentNode.replaceChild(next, slot);
+      slot = next;
+    }, 1500);
+  });
+})();
