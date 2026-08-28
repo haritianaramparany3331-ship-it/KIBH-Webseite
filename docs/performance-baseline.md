@@ -33,9 +33,10 @@ not present them as one:
 2. **Image weight is currently 0 KB** because every logo and photo is still a
    placeholder. Real assets will add weight. WordPress's 93 KB of images is
    the honest number to beat, and we should re-measure after upload.
-3. **Fonts:** 48 KB is Nunito Sans from Google Fonts. The live site loads
-   496 KB of fonts it then largely fails to use, since Avenir has no
-   `@font-face` and falls back on most devices.
+3. **Fonts (re-measured 2026-08-28):** 29 KB, a single Mulish file. Body
+   text is Verdana, a system face, so it costs nothing. The live site loads
+   496 KB across 3 files — it self-hosts Avenir as uncompressed `.ttf`
+   rather than `woff2`, which is most of the difference. 17x lighter.
 
 Byte count and request count are the two numbers safe to quote today. Rerun
 this script after deployment and after assets land, and replace the timing

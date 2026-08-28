@@ -46,11 +46,14 @@ Additional palette entries in use:
 overwhelmingly **`Avenir`** — 68 direct `Avenir` declarations against 15 for
 `Verdana`. Nearly every custom typography token specifies Avenir.
 
-**There is no `@font-face` rule and no Google Fonts link anywhere on the
-site.** Avenir is a licensed Linotype face that ships with macOS but not
-with Windows or Android. So on most visitors' machines the site is *already*
-falling back to generic `Sans-serif`, and renders differently per OS. This
-needs a decision in Stage 2 — see "Open decisions" below.
+**Correction (2026-08-28).** An earlier version of this section claimed the
+site had no `@font-face` rule and that Avenir therefore fell back to a
+generic sans on Windows and Android. That was wrong. The site **self-hosts
+Avenir**: `Avenir-Regular.ttf` and `Avenir-Heavy.ttf` are served from
+`wp-content/uploads/2024/03/` and both load. Avenir renders for every
+visitor on every OS, so there is no per-OS lottery, and the substitution
+question is a licensing one rather than a rendering one — Avenir is a
+licensed Linotype face we cannot serve ourselves. See "Open decisions".
 
 ### Type scale (desktop)
 
@@ -99,18 +102,32 @@ Weights in use: **400, 500, 600**. No 700+ anywhere.
 
 ## Open decisions for Stage 2
 
-1. **Avenir substitution.** Options, in order of my preference:
-   - **Nunito Sans** (Google Fonts, free) — geometric humanist, closest
-     free match to Avenir's proportions and its 400/500/600 range.
-   - **Montserrat** — more geometric, wider; recognisably different.
-   - **System stack** (`-apple-system, Segoe UI, …`) — matches what most
-     visitors *currently* see, but abandons the intended look on macOS too.
+1. **Avenir substitution — RESOLVED 2026-08-28: Mulish.**
 
-   Nunito Sans gives every visitor a consistent, close-to-intended result,
-   which is arguably closer to design intent than today's OS lottery. A
-   strict 1:1 reading would instead reproduce `font-family: "Avenir",
-   Sans-serif` verbatim, fallback behaviour and all. **Flagging rather than
-   deciding — this one is a judgement call about what "1:1" means.**
+   Candidates were measured against the real Avenir files rather than
+   chosen by reputation. Same headline, same size, width relative to
+   Avenir:
+
+   | Candidate | Heading width | Body width |
+   |---|---|---|
+   | **Mulish** | **100.2%** | **102.9%** |
+   | Figtree | 96.7% | 99.8% |
+   | Nunito Sans | 97.3% | 100.7% |
+   | DM Sans | 103.2% | 101.3% |
+   | Jost | 96.4% | 95.3% |
+   | Poppins | 109.2% | 108.7% |
+   | Montserrat | 111.8% | 110.2% |
+
+   Overlaying each candidate on Avenir at 64px confirmed it: Mulish stays
+   in register across a whole line, while Nunito Sans, Figtree and DM Sans
+   visibly drift apart by the end of it.
+
+   Body text is **Verdana**, matching the live site exactly — it is a system
+   face on Windows and macOS, so it needs no webfont and raises no licence
+   question at all.
+
+   Still open for Willy: whether KIBH holds a webfont licence for Avenir. If
+   it does, swapping Mulish for the real thing is a one-line token change.
 
 2. **`#76ABAE` vs `#77ABAE`.** Almost certainly a typo in the original.
    Reproduce both, or normalise to one.

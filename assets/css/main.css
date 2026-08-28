@@ -29,8 +29,26 @@
   --c-accent-dark: #5f9295;
   --c-accent-soft: rgba(118, 171, 174, 0.12);
 
-  /* Typography */
-  --font-sans: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  /*
+    Typography — two faces, split the way the live site splits them.
+
+    Running text is Verdana there, and Verdana ships with Windows and macOS,
+    so it costs no webfont and raises no licence question. Geneva and DejaVu
+    Sans are the nearest stand-ins where it is absent.
+
+    Headings, nav and buttons are Avenir there. Avenir is a licensed Linotype
+    face we cannot serve ourselves, so this is Mulish, picked by measuring
+    candidates against the real Avenir files rather than by reputation: it
+    renders the same headline at 100.2% of Avenir's width and its letterforms
+    stay in register across a whole line, where Nunito Sans, Figtree and DM
+    Sans all drift apart by the end of it.
+
+    Verdana carries only Regular and Bold, so a 600 lands on synthesised or
+    real bold. That is what the live site does too — it asks for 600 in
+    Verdana in several places.
+  */
+  --font-sans: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  --font-display: Mulish, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
 
   --fs-eyebrow: 0.75rem;   /* 12 */
@@ -138,6 +156,7 @@ video {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
+  font-family: var(--font-display);
   font-weight: 600;
   line-height: 1.2;
   color: var(--c-primary);
@@ -289,6 +308,7 @@ button {
 }
 
 .eyebrow {
+  font-family: var(--font-display);
   font-size: var(--fs-eyebrow);
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -323,6 +343,7 @@ button {
 /* --- Buttons ------------------------------------------------------------ */
 
 .btn {
+  font-family: var(--font-display);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -373,6 +394,7 @@ button {
 }
 
 .btn--ghost {
+  font-family: var(--font-sans);
   padding-inline: 0;
   color: var(--c-accent-dark);
 }
@@ -425,6 +447,7 @@ button {
 .brand:hover { color: var(--c-primary); }
 
 .brand__mark {
+  font-family: var(--font-display);
   display: grid;
   place-items: center;
   width: 42px;
@@ -443,6 +466,7 @@ button {
   line-height: 1.15;
 }
 .brand__name {
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: var(--fs-small);
 }
@@ -462,6 +486,7 @@ button {
 }
 
 .nav__link {
+  font-family: var(--font-display);
   display: inline-flex;
   align-items: center;
   gap: var(--sp-1);
@@ -517,6 +542,7 @@ button {
 }
 
 .nav__sub a {
+  font-family: var(--font-display);
   display: block;
   padding: var(--sp-3) var(--sp-4);
   font-size: var(--fs-small);
@@ -757,6 +783,7 @@ button {
   color: var(--c-text-muted);
 }
 .case__quote {
+  font-family: var(--font-display);
   padding-left: var(--sp-4);
   border-left: 3px solid var(--c-accent);
   font-size: var(--fs-small);
@@ -1001,6 +1028,7 @@ button {
   box-shadow: var(--shadow-sm);
 }
 .quote p {
+  font-family: var(--font-display);
   font-size: var(--fs-lead);
   font-style: italic;
   line-height: 1.6;
@@ -1250,9 +1278,27 @@ button {
    container width and type scale -- none of which match the rest of the site.
    Values here come from measuring the rendered original, not from the tokens. */
 
+/* Two of the live pages are set in Plus Jakarta Sans throughout rather than
+   the site's Verdana/Avenir pair -- E-Rechnung and the U2care case study, both
+   evidently built later. Scoped to <main> so the header and footer keep the
+   site face on those pages, exactly as the live site does. */
+.page-u2care main {
+  font-family: "Plus Jakarta Sans", var(--font-sans);
+}
+.page-u2care main :is(h1, h2, h3, h4, h5, h6),
+.page-erechnung main :is(h1, h2, h3, h4, h5, h6),
+.page-u2care main .eyebrow,
+.page-erechnung main .eyebrow,
+.page-u2care main .btn,
+.page-erechnung main .btn,
+.page-u2care main .case__quote,
+.page-erechnung main .case__quote,
+.page-u2care main .quote p,
+.page-erechnung main .quote p {
+  font-family: "Plus Jakarta Sans", var(--font-display);
+}
+
 .page-erechnung main {
-  /* The live E-Rechnung page is set in Plus Jakarta Sans; the rest of the site
-     is Nunito Sans. Scoped to <main> so header and footer keep the site face. */
   font-family: "Plus Jakarta Sans", var(--font-sans);
   color: var(--c-text);
   /* the slide-in animations start off-canvas */
@@ -1727,6 +1773,7 @@ button {
 }
 
 .site-footer__bottom {
+  font-family: var(--font-display);
   margin-top: var(--sp-7);
   padding-top: var(--sp-5);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
