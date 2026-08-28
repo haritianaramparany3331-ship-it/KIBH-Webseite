@@ -664,32 +664,31 @@ button {
   .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-/* Stretches the final card over whatever columns are left, so a grid whose
-   count is not a multiple of the column count does not end on a half-empty
-   row. The :nth-child arithmetic only holds if the column count is known, so
-   this grid pins it instead of leaving it to auto-fit. The three counts below
-   are the ones auto-fit was already producing at these widths — writing them
-   down is what stops the fill rules from drifting out of step with the
-   layout if a token changes. Opt in per grid: the sibling grids are sized to
-   land on full rows already. */
-.grid--fill-last { grid-template-columns: minmax(0, 1fr); }
+/* This grid mixes full-width cards in among the normal ones, so the spans
+   below only land on flush rows if the column count is known. That is why it
+   pins the count rather than leaving it to auto-fit — the three counts are
+   the ones auto-fit was already producing at these widths, written down so a
+   token change cannot quietly put the spans out of step with the layout. */
+.grid--testimonials { grid-template-columns: minmax(0, 1fr); }
 
 @media (min-width: 600px) {
-  .grid--fill-last { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid--testimonials { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 912px) {
-  .grid--fill-last { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid--testimonials { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-/* Two columns: a last card on an odd position is alone, so it takes both. */
-@media (min-width: 600px) and (max-width: 911px) {
-  .grid--fill-last > :last-child:nth-child(odd) { grid-column: span 2; }
-}
-/* Three columns: 3n+1 opens a row alone, 3n+2 leaves one slot spare. A last
-   card at 3n lands on a full row and is deliberately left untouched. */
+/* One testimonial runs several times longer than the rest. Given the full
+   width it reads as its own band, and it stops stretching whatever would
+   otherwise have to share its row. */
+.case--wide { grid-column: 1 / -1; }
+
+/* At three columns the full-width card above shifts everything after it by
+   two slots, which leaves the closing card alone on the last row — so it
+   takes the whole row rather than sitting in a third of it. At two columns
+   the slots already come out even and it needs no help. */
 @media (min-width: 912px) {
-  .grid--fill-last > :last-child:nth-child(3n + 1) { grid-column: span 3; }
-  .grid--fill-last > :last-child:nth-child(3n + 2) { grid-column: span 2; }
+  .case--close { grid-column: 1 / -1; }
 }
 
 /* Four across, or two — never three. Left to auto-fit, the four "Warum wir?"
