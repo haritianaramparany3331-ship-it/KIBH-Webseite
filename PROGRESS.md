@@ -90,9 +90,29 @@ Verified by driving both pages with Playwright, not by reading markup.
 11. webapp-testing on the DRE page at 390/768/900/1040/1440: no unrevealed animations, no console errors, no overflow. Full QA suite green, 11 pages × 5 viewports.
 12. Pushed. Live and serving `main.eb48b99b.css`.
 
+## 2026-08-28 — client recommendations on Ergebnisse
+
+1. `docs/content-recommendations.md` created for Willy's four new recommendations — Volker Adelfinger, Mihaela Geiger, Daniel Markus, Jarne Van Gompel. Same role as the DRE content doc: verbatim source, extend at the bottom.
+2. Text is final and untouched, typos included (`alltagfunktionierende`, `TipTop!`). No grammar pass this time — Hari said it was already reviewed.
+3. New card variant `.case--reco`: quote, round avatar, name | role, company. No heading above, no "Mehr lesen" below, because these have no detail page.
+4. The avatar circle came from looking at the live WordPress cards, which carry a 64px round company logo our rebuild had dropped. Placeholder for now.
+5. Added to `/ergebnisse/` only. The homepage stays a 3-card teaser — that is what its "weitere Success Stories" button is for. Hari's call.
+6. Jarne Van Gompel now appears twice on the page, once per project. Also Hari's call, both quotes stay.
+7. Commit `a9fd894`.
+8. Martin Kraus moved out of his standalone quote band and into the grid as a card, ahead of the new ones. Quote verified byte-identical after the move, 873 chars.
+9. Grid went to 11 cards and ended on a half-empty row. First fix stretched the last card via `:nth-child` arithmetic. Commit `d0d5cc8`.
+10. Then Martin went full width, because his testimonial runs 4× longer than its rowmates and left them mostly empty — his row dropped 682px → 298px.
+11. That broke the `:nth-child` fill rule: it counts children, and Martin now occupies 3 slots. Replaced with explicit `.case--wide` / `.case--close` spans. Commit `cb92ddb`.
+12. `.grid--testimonials` pins its own column counts (1 / 2 from 600px / 3 from 912px, measured by bisection) instead of leaving them to `auto-fit`. Column-span maths is only correct if the column count is known.
+13. Fixed: `flex-grow` sat on the quote box, so a short quote next to a long one had its accent rule dragged down through empty space. Moved to `.case__person`.
+14. Verified every grid row sums to the full grid width at 1, 2 and 3 columns. Card copy checked against the source doc mechanically at 5 viewports — identical. Full QA green.
+15. Pushed, live, `main.aa817137.css`.
+
 ## Open — waiting on Hari
 
 - Real assets: logos, team photos, client logos. Placeholders everywhere except E-Rechnung.
+- Photos for the 5 recommendation-card avatars on `/ergebnisse/`. Dashed „Foto“ circles until then.
+- The 6 older case cards on `/ergebnisse/` still have no avatar; the live site gives them one. Needs the real logos.
 - E-Rechnung reuses the live site's own photos and artwork. Confirm that is fine or ask for placeholders back.
 - The closing E-Rechnung CTA has no logo image; the original has one there.
 - The 🙂 inside Martin Kraus's quoted testimonial on `/ergebnisse/`. Left in — it is a customer's own words.
