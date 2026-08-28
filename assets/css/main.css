@@ -746,6 +746,30 @@ button {
   color: var(--c-text-muted);
 }
 
+/* Recommendation variant. Same shell as .case -- only the internals are
+   simpler: no result line above the quote and no "Mehr lesen" link below it,
+   because these recommendations have no detail page. */
+.case--reco { gap: var(--sp-5); }
+/* The quote is the whole card here, so it takes the slack and pushes the
+   person block to the bottom edge. Keeps the avatars on one line across a
+   row of cards whose quotes are different lengths. */
+.case--reco .case__quote { flex-grow: 1; }
+
+.case__person {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: var(--sp-4);
+  align-items: center;
+}
+/* .ph is built for image slots -- full width, 6rem tall, padded. An avatar
+   needs the opposite, so all three are overridden here. */
+.case__avatar {
+  width: 4rem;
+  height: 4rem;
+  min-height: 0;
+  padding: 0;
+}
+
 /* --- Feature list (Warum wir) ------------------------------------------- */
 
 .pillar {
