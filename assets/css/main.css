@@ -664,6 +664,34 @@ button {
   .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+/* Stretches the final card over whatever columns are left, so a grid whose
+   count is not a multiple of the column count does not end on a half-empty
+   row. The :nth-child arithmetic only holds if the column count is known, so
+   this grid pins it instead of leaving it to auto-fit. The three counts below
+   are the ones auto-fit was already producing at these widths — writing them
+   down is what stops the fill rules from drifting out of step with the
+   layout if a token changes. Opt in per grid: the sibling grids are sized to
+   land on full rows already. */
+.grid--fill-last { grid-template-columns: minmax(0, 1fr); }
+
+@media (min-width: 600px) {
+  .grid--fill-last { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 912px) {
+  .grid--fill-last { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Two columns: a last card on an odd position is alone, so it takes both. */
+@media (min-width: 600px) and (max-width: 911px) {
+  .grid--fill-last > :last-child:nth-child(odd) { grid-column: span 2; }
+}
+/* Three columns: 3n+1 opens a row alone, 3n+2 leaves one slot spare. A last
+   card at 3n lands on a full row and is deliberately left untouched. */
+@media (min-width: 912px) {
+  .grid--fill-last > :last-child:nth-child(3n + 1) { grid-column: span 3; }
+  .grid--fill-last > :last-child:nth-child(3n + 2) { grid-column: span 2; }
+}
+
 /* Four across, or two — never three. Left to auto-fit, the four "Warum wir?"
    pillars land 3+1 with an orphan, and the three-column tracks are too narrow
    for "Unternehmensprozesse" to fit on a line. */
@@ -750,12 +778,13 @@ button {
    simpler: no result line above the quote and no "Mehr lesen" link below it,
    because these recommendations have no detail page. */
 .case--reco { gap: var(--sp-5); }
-/* The quote is the whole card here, so it takes the slack and pushes the
-   person block to the bottom edge. Keeps the avatars on one line across a
-   row of cards whose quotes are different lengths. */
-.case--reco .case__quote { flex-grow: 1; }
 
 .case__person {
+  /* Pinned to the bottom so avatars line up across a row of cards whose
+     quotes differ in length. The slack is taken here and not by the quote
+     box: a growing quote drags its accent rule down through the empty space,
+     which is very visible next to a rowmate with a much longer testimonial. */
+  margin-top: auto;
   display: grid;
   grid-template-columns: 4rem minmax(0, 1fr);
   gap: var(--sp-4);
