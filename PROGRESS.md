@@ -75,6 +75,21 @@ Verified by driving both pages with Playwright, not by reading markup.
 10. Three bands — "Was bedeutet das konkret für Sie?", "Unsere Lösungen", the closing CTA — are designed black with a neon bloom. The live site has lost their background, so their white type renders on white and they look empty. I first copied that as-is; corrected. `ss.svg` is drawn with `mix-blend-mode: plus-lighter`, which only works on a dark ground — that is the proof. Commit `8ecbc81`.
 11. `tests/qa.py` now settles animations before auditing and skips `aria-hidden` decoration.
 
+## 2026-08-27 — Deep Reading Engine, Willy's final text
+
+1. `docs/content-deep-reading-engine.md` replaced with Willy's final text. The three overlapping drafts are gone — this supersedes them.
+2. `/deep-reading-engine/` rebuilt around that text word for word: dark hero, "Das Geheimnis liegt in unserer Architektur" with 4 pillar cards, "Reale Anwendungsbeispiele" with 3 case cards on a dark teal band, closing CTA.
+3. Copy fidelity checked mechanically, not by eye: source doc vs. rendered page, whitespace normalised, bullets stripped — 2 755 chars, identical.
+4. Motion and icon CSS lifted out of the E-Rechnung block into a shared "Motion & icons" section. The DRE page reuses it — same fade-up entrances, same hover lift.
+5. Commit `a4309b4`.
+6. Grammar pass on Willy's text, after Hari allowed it: `KI workflows` → `KI-Workflows`, `weißt dass` → `weiß, dass`, `verständniss` → `Verständnis`, `Know-How` → `Know-how`, `Mit unsere` → `Mit unserer`, `in eine vielzahl` → `in einer Vielzahl`, `statt blind halluziniert` → `statt blind zu halluzinieren`, `1.Ausschreibungen` → `1. Ausschreibungen`, plus noun capitalisation and the closing quote. Applied to the doc and the page together.
+7. `z.B.` kept without a space, on Hari's instruction.
+8. Homepage teaser now carries Willy's own title and lead sentence instead of the old summary. Commit `9a97e34`.
+9. Closing CTA: first tried the E-Rechnung style band ("KI Beratung Hessen / Ihr Weg zur KI-Exzellenz"), then reverted to the question form Hari preferred — "Haben Sie ein Dokument, an dem KI bisher gescheitert ist?" + Termin buchen. Commit `6b208ed`.
+10. Trap found and documented in the CSS: `[data-anim].is-in { transform: none }` is specificity 0,3,0 and silently beat `.dre-pillar:hover` at 0,2,0, so the hover lift did nothing. Fixed by putting the reveal on a wrapper and the hover on the card.
+11. webapp-testing on the DRE page at 390/768/900/1040/1440: no unrevealed animations, no console errors, no overflow. Full QA suite green, 11 pages × 5 viewports.
+12. Pushed. Live and serving `main.eb48b99b.css`.
+
 ## Open — waiting on Hari
 
 - Real assets: logos, team photos, client logos. Placeholders everywhere except E-Rechnung.
@@ -84,8 +99,6 @@ Verified by driving both pages with Playwright, not by reading markup.
 
 ## Open — waiting on Willy
 
-- Which DRE draft framing is authoritative.
-- Draft 3's third use case cuts off mid-sentence after "Angebot".
 - Booking backend for "Kostenloses Erstgespräch": Calendly embed vs. serverless form.
 - Kommunikation page has 3 empty section headings — keep or fill?
 - Impressum was translated to German. Live site had it half in English. Confirm or revert.
