@@ -1768,6 +1768,151 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   line-height: 1.6;
 }
 
+/* --- Ergebnisse page ----------------------------------------------------- */
+
+/*
+  The cards band sits on the same off-white as the page hero above it, so the
+  two read as one continuous ground the way they do on the original, and the
+  grid runs at the original's 20px gutter rather than the site default.
+*/
+/* The original's grid holds 1140px of *content*, so the container has to be
+   that plus its own gutters for the columns to land on the original's 367px
+   and the copy to break over the same lines. */
+.page-ergebnisse .container { max-width: calc(var(--container) + 2 * var(--sp-5)); }
+
+.page-ergebnisse .grid--testimonials { gap: 20px; }
+
+.page-ergebnisse .case {
+  gap: 0;
+  padding: 20px;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.15) 3px 0 12px 0;
+  transition: none;
+}
+/* The original's cards have no hover state at all -- and ours are not
+   clickable as a whole, so a lift here would promise a link that is not
+   there. Only the "Mehr Lesen" link below reacts. */
+.page-ergebnisse .case:hover {
+  transform: none;
+  box-shadow: rgba(0, 0, 0, 0.15) 3px 0 12px 0;
+}
+
+/*
+  Same weight story as the homepage: the original asks for 600 in faces that
+  ship only 400 and 700, so everything it calls semibold renders bold.
+
+  Title sizes are set per card there so each one still lands on a single
+  line; min-height keeps the shorter ones in the original's 38px line box so
+  the intro paragraphs below start level across a row.
+*/
+.page-ergebnisse .case h3 {
+  font-size: var(--fs-h2-sm);
+  font-weight: 700;
+  /* A flat 38px line box, as on the original: the smaller titles keep the
+     same height as the full-size ones, so the intro paragraphs below start
+     level right across a row. */
+  line-height: 38px;
+  color: var(--c-primary);
+}
+.page-ergebnisse .case--title-lg h3 { font-size: 1.75rem; }
+.page-ergebnisse .case--title-md h3 { font-size: 1.6875rem; }
+/* A hair under the original's 22px: our title carries the German space in
+   "80 %", which is just wide enough to push it onto a second line. */
+.page-ergebnisse .case--title-sm h3 { font-size: 1.3125rem; }
+
+.page-ergebnisse .case__result {
+  font-size: var(--fs-body);
+  line-height: 1.25;
+  color: var(--c-text);
+}
+.page-ergebnisse .case__result strong { font-weight: 700; }
+
+/*
+  Quote, avatar and attribution share one tinted panel, pushed to the foot of
+  the card so the panels line up across a row whose intros differ in length.
+*/
+.page-ergebnisse .case__box {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: rgba(118, 171, 174, 0.314);
+  border-radius: 4px;
+}
+.page-ergebnisse .case__quote {
+  padding-left: 0;
+  border-left: 0;
+  font-size: var(--fs-body);
+  font-style: normal;
+  line-height: 1.4;
+  color: var(--c-text);
+}
+.page-ergebnisse .case__person {
+  margin-top: 0;
+  grid-template-columns: 57px minmax(0, 1fr);
+  gap: 20px;
+}
+.page-ergebnisse .case__avatar { width: 57px; height: 57px; }
+.page-ergebnisse .case__author {
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--c-text);
+  /*
+    Between 912px and ~1100px the attribution column is only ~160px wide, and
+    a few of these titles ("Angebotsvergleich", "Softwareentwickler") are
+    wider than that on their own. Hyphenate, but require a long word and a
+    real fragment on each side so it breaks as "Angebots-vergleich" rather
+    than at the first opportunity ("An-gebotsvergleich").
+  */
+  hyphens: auto;
+  -webkit-hyphenate-limit-before: 5;
+  -webkit-hyphenate-limit-after: 4;
+  hyphenate-limit-chars: 10 5 4;
+}
+.page-ergebnisse .case__company {
+  font-size: var(--fs-body);
+  line-height: 1.25;
+  color: var(--c-text);
+}
+
+/* One card carries a project photo where its rowmates carry a testimonial. */
+.page-ergebnisse .case__shot {
+  margin-top: auto;
+  min-height: 0;
+  aspect-ratio: 327 / 280;
+  border-radius: 4px;
+}
+
+.page-ergebnisse .card__foot {
+  margin-top: 20px;
+  padding-top: 0;
+  text-align: center;
+}
+.page-ergebnisse .case__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  font-size: var(--fs-body-lg);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--c-accent);
+  transition: color var(--transition);
+}
+.page-ergebnisse .case__more:hover { color: var(--c-accent-dark); }
+
+/*
+  The recommendations have no intro line above the panel, so the panel is the
+  card: it fills the height instead of being pushed to the foot, and the
+  attribution sits at its bottom, which keeps the avatars level across a row
+  of quotes that differ in length.
+*/
+.page-ergebnisse .case--reco { gap: 0; }
+.page-ergebnisse .case--reco .case__box { margin-top: 0; flex: 1; }
+.page-ergebnisse .case--reco .case__person { margin-top: auto; }
+
 /* --- E-Rechnung page ---------------------------------------------------- */
 
 /* Everything below is scoped to this page. It is the one page rebuilt pixel-
