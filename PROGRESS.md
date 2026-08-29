@@ -142,6 +142,21 @@ Verified by driving both pages with Playwright, not by reading markup.
 17. Fixed: the first element inside `.prose` stacked its own top margin on the section padding, leaving a ~144px hole under the page hero.
 18. `scratchpad/verify_erg.py` written as the Ergebnisse acceptance pass — 5 viewports, animation reveal, overflow, clipped text, even card heights, weight/colour/geometry table, hover. Green. Full QA suite green throughout, 11 pages × 5 viewports.
 
+## 2026-08-29 — Kontakt page
+
+1. Structure confirmed on the live page before building, not assumed: "Termin Buchen" and "Erstmal Kontakt aufnehmen" are two Elementor nested tabs on ONE page, `flex-direction: column-reverse`, so the strip renders below the panel it controls. Under 768px it flips to `column` with full-width buttons. Commit `f4b13f7`.
+2. Tab 1 holds a Calendly embed (`calendly.com/ilya-den-volkov/kostenlose_strategieanalyse`, 700px). Our booking placeholder stays in its place — still no backend.
+3. Tab 2 holds the contact form: Name / Telefon / Email / Nachricht, Senden. Labels exist but are `elementor-screen-only`; a sighted visitor sees only placeholders. Reproduced with `.visually-hidden`.
+4. Headline is Elementor's animated headline in `typing` mode. Its own `data-settings` gave the three phrases verbatim — "deine Arbeit zu erleichtern." / "dich kennen zu lernen." / "zusammen zu arbeiten." — plus `rotate_iteration_delay: 2500`. Static half `#31363F`, rotating half accent, 1px blinking caret. The widget does not run in headless Chromium, so typing/erasing speeds are ours; the hold is the original's.
+5. Measurements taken rather than guessed: tabs `#CECCCC`/`#EEEEEE` idle → `#76ABAE`/white on hover and when active, 15px 35px, Verdana 16px 400, 10px gap, 0.3s. Form panel `#FCFCFC`, 1px `#DADADA`, 4px radius, 45px padding; fields 44px, textarea 114px (4 rows), button 54px. Ours land on the same numbers.
+6. No backend: `form[data-inert]` + a submit handler that calls `preventDefault()`. Without it a form with no action posts the page to itself and looks like a successful send.
+7. Removed on Hari's instruction: the "So läuft das Erstgespräch ab" section — checked first, it is nowhere on the original, not in the page flow and not in a popup. Also removed the eyebrow and the lead paragraph, both invented.
+8. The live page has no entrance or scroll animations at all (0 `elementor-invisible`, one animation setting and it is the headline). None added.
+9. `scratchpad/cta_audit.py`: every booking CTA on all 12 pages resolves to `/kontakt/`, the target returns 200, and the header button was clicked through from three separate pages. The one exception is E-Rechnung's "Beratung zur E-Rechnungspflicht buchen", an in-page jump on the original too (`#solutions` there).
+10. Fixed: the Ergebnisse container override was unscoped and beat `.container--wide`, so the header and footer sat 52px narrower on that page than on every other one. Scoped to `<main>`.
+11. Fixed: the rotating phrase is held together with non-breaking spaces, so at a fixed 32px it is 409px wide and pushes a phone into horizontal scroll — the original does this too (scrollWidth 421 at 390px). Headline is fluid below ~500px, and the reservation width is re-measured on resize.
+12. `scratchpad/verify_kontakt.py`: 5 viewports, tab switching both ways, strip position per breakpoint, keyboard arrows, hover, field geometry, submit does not navigate, headline actually types, and a six-way text diff against the live page. Green. Full QA suite green.
+
 ## Open — waiting on Hari
 
 - Real assets: logos, team photos, client logos. Placeholders everywhere except E-Rechnung.
