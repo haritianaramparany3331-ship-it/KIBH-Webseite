@@ -1806,20 +1806,24 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   line; min-height keeps the shorter ones in the original's 38px line box so
   the intro paragraphs below start level across a row.
 */
+/*
+  The original sizes every card title individually (32/28/27/22px) so each
+  one lands on a single line, which reads as six different headings rather
+  than one set. They are all one size here instead. 26px is the largest that
+  still fits the longest of them, "Rechnungsverarbeitung", on one line.
+*/
 .page-ergebnisse .case h3 {
-  font-size: var(--fs-h2-sm);
+  font-size: 1.625rem;
   font-weight: 700;
-  /* A flat 38px line box, as on the original: the smaller titles keep the
-     same height as the full-size ones, so the intro paragraphs below start
-     level right across a row. */
-  line-height: 38px;
+  line-height: 1.2;
+  /*
+    Two lines are always reserved. Only one title wraps, and without the
+    reserve its intro would sit a line lower than its rowmates' -- the
+    ragged look the per-card sizes were there to avoid.
+  */
+  min-height: 2.4em;
   color: var(--c-primary);
 }
-.page-ergebnisse .case--title-lg h3 { font-size: 1.75rem; }
-.page-ergebnisse .case--title-md h3 { font-size: 1.6875rem; }
-/* A hair under the original's 22px: our title carries the German space in
-   "80 %", which is just wide enough to push it onto a second line. */
-.page-ergebnisse .case--title-sm h3 { font-size: 1.3125rem; }
 
 .page-ergebnisse .case__result {
   /*
