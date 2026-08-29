@@ -158,6 +158,7 @@ Verified by driving both pages with Playwright, not by reading markup.
 12. Two spelling corrections on Hari's instruction, the only place our text departs from the original: it splits both verbs, German writes them closed up — "dich kennen zu lernen." → "dich kennenzulernen.", "zusammen zu arbeiten." → "zusammenzuarbeiten.".
 13. The caret trails the last typed letter. The width of the longest phrase is reserved on the wrapper rather than on the text node, so the caret stays inline 1px behind the text while the slack sits to its right and nothing reflows.
 14. `scratchpad/verify_kontakt.py`: 5 viewports, tab switching both ways, strip position per breakpoint, keyboard arrows, hover, field geometry, submit does not navigate, headline actually types, and a six-way text diff against the live page. Green. Full QA suite green.
+15. Pushed together with the homepage, Ergebnisse and legal-page work — 11 commits, `39e2118..ddf82a2`. Live, `main.f22ba310.css`.
 
 ## Open — waiting on Hari
 
@@ -167,6 +168,8 @@ Verified by driving both pages with Playwright, not by reading markup.
 - E-Rechnung reuses the live site's own photos and artwork. Confirm that is fine or ask for placeholders back.
 - The closing E-Rechnung CTA has no logo image; the original has one there.
 - The 🙂 inside Martin Kraus's quoted testimonial on `/ergebnisse/`. Left in — it is a customer's own words.
+- The Kontakt form is silent when submitted: `data-inert` stops it navigating, but nothing tells the visitor it is not connected yet. A note there would be text the original does not have, so it was left out — say if it should be added.
+- The live Martin Kraus card on `/ergebnisse/` carries a heading, "Rechnungsverarbeitung"; ours has none. Adding it is copy, so it was left alone.
 
 ## Open — waiting on Willy
 
