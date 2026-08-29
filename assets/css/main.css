@@ -981,6 +981,10 @@ button {
   font-size: var(--fs-body-lg);
   margin-top: var(--sp-6);
 }
+/* The heading margins above separate one section from the next. On the first
+   one there is nothing to separate it from, and stacked on the section's own
+   top padding it left a large hole under the page hero. */
+.prose > :first-child { margin-top: 0; }
 .prose p,
 .prose li { color: var(--c-text-muted); }
 .prose ul,
