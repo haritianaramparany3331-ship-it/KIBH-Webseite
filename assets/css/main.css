@@ -1775,6 +1775,41 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   two read as one continuous ground the way they do on the original, and the
   grid runs at the original's 20px gutter rather than the site default.
 */
+/*
+  The page hero borrows the Deep Reading Engine hero's treatment: the same ink
+  ground with its two accent blooms, the same display size and tight leading,
+  the same lit hairline along the bottom edge. The eyebrow takes the accent
+  colour the DRE band gives its own label.
+*/
+.page-ergebnisse .page-hero {
+  position: relative;
+  padding-block: var(--sp-10) var(--sp-9);
+  background:
+    radial-gradient(ellipse 75% 85% at 78% 108%, rgba(118, 171, 174, 0.42), transparent 62%),
+    radial-gradient(ellipse 55% 70% at 6% -12%, rgba(214, 216, 79, 0.13), transparent 60%),
+    var(--c-ink);
+  color: rgba(255, 255, 255, 0.82);
+  overflow: hidden;
+}
+.page-ergebnisse .page-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(118, 171, 174, 0.55), transparent);
+}
+.page-ergebnisse .page-hero .eyebrow { color: var(--c-accent); }
+.page-ergebnisse .page-hero h1 {
+  /* Wide enough that the sentence lands on three lines rather than five. */
+  max-width: 30ch;
+  font-size: clamp(2.25rem, 4.4vw, 3.5rem);
+  line-height: 1.1;
+  color: var(--c-white);
+}
+@media (max-width: 767px) {
+  .page-ergebnisse .page-hero { padding-block: var(--sp-9) var(--sp-8); }
+}
+
 /* The original's grid holds 1140px of *content*, so the container has to be
    that plus its own gutters for the columns to land on the original's 367px
    and the copy to break over the same lines. */
