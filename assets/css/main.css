@@ -2398,17 +2398,20 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   typing`. The caret is its 1px blinking bar.
 */
 .typeline {
-  position: relative;
   display: inline-block;
   white-space: nowrap;
+  /* The width of the longest phrase is reserved on this wrapper (see main.js)
+     and its contents run left, so the caret trails the last typed letter
+     instead of parking at the right edge of the reservation. */
+  text-align: left;
   color: var(--c-accent);
 }
 .typeline__caret {
-  position: absolute;
-  top: 0.1em;
-  right: -0.07em;
+  display: inline-block;
   width: 1px;
   height: 1.08em;
+  margin-left: 0.03em;
+  vertical-align: -0.16em;
   background: #0d0d0d;
 }
 .js-anim .typeline__caret {

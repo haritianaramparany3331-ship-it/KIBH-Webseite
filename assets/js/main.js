@@ -229,14 +229,11 @@
     // shuffle sideways on every keystroke. Re-measured on resize, because the
     // headline is fluid and a stale reservation would overflow a narrower
     // viewport.
-    slot.style.display = "inline-block";
-    slot.style.textAlign = "left";
-
     function reserve() {
       var probe = document.createElement("span");
       probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap";
       probe.className = slot.className;
-      slot.style.minWidth = "0";
+      el.style.minWidth = "0";
       el.appendChild(probe);
       var widest = 0;
       phrases.forEach(function (t) {
@@ -244,7 +241,9 @@
         widest = Math.max(widest, probe.getBoundingClientRect().width);
       });
       el.removeChild(probe);
-      slot.style.minWidth = Math.ceil(widest) + "px";
+      // The caret sits inside the wrapper too, so its own width is part of
+      // what has to be reserved.
+      el.style.minWidth = Math.ceil(widest + 3) + "px";
     }
     reserve();
 

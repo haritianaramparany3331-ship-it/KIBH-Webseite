@@ -155,7 +155,9 @@ Verified by driving both pages with Playwright, not by reading markup.
 9. `scratchpad/cta_audit.py`: every booking CTA on all 12 pages resolves to `/kontakt/`, the target returns 200, and the header button was clicked through from three separate pages. The one exception is E-Rechnung's "Beratung zur E-Rechnungspflicht buchen", an in-page jump on the original too (`#solutions` there).
 10. Fixed: the Ergebnisse container override was unscoped and beat `.container--wide`, so the header and footer sat 52px narrower on that page than on every other one. Scoped to `<main>`.
 11. Fixed: the rotating phrase is held together with non-breaking spaces, so at a fixed 32px it is 409px wide and pushes a phone into horizontal scroll — the original does this too (scrollWidth 421 at 390px). Headline is fluid below ~500px, and the reservation width is re-measured on resize.
-12. `scratchpad/verify_kontakt.py`: 5 viewports, tab switching both ways, strip position per breakpoint, keyboard arrows, hover, field geometry, submit does not navigate, headline actually types, and a six-way text diff against the live page. Green. Full QA suite green.
+12. Two spelling corrections on Hari's instruction, the only place our text departs from the original: it splits both verbs, German writes them closed up — "dich kennen zu lernen." → "dich kennenzulernen.", "zusammen zu arbeiten." → "zusammenzuarbeiten.".
+13. The caret trails the last typed letter. The width of the longest phrase is reserved on the wrapper rather than on the text node, so the caret stays inline 1px behind the text while the slack sits to its right and nothing reflows.
+14. `scratchpad/verify_kontakt.py`: 5 viewports, tab switching both ways, strip position per breakpoint, keyboard arrows, hover, field geometry, submit does not navigate, headline actually types, and a six-way text diff against the live page. Green. Full QA suite green.
 
 ## Open — waiting on Hari
 
