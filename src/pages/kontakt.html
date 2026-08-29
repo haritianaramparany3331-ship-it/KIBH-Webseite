@@ -2,81 +2,99 @@
   "title": "Kontakt - KI Beratung Hessen",
   "description": "Buchen Sie Ihr kostenloses Erstgespräch mit der KI Beratung Hessen – unverbindlich und auf Ihr Unternehmen zugeschnitten.",
   "url": "/kontakt/",
-  "nav": "kontakt"
+  "nav": "kontakt",
+  "bodyClass": "page-kontakt"
 }-->
 
-<section class="page-hero">
-  <div class="container container--wide">
-    <p class="eyebrow">Kontakt</p>
-    <h1>
-      Wir freuen uns darauf, <span style="color:var(--c-accent-dark)">zusammenzuarbeiten.</span>
-    </h1>
-    <p class="lead">
-      Vereinbaren Sie einen Termin für ein unverbindliches Erstgespräch und
-      nutzen Sie die Gelegenheit, uns kennenzulernen und Ihre Herausforderungen
-      zu besprechen.
-    </p>
-  </div>
-</section>
-
-<section class="section">
+<!--
+  One page, two tabs, exactly as the original: the tab strip sits *below* the
+  panel it controls (the original's `.e-n-tabs` is `flex-direction:
+  column-reverse`), so the buttons come first in the DOM and last on screen.
+-->
+<section class="section kontakt">
   <div class="container">
 
-    <!--
-      Booking placeholder.
+    <h1 class="kontakt__headline">
+      Wir freuen uns darauf,
+      <span class="typeline"
+            data-type="deine&#160;Arbeit&#160;zu&#160;erleichtern.|dich&#160;kennen&#160;zu&#160;lernen.|zusammen&#160;zu&#160;arbeiten."><span class="typeline__text">deine&#160;Arbeit&#160;zu&#160;erleichtern.</span><span class="typeline__caret" aria-hidden="true"></span></span>
+    </h1>
 
-      The live WordPress site embeds Calendly here:
-        https://calendly.com/ilya-den-volkov/kostenlose_strategieanalyse
+    <div class="kontakt__tabs" data-tabs>
 
-      Deliberately not wired up yet — the booking backend is still an open
-      decision (Calendly embed vs. an EU-hosted alternative vs. a form), and it
-      carries a DSGVO question because an embedded US-hosted widget loads before
-      the visitor consents. Swapping this block for the real embed is a
-      contained change once that is decided.
-    -->
-    <div class="booking">
-      <h3>Terminbuchung</h3>
-      <p>
-        Hier erscheint der Buchungskalender für Ihr kostenloses Erstgespräch.
-        Die Anbindung wird derzeit eingerichtet.
-      </p>
-      <p class="booking__mail">
-        Bis dahin erreichen Sie uns direkt unter
-        <a href="mailto:kontakt@kiberatunghessen.com">kontakt@kiberatunghessen.com</a>
-      </p>
-    </div>
+      <div class="kontakt__tablist" role="tablist">
+        <button class="ktab" type="button" role="tab" id="tab-termin"
+                aria-controls="panel-termin" aria-selected="true" data-tab="termin">
+          <span class="ktab__icon" aria-hidden="true"><svg viewBox="0 0 448 512" fill="currentColor" aria-hidden="true" focusable="false"><path d="M148 288h-40a12 12 0 0 1-12-12v-40a12 12 0 0 1 12-12h40a12 12 0 0 1 12 12v40a12 12 0 0 1-12 12zm108-12v-40a12 12 0 0 0-12-12h-40a12 12 0 0 0-12 12v40a12 12 0 0 0 12 12h40a12 12 0 0 0 12-12zm96 0v-40a12 12 0 0 0-12-12h-40a12 12 0 0 0-12 12v40a12 12 0 0 0 12 12h40a12 12 0 0 0 12-12zm-96 96v-40a12 12 0 0 0-12-12h-40a12 12 0 0 0-12 12v40a12 12 0 0 0 12 12h40a12 12 0 0 0 12-12zm-96 0v-40a12 12 0 0 0-12-12h-40a12 12 0 0 0-12 12v40a12 12 0 0 0 12 12h40a12 12 0 0 0 12-12zm192 0v-40a12 12 0 0 0-12-12h-40a12 12 0 0 0-12 12v40a12 12 0 0 0 12 12h40a12 12 0 0 0 12-12zm96-260v352a48 48 0 0 1-48 48H48a48 48 0 0 1-48-48V112a48 48 0 0 1 48-48h48V12a12 12 0 0 1 12-12h40a12 12 0 0 1 12 12v52h128V12a12 12 0 0 1 12-12h40a12 12 0 0 1 12 12v52h48a48 48 0 0 1 48 48zm-48 346V160H48v302a6 6 0 0 0 6 6h340a6 6 0 0 0 6-6z"/></svg></span>Termin Buchen
+        </button>
+        <button class="ktab" type="button" role="tab" id="tab-kontakt"
+                aria-controls="panel-kontakt" aria-selected="false" data-tab="kontakt">
+          <span class="ktab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3.4 6 8.6 6.2L20.6 6"/></svg></span>Erstmal Kontakt aufnehmen
+        </button>
+      </div>
 
-  </div>
-</section>
+      <div class="kontakt__panel" id="panel-termin" role="tabpanel"
+           aria-labelledby="tab-termin" data-panel="termin">
+        <!--
+          Booking placeholder.
 
-<section class="section section--surface">
-  <div class="container container--wide">
-    <div class="section-head section-head--center">
-      <h2>So läuft das Erstgespräch ab</h2>
-    </div>
+          The live WordPress site embeds Calendly here:
+            https://calendly.com/ilya-den-volkov/kostenlose_strategieanalyse
 
-    <div class="steps">
-      <article class="step">
-        <h3>Kennenlernen</h3>
-        <p>
-          Sie schildern Ihre aktuelle Situation und die Abläufe, die heute am
-          meisten Zeit kosten.
-        </p>
-      </article>
-      <article class="step">
-        <h3>Einschätzung</h3>
-        <p>
-          Wir sagen offen, wo wir Potenzial für Automatisierung sehen – und wo
-          nicht.
-        </p>
-      </article>
-      <article class="step">
-        <h3>Nächste Schritte</h3>
-        <p>
-          Wenn es passt, schlagen wir ein konkretes Vorgehen vor. Unverbindlich
-          und kostenfrei.
-        </p>
-      </article>
+          Deliberately not wired up yet — the booking backend is still an open
+          decision (Calendly embed vs. an EU-hosted alternative vs. a form), and
+          it carries a DSGVO question because an embedded US-hosted widget loads
+          before the visitor consents. Swapping this block for the real embed is
+          a contained change once that is decided.
+        -->
+        <div class="booking">
+          <h3>Terminbuchung</h3>
+          <p>
+            Hier erscheint der Buchungskalender für Ihr kostenloses Erstgespräch.
+            Die Anbindung wird derzeit eingerichtet.
+          </p>
+          <p class="booking__mail">
+            Bis dahin erreichen Sie uns direkt unter
+            <a href="mailto:kontakt@kiberatunghessen.com">kontakt@kiberatunghessen.com</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="kontakt__panel" id="panel-kontakt" role="tabpanel"
+           aria-labelledby="tab-kontakt" data-panel="kontakt" hidden>
+        <!--
+          Field labels are the original's, kept for screen readers the way the
+          original keeps them (`elementor-screen-only`); a sighted visitor sees
+          only the placeholders. No backend yet, so `data-inert` stops the
+          submit rather than posting the page to itself.
+        -->
+        <form class="kform" data-inert novalidate>
+          <p class="kform__row">
+            <label class="visually-hidden" for="k-name">Name</label>
+            <input class="kform__field" id="k-name" name="name" type="text"
+                   placeholder="Name" autocomplete="name">
+          </p>
+          <p class="kform__row">
+            <label class="visually-hidden" for="k-tel">Telefon</label>
+            <input class="kform__field" id="k-tel" name="tel" type="tel"
+                   placeholder="Telefon" autocomplete="tel">
+          </p>
+          <p class="kform__row">
+            <label class="visually-hidden" for="k-mail">Email</label>
+            <input class="kform__field" id="k-mail" name="email" type="email"
+                   placeholder="Email" autocomplete="email">
+          </p>
+          <p class="kform__row">
+            <label class="visually-hidden" for="k-msg">Nachricht</label>
+            <textarea class="kform__field kform__field--area" id="k-msg" name="message"
+                      rows="4" placeholder="Nachricht"></textarea>
+          </p>
+          <p class="kform__row">
+            <button class="kform__submit" type="submit">Senden</button>
+          </p>
+        </form>
+      </div>
+
     </div>
   </div>
 </section>

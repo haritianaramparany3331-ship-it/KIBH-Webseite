@@ -1816,8 +1816,10 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 
 /* The original's grid holds 1140px of *content*, so the container has to be
    that plus its own gutters for the columns to land on the original's 367px
-   and the copy to break over the same lines. */
-.page-ergebnisse .container { max-width: calc(var(--container) + 2 * var(--sp-5)); }
+   and the copy to break over the same lines. Scoped to <main>: unscoped it
+   also beat `.container--wide` on the header and footer, which then sat 52px
+   narrower here than on every other page. */
+.page-ergebnisse main .container { max-width: calc(var(--container) + 2 * var(--sp-5)); }
 
 .page-ergebnisse .grid--testimonials { gap: 20px; }
 
@@ -2366,6 +2368,160 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   .er-card h3 { font-size: 1.75rem; }
   .er-tabs__btn { padding: 12px 10px; font-size: 1rem; }
   .er-btn { padding: 1rem 1.5rem; font-size: 0.9375rem; }
+}
+
+/* --- Kontakt page -------------------------------------------------------- */
+
+/* Same 1140px content measure the original lays this page out on. */
+.page-kontakt main .container { max-width: calc(var(--container) + 2 * var(--sp-5)); }
+
+.kontakt__headline {
+  margin-bottom: var(--sp-7);
+  /*
+    32px, as on the original, but shrinking below ~500px. The rotating phrase
+    is held together with non-breaking spaces, so at a fixed 32px it is 409px
+    wide and pushes a phone viewport into horizontal scroll -- the original
+    does exactly that (scrollWidth 421 at 390px). Fluid here instead.
+  */
+  font-size: clamp(1.5rem, 6.4vw, 2rem);
+  /* The original asks for 600 in Avenir, which ships 400 and 700 only, so it
+     renders bold. Mulish's real 600 is visibly lighter; 700 is the match. */
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--c-primary);
+}
+
+/*
+  The second half of the sentence is typed in letter by letter and cycles
+  through three phrases -- the original's animated headline, `animation_type:
+  typing`. The caret is its 1px blinking bar.
+*/
+.typeline {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  color: var(--c-accent);
+}
+.typeline__caret {
+  position: absolute;
+  top: 0.1em;
+  right: -0.07em;
+  width: 1px;
+  height: 1.08em;
+  background: #0d0d0d;
+}
+.js-anim .typeline__caret {
+  animation: kontakt-caret 1s steps(1, end) infinite;
+}
+@keyframes kontakt-caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typeline__caret { animation: none; opacity: 0; }
+}
+
+/* The tab strip sits under the panel it controls, so the buttons lead in the
+   DOM (where a keyboard user wants them) and trail on screen. */
+.kontakt__tabs {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.kontakt__tablist {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: var(--sp-6);
+}
+.ktab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 15px 35px;
+  background: #cecccc;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--c-secondary);
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.ktab__icon {
+  display: inline-flex;
+  width: 1em;
+  flex: none;
+}
+.ktab__icon svg { width: 100%; height: auto; }
+.ktab:hover,
+.ktab[aria-selected="true"] {
+  background: var(--c-accent);
+  color: var(--c-white);
+}
+
+/* Form panel chrome, taken from the original's inner section. */
+.kform {
+  padding: 45px;
+  background: #fcfcfc;
+  border: 1px solid #dadada;
+  border-radius: 4px;
+}
+.kform__row { margin: 0 0 10px; }
+.kform__row:last-child { margin-bottom: 0; }
+.kform__field {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  background: var(--c-white);
+  border: 1px solid #f0f0f0;
+  border-radius: 3px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--c-text);
+}
+.kform__field--area {
+  padding: 5px 14px;
+  resize: vertical;
+}
+.kform__field:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 1px;
+}
+.kform__submit {
+  width: 100%;
+  padding: 16px 32px;
+  background: var(--c-accent);
+  border: 0;
+  border-radius: 4px;
+  font-family: var(--font-display);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--c-white);
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+.kform__submit:hover { background: var(--c-accent-dark); }
+
+/* Under 768px the original puts the strip above the panel and runs the
+   buttons full width. */
+@media (max-width: 767px) {
+  .kontakt__tabs { flex-direction: column; }
+  .kontakt__tablist {
+    margin-top: 0;
+    margin-bottom: var(--sp-6);
+  }
+  .ktab {
+    flex: 1 1 100%;
+    justify-content: center;
+    padding: 15px 20px;
+  }
+  .kform { padding: var(--sp-5); }
 }
 
 /* --- Booking placeholder ------------------------------------------------ */

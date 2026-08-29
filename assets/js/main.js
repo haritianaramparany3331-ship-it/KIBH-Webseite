@@ -202,3 +202,98 @@
     }, 1500);
   });
 })();
+
+/* Typed headline on the Kontakt page.
+   --------------------------------------------------------------------------
+   The original runs Elementor's animated headline in `typing` mode over three
+   phrases, holding each one for its configured `rotate_iteration_delay` of
+   2500ms. Letters are typed and deleted one at a time; the caret is CSS. */
+(function () {
+  "use strict";
+
+  var HOLD = 2500;      // the original's own rotate_iteration_delay
+  var TYPE = 110;       // ms per letter typed
+  var ERASE = 55;       // ms per letter deleted
+  var GAP = 400;        // pause on an empty line before the next phrase
+
+  var els = document.querySelectorAll("[data-type]");
+  if (!els.length) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  Array.prototype.forEach.call(els, function (el) {
+    var phrases = el.getAttribute("data-type").split("|").filter(Boolean);
+    var slot = el.querySelector(".typeline__text");
+    if (!slot || phrases.length < 2) return;
+
+    // Hold the width of the longest phrase so the centred headline does not
+    // shuffle sideways on every keystroke. Re-measured on resize, because the
+    // headline is fluid and a stale reservation would overflow a narrower
+    // viewport.
+    slot.style.display = "inline-block";
+    slot.style.textAlign = "left";
+
+    function reserve() {
+      var probe = document.createElement("span");
+      probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap";
+      probe.className = slot.className;
+      slot.style.minWidth = "0";
+      el.appendChild(probe);
+      var widest = 0;
+      phrases.forEach(function (t) {
+        probe.textContent = t;
+        widest = Math.max(widest, probe.getBoundingClientRect().width);
+      });
+      el.removeChild(probe);
+      slot.style.minWidth = Math.ceil(widest) + "px";
+    }
+    reserve();
+
+    var pending;
+    window.addEventListener("resize", function () {
+      window.clearTimeout(pending);
+      pending = window.setTimeout(reserve, 150);
+    });
+
+    var i = 0;
+    var n = phrases[0].length;
+    var typing = false;
+
+    function tick() {
+      var text = phrases[i];
+      if (typing) {
+        n += 1;
+        slot.textContent = text.slice(0, n);
+        if (n >= text.length) {
+          typing = false;
+          window.setTimeout(tick, HOLD);
+          return;
+        }
+        window.setTimeout(tick, TYPE);
+      } else {
+        n -= 1;
+        slot.textContent = text.slice(0, Math.max(n, 0));
+        if (n <= 0) {
+          i = (i + 1) % phrases.length;
+          typing = true;
+          n = 0;
+          window.setTimeout(tick, GAP);
+          return;
+        }
+        window.setTimeout(tick, ERASE);
+      }
+    }
+
+    window.setTimeout(tick, HOLD);
+  });
+})();
+
+/* Forms with no backend yet. Without this a submit posts the page to itself
+   and looks like a successful send. */
+(function () {
+  "use strict";
+
+  var forms = document.querySelectorAll("form[data-inert]");
+  Array.prototype.forEach.call(forms, function (form) {
+    form.addEventListener("submit", function (e) { e.preventDefault(); });
+  });
+})();
