@@ -1314,26 +1314,6 @@ button {
 .page-home .hero h1 { color: #31363f; }
 .page-home .hero h2 { color: #0d1d20; }
 
-/* "KI-Lösungen" carries a lime marker underneath it on the original. */
-.page-home .hero__mark {
-  position: relative;
-  white-space: nowrap;
-}
-.page-home .hero__mark::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.02em;
-  height: 0.09em;
-  background: var(--c-lime);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
-}
-.js-anim .page-home [data-anim].is-in .hero__mark::after,
-html:not(.js-anim) .page-home .hero__mark::after { transform: scaleX(1); }
-
 .page-home .hero__text,
 .page-home .hero__stat {
   font-size: var(--fs-body);
