@@ -108,6 +108,40 @@ Verified by driving both pages with Playwright, not by reading markup.
 14. Verified every grid row sums to the full grid width at 1, 2 and 3 columns. Card copy checked against the source doc mechanically at 5 viewports — identical. Full QA green.
 15. Pushed, live, `main.aa817137.css`.
 
+## 2026-08-28 — typefaces, then the homepage rebuilt against the original
+
+1. Typeface pair corrected site-wide. The live site is Verdana for running text and Avenir for headings, nav and buttons. We had been on Nunito Sans throughout. Avenir is licensed and cannot be self-served, so headings use Mulish — picked by measuring candidates against the real Avenir files, not by reputation: it sets the same headline at 100.2 % of Avenir's width and stays in register across a line, where Nunito Sans, Figtree and DM Sans all drift. Commit `b1b1c11`.
+2. Homepage deep-audited against the original section by section with Playwright, then rebuilt. Commit `60fb6e2`.
+3. Rule Hari set for the audit: any sentence without an exact match on the original is replaced with the original's wording, word for word. A checker script walked every text run on our page and looked it up in the live page's text — 102 runs, the 20 unmatched all explained (asset placeholders, the approved DRE band, one added comma).
+4. Weights. The original asks for 600 but ships Avenir 400/700 only, so every heading on it actually renders bold. Mulish has a real 600, which is visibly lighter — `.page-home` headings, eyebrows, buttons and authors go to 700.
+5. Colours sampled from the live page instead of guessed: `#0D1D20` hero, `#000F08` solutions headline and card titles (the "black" one), `#31363F` other section headlines, `#222831` body, `#587274` hero lead.
+6. Three whole sections were structurally wrong and only showed up in rendered crops, not in computed styles: the three process steps are staggered white panels joined by dotted connectors, "Warum wir?" is a two-column block with certificates on the left, and the team photos sit above the names rather than beside them.
+7. Solution-card hover established by pixel-diffing a genuinely visible card: the card floods to the accent colour, text to `#EEEEEE`, icon chip to lime, 0.4s. Reading the `::before` had been misleading — it is vestigial and transparent.
+8. Entrance animations added throughout, matching the original's Elementor `fadeInUp` / `fadeInLeft` / `fadeInRight`. Hero underline is the original's own SVG path, drawn on with the reveal.
+9. Placeholder circles added for the two team photos and the two "Warum wir?" certificates.
+10. Fixed along the way: `.member__photo` overflowing at mobile, "Geschäftsführer" breaking mid-word at laptop, the testimonials button colliding with the logo strip, and the hero underline crossing the descender of "g" — Mulish's content box is 1.047em against Avenir's 1.203em, so the same percentage lands differently.
+
+## 2026-08-29 — Ergebnisse rebuilt, legal pages taken from the original
+
+1. Fixed: two lime underlines were rendering under "KI-Lösungen" — an older flat-bar `::after` had been left in the stylesheet beside the SVG stroke that replaced it. Commit `39e2118`.
+2. Ergebnisse compared against `https://kiberatunghessen.com/index.php/ergebnisse/` and rebuilt. Commit `f8852a8`.
+3. Invented lead sentence under the page heading removed ("Ausgewählte Projekte aus Mittelstand, Bauwesen…"). A text diff confirms the only other copy changes are the placeholder labels and `Mehr lesen` → `Mehr Lesen`, the original's own capitalisation.
+4. Card chrome from the original: white, 4px radius, `rgba(0,0,0,.15) 3px 0 12px`, 20px padding, 20px gutter, on the `#f8faf9` band. Quote, avatar and attribution now share the original's tinted `rgba(118,171,174,.314)` panel instead of an italic pull-quote with an accent rule.
+5. Container widened to hold 1140px of content, so the columns come out at the original's 367px and the copy breaks over the same lines.
+6. Intros carry the metric in bold, as on the original. Placeholder circles for the six missing client photos, plus a 327×280 slot for the project photo on the Rechnungsprüfung card.
+7. Animation: the original plays exactly one `fadeInUp` over the whole cards band — checked across all 21 `data-settings` widgets and the raw HTML. It has no card hover at all; pixel-diffing a hovered card gave byte-identical screenshots. The inherited card lift was removed accordingly, since our cards are not clickable.
+8. Fixed: long job titles ("Angebotsvergleich", "Softwareentwickler") overflowed the ~160px attribution column between 912px and 1100px. Hyphenation with `hyphenate-limit-chars: 10 5 4`, so it breaks as `Angebots-vergleich`.
+9. Closing CTA band dropped — the original ends on the last card and runs into the footer. Commit `8a12214`.
+10. Fixed: the tinted panel is pushed to the foot of the card, so on the card with the longest intro the slack ran out and the two touched. 26px bottom margin on the intro as a floor — the tightest that gap ever gets on the original. Commit `2d4ac6c`.
+11. Card titles unified at 26px bold on Hari's call. The original sizes each one individually (32/28/27/22px) so each fits a line, which reads as six different headings. 26px is the largest that still fits the longest one-line title. Two lines are reserved for every title so the one that wraps keeps its intro level with its rowmates'. Commit `db582ce`.
+12. Page hero given the Deep Reading Engine hero's treatment on Hari's call — same ink ground with its two accent blooms, 56px/1.1, accent eyebrow, lit hairline at the bottom edge. Commit `0f709f9`.
+13. Potenzial Analyse, Kommunikation / Management, U2care and Automatische Rechnungsprüfung removed from the footer quicklinks. One edit in the shared partial, verified on all 12 pages. They stay in the nav dropdown. Commit `66e3cff`.
+14. Impressum and Vertraulichkeit taken from the live pages word for word. Commit `6ebb486`.
+15. Impressum had been rewritten into a German TMG layout; it now carries the original's own English headings and mixed-language address block. Four drifts fixed in Vertraulichkeit: two spaces before an ellipsis, a shortened cnil.fr link label, and a subhead under 8. that had been cut off mid-sentence.
+16. Layout, hierarchy and the site's Mulish/Verdana pair stay ours — Hari prefers our design on these two pages, only the text is 1:1. A block-by-block diff script against both live pages reports every block matching.
+17. Fixed: the first element inside `.prose` stacked its own top margin on the section padding, leaving a ~144px hole under the page hero.
+18. `scratchpad/verify_erg.py` written as the Ergebnisse acceptance pass — 5 viewports, animation reveal, overflow, clipped text, even card heights, weight/colour/geometry table, hover. Green. Full QA suite green throughout, 11 pages × 5 viewports.
+
 ## Open — waiting on Hari
 
 - Real assets: logos, team photos, client logos. Placeholders everywhere except E-Rechnung.
@@ -121,7 +155,6 @@ Verified by driving both pages with Playwright, not by reading markup.
 
 - Booking backend for "Kostenloses Erstgespräch": Calendly embed vs. serverless form.
 - Kommunikation page has 3 empty section headings — keep or fill?
-- Impressum was translated to German. Live site had it half in English. Confirm or revert.
 
 ## Deferred
 
