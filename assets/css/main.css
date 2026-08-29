@@ -1822,6 +1822,13 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .page-ergebnisse .case--title-sm h3 { font-size: 1.3125rem; }
 
 .page-ergebnisse .case__result {
+  /*
+    The panel below is pushed to the foot of the card, so on the card with the
+    longest intro the slack ran out and the two ended up touching. 26px is the
+    tightest the original ever lets that gap get, so it becomes the floor and
+    the auto margin takes whatever is left over.
+  */
+  margin-bottom: 26px;
   font-size: var(--fs-body);
   line-height: 1.25;
   color: var(--c-text);
