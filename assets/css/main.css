@@ -736,6 +736,58 @@ img.case__shot,
   border-radius: 999px;
 }
 
+/*
+  Three testimonials on /ergebnisse/ carry a company wordmark rather than a
+  portrait or a round client mark. Entropia's is 2.89:1 and Business
+  Elegance's 1.18:1, so neither survives the 57px circle the other cards use.
+  Setting them beside the name instead did not work either: a chip wide enough
+  to read took 152px out of a ~330px card and pushed "Volker Adelfinger |
+  Angebotsvergleich Bauwesen" onto four hyphenated lines, where every other
+  card needs two. So the mark sits above the attribution and both get the full
+  width. BE Renovierung supplied no logo, so its chip carries the name as type.
+*/
+.page-ergebnisse .case__person.case__person--mark,
+.case__person--mark {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-3);
+  justify-items: start;
+}
+
+.case__mark {
+  /*
+    Flex, not grid: an `auto` grid row sizes to its own content, so the image
+    height fed back into the row and a percentage cap on it was circular --
+    the taller wordmark simply spilled out of the chip. A flex container with
+    a fixed height gives the child a definite box to be capped against.
+  */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  max-width: 100%;
+  padding: 5px 10px;
+  background: var(--c-white);
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+}
+/* Height-led, so each chip comes out exactly as wide as its own wordmark
+   needs rather than every one being padded to the widest. */
+.case__mark img {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+.case__mark--text {
+  font-family: var(--font-display);
+  font-size: var(--fs-caption);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--c-primary);
+}
+
 /* The wordmark closing the E-Rechnung page, on the black band. */
 .er-cta__logo {
   display: block;
