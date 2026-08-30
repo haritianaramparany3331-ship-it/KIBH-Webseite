@@ -160,6 +160,29 @@ Verified by driving both pages with Playwright, not by reading markup.
 14. `scratchpad/verify_kontakt.py`: 5 viewports, tab switching both ways, strip position per breakpoint, keyboard arrows, hover, field geometry, submit does not navigate, headline actually types, and a six-way text diff against the live page. Green. Full QA suite green.
 15. Pushed together with the homepage, Ergebnisse and legal-page work — 11 commits, `39e2118..ddf82a2`. Live, `main.f22ba310.css`.
 
+## 2026-08-30 — case-study pages unified on U2care, nav bold
+
+1. Hari's call: the four pages under `/ergebnisse/` all take the **U2care** original's design, overriding each page's own styling. Text stays 1:1 with each page's *own* original. Commits `5ca9b9c`, `d40edd7`.
+2. Design system extracted from the live U2care page by measurement, not by eye → `.page-case` in `main.css`. Plus Jakarta Sans, 18/24 body, 1140 content column, H2 48/600 in `#76abae` with a 4px rule 10px under it, cards 367 wide with a 1px teal border and a 20px radius, centred 16px text over a 50px grey icon, 20px between blocks, everything fading up on scroll.
+3. Container widened by the gutter (`calc(--container + 2 * --sp-5)`) so the content column measures 1140 like the original and the cards land on 367, not 351.
+4. Hero: black + teal bloom borrowed from Ergebnisse/DRE, lime "Case study" line, white headline, client quote inside the band. The original's hero is a licensed photograph — Hari chose the CSS ground over downloading it.
+5. Headline is 52px, not the original's 64px: three of the four titles are twice the length of U2care's and filled the screen at 64.
+6. Card icons drawn as inline line-art SVG (user-check, invoice, gears, user-cog, rocket) — the original uses an icon font we do not ship. Numbered pages keep their `1/2/3` badge in the same slot.
+7. **Text drift found and closed.** The live pages had moved on since the Stage 2 rebuild:
+   - Kommunikation gained *Erkenntniss*, *Lösung* and *Probleme* with their numbered cards — the three sections that were empty when we first built it.
+   - Automatische Rechnungsprüfung gained the full *Ergebnis* paragraph and the "Mehr Qualität. Mehr Transparenz. Weniger Aufwand." band.
+   - Potenzial Analyse gained the real step titles, their lead-ins and the "Am Ende erhalten Sie…" paragraph.
+   - U2care gained "Kernpunkte der Lösung" and three result cards in place of a tick list.
+8. Closing "Termin buchen" bands removed from all four — no live original has one, they were ours.
+9. Grammar-only corrections, nothing else touched: "E-Rechung" → "E-Rechnung"; "Wiederstände Identifizieren" → "Widerstände identifizieren"; a missing space after a full stop on Kommunikation and on Automatische Rechnungsprüfung; six missing terminal full stops on U2care.
+10. Fixed: the shared `.ticks` lays each item out as a flex row, so a leading `<strong>` became its own flex item — "Handlungsempfehlung" broke across two lines and the colon was pushed off it. Hanging indent instead.
+11. Fixed: Potenzial Analyse's step lists are centred on the original, leaving the bullets at ragged positions. Cards holding a list are set left.
+12. **Nav** (separate ask). The original sets it in Avenir 600, and Avenir ships 400/700 only, so it renders bold; Mulish has a real 600, so ours came out semibold and read greyer than the headings next to it. Now 700, 15 → 16px. Dropdown 500 → 600.
+13. Fixed: the nav drawer opened at 1025px but the row has never fitted there — it needs 1120px. Between 1025 and 1071px the CTA pushed **every page** into horizontal scroll. Breakpoint moved to 1119px, in CSS and in the `matchMedia` that resets it.
+14. Fixed: the homepage loaded with ~40px of horizontal scroll under 1300px. Its nine `data-anim="right"` blocks sit 64px right until revealed; DRE and E-Rechnung already had `overflow-x: clip` on `<main>`, the homepage never did.
+15. `scratchpad/u2/verify_case.py` — design values, word-level text diff against each live original, overflow at 5 viewports. Green. `scratchpad/u2/sweep.py` — 12 pages × 8 viewports, on load and settled, 0 horizontal overflow. `scratchpad/u2/wt.py` — webapp-testing pass, 4 pages × 5 viewports: no console errors, no failed requests, no clipped text, no card collisions, even card heights, heading order intact, every reveal fires, every link resolves and focuses. `tests/qa.py` green.
+16. **Not** pushed yet — waiting on Hari.
+
 ## Open — waiting on Hari
 
 - Real assets: logos, team photos, client logos. Placeholders everywhere except E-Rechnung.
@@ -170,11 +193,13 @@ Verified by driving both pages with Playwright, not by reading markup.
 - The 🙂 inside Martin Kraus's quoted testimonial on `/ergebnisse/`. Left in — it is a customer's own words.
 - The Kontakt form is silent when submitted: `data-inert` stops it navigating, but nothing tells the visitor it is not connected yet. A note there would be text the original does not have, so it was left out — say if it should be added.
 - The live Martin Kraus card on `/ergebnisse/` carries a heading, "Rechnungsverarbeitung"; ours has none. Adding it is copy, so it was left alone.
+- The teal section headings on the four case-study pages sit at 2.56:1 against white, under the 3:1 WCAG needs for large text. That colour is the U2care original's and Hari asked for it, so it was not changed. `--c-accent-dark` (#5f9295) would clear it at ~3.6:1 if he wants.
+- Automatische Rechnungsprüfung opens with a construction-site photograph on the live page; ours is a dashed placeholder.
+- The hero quote avatars on U2care, Kommunikation and Potenzial Analyse are dashed „Foto“ circles — the live site has real portraits there.
 
 ## Open — waiting on Willy
 
 - Booking backend for "Kostenloses Erstgespräch": Calendly embed vs. serverless form.
-- Kommunikation page has 3 empty section headings — keep or fill?
 
 ## Deferred
 
