@@ -207,9 +207,10 @@ Verified by driving both pages with Playwright, not by reading markup.
 - The Kontakt form is silent when submitted: `data-inert` stops it navigating, but nothing tells the visitor it is not connected yet. A note there would be text the original does not have, so it was left out — say if it should be added.
 - The live Martin Kraus card on `/ergebnisse/` carries a heading, "Rechnungsverarbeitung"; ours has none. Adding it is copy, so it was left alone.
 - The teal section headings on the four case-study pages sit at 2.56:1 against white, under the 3:1 WCAG needs for large text. That colour is the U2care original's and Hari asked for it, so it was not changed. `--c-accent-dark` (#5f9295) would clear it at ~3.6:1 if he wants.
-13. Entropia and Business Elegance wordmarks added afterwards, commit `7040b1d`. Both are wide lockups, not square marks, so the last three testimonials put the mark **above** the attribution instead of beside it — a chip beside the name pushed those names onto four hyphenated lines where every other card needs two. BE Renovierung has no logo; per Hari its chip carries the company name as type.
-14. Two CSS traps fixed there: `.page-ergebnisse .case__person` pins the first column at 57px and is declared later in the file, so widening it needs one class more; and an `auto` grid row sizes to its own content, so a percentage height cap on the image inside was circular and the taller wordmark spilled out — the chip is a fixed-height flex container now.
-15. **Every placeholder on the site is now a real asset.**
+13. Entropia and Business Elegance wordmarks added afterwards, commits `7040b1d`, `8323f08`. Both are wide lockups rather than square marks. A stacked chip above the attribution was built first, then dropped on Hari's call: all ten slots use the same 57px circle as the photo avatars, with the wordmarks contained inside (Entropia lands at 43×15, Business Elegance at 43×36). Small on purpose — the company name is spelled out beside the circle, so the mark only holds the place.
+14. BE Renovierung has no logo; per Hari its circle carries the name as type, at the 7px that fits "Renovierung" across a 57px circle unbroken.
+15. CSS trap worth remembering: an `auto` grid row sizes to its own content, so a percentage height cap on an image inside it is circular and the image simply overflows. The circle is a fixed-size flex container for that reason.
+16. **Every placeholder on the site is now a real asset.**
 
 ## Open — waiting on Willy
 
