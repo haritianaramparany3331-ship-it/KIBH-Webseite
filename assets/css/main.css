@@ -738,50 +738,47 @@ img.case__shot,
 
 /*
   Three testimonials on /ergebnisse/ carry a company wordmark rather than a
-  portrait or a round client mark. Entropia's is 2.89:1 and Business
-  Elegance's 1.18:1, so neither survives the 57px circle the other cards use.
-  Setting them beside the name instead did not work either: a chip wide enough
-  to read took 152px out of a ~330px card and pushed "Volker Adelfinger |
-  Angebotsvergleich Bauwesen" onto four hyphenated lines, where every other
-  card needs two. So the mark sits above the attribution and both get the full
-  width. BE Renovierung supplied no logo, so its chip carries the name as type.
+  portrait or a round client mark. They use the same 57px circle as every
+  other card on the page, so the row of attributions stays uniform; the
+  wordmarks are simply contained inside it. Entropia's is 2.89:1 and Business
+  Elegance's 1.18:1, so they come out small -- deliberately so, on Hari's
+  call: the company name is spelled out in full right beside the circle, so
+  the mark only has to be recognisable, not readable. BE Renovierung supplied
+  no logo, so its circle carries the name as type.
 */
-.page-ergebnisse .case__person.case__person--mark,
-.case__person--mark {
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--sp-3);
-  justify-items: start;
-}
-
 .case__mark {
   /*
     Flex, not grid: an `auto` grid row sizes to its own content, so the image
     height fed back into the row and a percentage cap on it was circular --
-    the taller wordmark simply spilled out of the chip. A flex container with
-    a fixed height gives the child a definite box to be capped against.
+    the taller wordmark spilled out of the circle. A flex container with a
+    fixed size gives the child a definite box to be capped against.
   */
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 44px;
-  max-width: 100%;
-  padding: 5px 10px;
+  flex: none;
+  /* Matches `.page-ergebnisse .case__avatar`; these three cards exist only
+     on that page. */
+  width: 57px;
+  height: 57px;
+  padding: 6px;
+  overflow: hidden;
   background: var(--c-white);
   border: 1px solid var(--c-border);
-  border-radius: 8px;
+  border-radius: 999px;
 }
-/* Height-led, so each chip comes out exactly as wide as its own wordmark
-   needs rather than every one being padded to the widest. */
 .case__mark img {
   display: block;
-  width: auto;
-  height: 100%;
   max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
 }
+/* 7px is what fits "Renovierung" across a 57px circle without the word being
+   broken. Tiny on purpose -- the company name is spelled out in full beside
+   the circle, so this only has to hold the place a logo would. */
 .case__mark--text {
   font-family: var(--font-display);
-  font-size: var(--fs-caption);
+  font-size: 7px;
   font-weight: 700;
   line-height: 1.2;
   text-align: center;
