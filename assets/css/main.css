@@ -447,6 +447,14 @@ button {
 }
 .brand:hover { color: var(--c-primary); }
 
+/* Header wordmark. The original gives it 89px in a 109px header (82%); ours
+   is a 76px header, so 46px keeps the same proportion of breathing room. */
+.brand__logo {
+  display: block;
+  width: auto;
+  height: 46px;
+}
+
 .brand__mark {
   font-family: var(--font-display);
   display: grid;
@@ -645,6 +653,113 @@ button {
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-md);
+}
+
+/* --- Real imagery ------------------------------------------------------- */
+
+/*
+  Every one of these replaced a dashed `.ph` box, so each needs the sizing the
+  placeholder used to provide. Widths and heights are on the elements
+  themselves as well, so the space is reserved before the file arrives and the
+  page does not jump.
+*/
+
+/* Homepage hero. The original draws the robot straight onto the page -- no
+   card, no crop -- and it is a cut-out on transparent, so the rounded box and
+   the shadow the placeholder wore would have framed empty air. */
+.page-home .hero__media {
+  aspect-ratio: auto;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+}
+.page-home .hero__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Client strip. The logos are 300x300 with their own generous white margin,
+   so they are contained rather than cropped and share one height, which puts
+   the marks on a common baseline however differently they are drawn. */
+/*
+  Every one of these files is a 300x300 square carrying roughly a quarter of
+  its own width as blank margin, so the painted mark is only about 75% of
+  whatever box it is given. At the 5.25rem the placeholder used, that left
+  ~50px marks in a 150px cell -- too small to read in a "trusted by" strip.
+  A 7rem box brings them to ~84px. Scaling the element instead was tried and
+  dropped: `transform` grows the box as well as the paint, so the outer logos
+  reported as overflowing their container even though nothing was visible
+  there.
+*/
+.logos__item {
+  width: 100%;
+  height: 7rem;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Testimonial and case-study avatars. Portraits are not square (Torsten is
+   1024x984), so `cover` keeps the face centred instead of squashing it. */
+img.case__avatar,
+img.case-quote__avatar {
+  display: block;
+  object-fit: cover;
+  border-radius: 999px;
+}
+img.case__shot,
+.case-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.case-figure img { border-radius: var(--radius-lg); aspect-ratio: 1140 / 384; }
+
+/* Certificate and test mark. Both keep their own proportions; the aspect
+   ratios on .why__cert/.why__seal already match the files. */
+.why__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.1) 3px 0 15px 0;
+}
+
+/* Team portraits. The source files are circular cut-outs on white, so a round
+   mask lands exactly on the circle rather than cropping into the face. */
+.member__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 999px;
+}
+
+/* The wordmark closing the E-Rechnung page, on the black band. */
+.er-cta__logo {
+  display: block;
+  width: 171px;
+  height: auto;
+  margin: 0 auto var(--sp-5);
+}
+
+/*
+  Client wordmark under the quote on the two Hinnerbäcker case studies, the
+  same 92px the original gives it. The file is a JPEG with its own white
+  ground, and the original sits it on a light band; our hero is dark, so it
+  would otherwise read as a bare white rectangle. Padding and a radius turn
+  that white into a deliberate chip -- the original rounds it too (25px).
+*/
+.case-quote__logo {
+  display: block;
+  box-sizing: content-box;
+  width: 92px;
+  height: auto;
+  margin-top: var(--sp-4);
+  padding: 5px 9px;
+  background: var(--c-white);
+  border-radius: 10px;
 }
 
 /* --- Placeholder (assets pending upload) -------------------------------- */
