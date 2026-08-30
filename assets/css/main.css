@@ -492,8 +492,14 @@ button {
   align-items: center;
   gap: var(--sp-1);
   padding: var(--sp-2) var(--sp-3);
-  font-size: var(--fs-small);
-  font-weight: 600;
+  font-size: var(--fs-body);
+  /*
+    The original asks for 600 in Avenir, which ships 400 and 700 only, so its
+    nav renders bold -- the same trick as every heading on the site. Mulish
+    has a real 600, so a literal 600 here came out semibold: lighter and, next
+    to the 700 headings, visibly greyer. 700 is the match.
+  */
+  font-weight: 700;
   color: var(--c-primary);
   border-radius: 8px;
   white-space: nowrap;
@@ -547,7 +553,8 @@ button {
   display: block;
   padding: var(--sp-3) var(--sp-4);
   font-size: var(--fs-small);
-  font-weight: 500;
+  /* One step below the top level, so the dropdown still reads as subordinate. */
+  font-weight: 600;
   color: var(--c-text);
   border-radius: 8px;
 }
@@ -1101,6 +1108,15 @@ button {
 
 /* The slide-in animations start off-canvas. */
 .page-dre main { overflow-x: clip; }
+/*
+  Same reason as the DRE and E-Rechnung pages: the blocks marked
+  `data-anim="right"` sit 64px to the right of where they belong until the
+  observer reveals them, and the homepage has nine of them. Without this the
+  page loaded with ~40px of horizontal scroll at every viewport under 1300px
+  -- "Warum wir?" and the zig-zag process steps were the ones sticking out.
+  `clip`, not `hidden`, so no scroll container is created.
+*/
+.page-home main { overflow-x: clip; }
 
 .dre-hero {
   position: relative;
@@ -3025,11 +3041,16 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   }
 }
 
-@media (max-width: 1024px) {
-  /* Collapse to the mobile drawer before the nav can crowd the logo. Raised
-     from 900px when "Deep Reading Engine" became the fifth nav item: at five
-     items the row pushed the CTA button off-screen up to ~1023px. 1024px is
-     also the design system's own tablet breakpoint. */
+@media (max-width: 1119px) {
+  /*
+    Collapse to the mobile drawer before the nav can crowd the logo. Raised
+    from 900px when "Deep Reading Engine" became the fifth nav item, then from
+    1024px after measuring it: with five bold 16px links plus the CTA the row
+    needs 1120px of viewport to sit inside the container's gutter, and it
+    genuinely overflowed the viewport on every page between 1025 and 1071px.
+    1024px was chosen back then because it is the design system's tablet
+    breakpoint, not because the row fitted there.
+  */
   .nav-toggle { display: flex; }
 
   .nav {

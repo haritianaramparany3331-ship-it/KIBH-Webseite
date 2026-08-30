@@ -30,8 +30,8 @@
     }
   });
 
-  // Reset state if the viewport grows past the drawer breakpoint (1024px).
-  var mq = window.matchMedia("(min-width: 1025px)");
+  // Reset state if the viewport grows past the drawer breakpoint (1119px).
+  var mq = window.matchMedia("(min-width: 1120px)");
   var onChange = function (e) { if (e.matches) setOpen(false); };
   if (mq.addEventListener) mq.addEventListener("change", onChange);
   else if (mq.addListener) mq.addListener(onChange);
