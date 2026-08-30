@@ -202,7 +202,7 @@ Verified by driving both pages with Playwright, not by reading markup.
 
 - **Page weight.** With the real images in, the homepage is 2 189 KB and E-Rechnung 4 044 KB, against the 101 KB measured in `docs/performance-baseline.md`. The comparison there no longer holds — the biggest single files are `zertifikat-ai-consultant.png` (1 184 KB) and the four E-Rechnung PNGs (3 053 KB together). Re-encoding to WebP at display size would win most of it back; not done unasked because it changes the uploaded assets.
 - `ergebnisse/torsten-krueger.jpg` (the wide crop) is now unused — the square one reads better at avatar size. Kept in case it is wanted somewhere.
-- The footer still uses the teal "KIBH" block and text rather than the wordmark. That is what the live footer does too; say if it should become the logo.
+- The logo's "HESSEN" line is drawn in a light grey meant for a white ground, so it goes faint on the dark footer. A light-on-dark variant of the file would fix it; not filtered in CSS because that shifts the brand colour.
 - The 🙂 inside Martin Kraus's quoted testimonial on `/ergebnisse/`. Left in — it is a customer's own words.
 - The Kontakt form is silent when submitted: `data-inert` stops it navigating, but nothing tells the visitor it is not connected yet. A note there would be text the original does not have, so it was left out — say if it should be added.
 - The live Martin Kraus card on `/ergebnisse/` carries a heading, "Rechnungsverarbeitung"; ours has none. Adding it is copy, so it was left alone.
@@ -210,7 +210,8 @@ Verified by driving both pages with Playwright, not by reading markup.
 13. Entropia and Business Elegance wordmarks added afterwards, commits `7040b1d`, `8323f08`. Both are wide lockups rather than square marks. A stacked chip above the attribution was built first, then dropped on Hari's call: all ten slots use the same 57px circle as the photo avatars, with the wordmarks contained inside (Entropia lands at 43×15, Business Elegance at 43×36). Small on purpose — the company name is spelled out beside the circle, so the mark only holds the place.
 14. BE Renovierung has no logo; per Hari its circle carries the name as type, at the 7px that fits "Renovierung" across a 57px circle unbroken.
 15. CSS trap worth remembering: an `auto` grid row sizes to its own content, so a percentage height cap on an image inside it is circular and the image simply overflows. The circle is a fixed-size flex container for that reason.
-16. **Every placeholder on the site is now a real asset.**
+16. Footer wordmark, commit `875dc5e`. It was still carrying the stand-in — a teal 84px square reading "KIBH" beside the name in type. Now the same logo file as the header at 60px, with the lime tagline under it; the "KI Beratung Hessen" line is gone because the logo says it. That was the last use of the stand-in, so `.brand__mark`, `.brand__text`, `.brand__name` and their three footer overrides were deleted rather than left as dead rules.
+17. **Every placeholder on the site is now a real asset.**
 
 ## Open — waiting on Willy
 
