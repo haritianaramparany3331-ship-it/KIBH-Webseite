@@ -200,7 +200,6 @@ Verified by driving both pages with Playwright, not by reading markup.
 
 ## Open — waiting on Hari
 
-- Photos for three `/ergebnisse/` cards: Volker Adelfinger (Entropia Consulting), Mihaela Geiger (BE Renovierung), Daniel Markus (Business Elegance Logistics). Nothing in the upload and the live Ergebnisse page ends before them, so they keep a dashed circle.
 - **Page weight.** With the real images in, the homepage is 2 189 KB and E-Rechnung 4 044 KB, against the 101 KB measured in `docs/performance-baseline.md`. The comparison there no longer holds — the biggest single files are `zertifikat-ai-consultant.png` (1 184 KB) and the four E-Rechnung PNGs (3 053 KB together). Re-encoding to WebP at display size would win most of it back; not done unasked because it changes the uploaded assets.
 - `ergebnisse/torsten-krueger.jpg` (the wide crop) is now unused — the square one reads better at avatar size. Kept in case it is wanted somewhere.
 - The footer still uses the teal "KIBH" block and text rather than the wordmark. That is what the live footer does too; say if it should become the logo.
@@ -208,6 +207,9 @@ Verified by driving both pages with Playwright, not by reading markup.
 - The Kontakt form is silent when submitted: `data-inert` stops it navigating, but nothing tells the visitor it is not connected yet. A note there would be text the original does not have, so it was left out — say if it should be added.
 - The live Martin Kraus card on `/ergebnisse/` carries a heading, "Rechnungsverarbeitung"; ours has none. Adding it is copy, so it was left alone.
 - The teal section headings on the four case-study pages sit at 2.56:1 against white, under the 3:1 WCAG needs for large text. That colour is the U2care original's and Hari asked for it, so it was not changed. `--c-accent-dark` (#5f9295) would clear it at ~3.6:1 if he wants.
+13. Entropia and Business Elegance wordmarks added afterwards, commit `7040b1d`. Both are wide lockups, not square marks, so the last three testimonials put the mark **above** the attribution instead of beside it — a chip beside the name pushed those names onto four hyphenated lines where every other card needs two. BE Renovierung has no logo; per Hari its chip carries the company name as type.
+14. Two CSS traps fixed there: `.page-ergebnisse .case__person` pins the first column at 57px and is declared later in the file, so widening it needs one class more; and an `auto` grid row sizes to its own content, so a percentage height cap on the image inside was circular and the taller wordmark spilled out — the chip is a fixed-height flex container now.
+15. **Every placeholder on the site is now a real asset.**
 
 ## Open — waiting on Willy
 
