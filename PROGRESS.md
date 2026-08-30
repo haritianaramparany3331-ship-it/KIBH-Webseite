@@ -183,19 +183,31 @@ Verified by driving both pages with Playwright, not by reading markup.
 15. `scratchpad/u2/verify_case.py` — design values, word-level text diff against each live original, overflow at 5 viewports. Green. `scratchpad/u2/sweep.py` — 12 pages × 8 viewports, on load and settled, 0 horizontal overflow. `scratchpad/u2/wt.py` — webapp-testing pass, 4 pages × 5 viewports: no console errors, no failed requests, no clipped text, no card collisions, even card heights, heading order intact, every reveal fires, every link resolves and focuses. `tests/qa.py` green.
 16. **Not** pushed yet — waiting on Hari.
 
+## 2026-08-30 — real photos and logos placed site-wide
+
+1. Hari uploaded the real imagery into `assets/img`, organised by section. Commits `b395903`, `27d9e8c`.
+2. **Assets normalised.** The upload arrived with mixed-case folders, spaces, umlauts and parentheses, five images duplicated across up to seven folders, and `erechnung/` case-renamed to `ERechnung/` — the same directory on Windows, a different one on Vercel's Linux, which would have 404'd every E-Rechnung image in production. Now 21 unique files on lowercase ASCII paths: `kibh-logo.png`, `erechnung/`, `startseite/` (+ `logos/1..7`), `ergebnisse/`.
+3. `bg-1.png`, `graphic.svg` and `ss.svg` restored — the re-upload dropped them and the E-Rechnung page still needs them.
+4. **Mistake, and the recovery.** The normalisation script deleted the files it had just moved: on Windows `makedirs("startseite")` reuses the existing `Startseite`, so a lowercase `startswith` guard missed them and they were counted as duplicates. They were untracked, so git could not restore them. All 21 were re-fetched from their sources — the live site plus the seven strip logos already pulled into the scratchpad — and every one came back at the same dimensions and byte size Hari uploaded; the five with recorded hashes match exactly. Committed immediately so it cannot recur.
+5. Every placement matched by looking at the file and then checking how the live page displays it, not by filename.
+6. Placed: header + E-Rechnung CTA wordmark; homepage hero robot; all 7 client logos in the live site's own order; 3 homepage testimonial portraits; the AI-Consultant certificate and the TÜV Rheinland mark; Willy and Ilya; 7 of the 11 Ergebnisse cards; the hero portraits on U2care, Kommunikation and Potenzial Analyse; the Hinnerbäcker wordmark on the two Hinnerbäcker case studies; the Bauwesen photo on Automatische Rechnungsprüfung.
+7. Torsten's small round avatars use the square 1024×1024 crop, not the wide 1024×984 — same shot, but at 57px the wide one is mostly shirt. The live site squashes the wide file to 57×55.
+8. The Hinnerbäcker wordmark is a JPEG with its own white ground; the original sits it on a light band, ours is a dark hero, so it gets padding and a radius and reads as a chip.
+9. Strip logos: 300×300 files with ~25 % blank margin baked in, so a 7rem box brings the marks to ~84px. `transform: scale()` was tried first and dropped — it grows the box as well as the paint, and the outer logos then reported as overflowing.
+10. Team portraits stay round: the files are circular cut-outs on white, so a round mask lands on the circle. The original's contain-in-a-rectangle leaves white bars.
+11. `scratchpad/u2/wt_site.py` — webapp-testing pass, 12 pages × 5 viewports: every image loads, none stretched, squashed, upscaled past its own resolution or missing an alt; no overflow, no console errors, no failed requests. 0 problems. Overflow sweep and `tests/qa.py` green.
+12. **Not** pushed yet — waiting on Hari.
+
 ## Open — waiting on Hari
 
-- Real assets: logos, team photos, client logos. Placeholders everywhere except E-Rechnung.
-- Photos for the 5 recommendation-card avatars on `/ergebnisse/`. Dashed „Foto“ circles until then.
-- The 6 older case cards on `/ergebnisse/` still have no avatar; the live site gives them one. Needs the real logos.
-- E-Rechnung reuses the live site's own photos and artwork. Confirm that is fine or ask for placeholders back.
-- The closing E-Rechnung CTA has no logo image; the original has one there.
+- Photos for three `/ergebnisse/` cards: Volker Adelfinger (Entropia Consulting), Mihaela Geiger (BE Renovierung), Daniel Markus (Business Elegance Logistics). Nothing in the upload and the live Ergebnisse page ends before them, so they keep a dashed circle.
+- **Page weight.** With the real images in, the homepage is 2 189 KB and E-Rechnung 4 044 KB, against the 101 KB measured in `docs/performance-baseline.md`. The comparison there no longer holds — the biggest single files are `zertifikat-ai-consultant.png` (1 184 KB) and the four E-Rechnung PNGs (3 053 KB together). Re-encoding to WebP at display size would win most of it back; not done unasked because it changes the uploaded assets.
+- `ergebnisse/torsten-krueger.jpg` (the wide crop) is now unused — the square one reads better at avatar size. Kept in case it is wanted somewhere.
+- The footer still uses the teal "KIBH" block and text rather than the wordmark. That is what the live footer does too; say if it should become the logo.
 - The 🙂 inside Martin Kraus's quoted testimonial on `/ergebnisse/`. Left in — it is a customer's own words.
 - The Kontakt form is silent when submitted: `data-inert` stops it navigating, but nothing tells the visitor it is not connected yet. A note there would be text the original does not have, so it was left out — say if it should be added.
 - The live Martin Kraus card on `/ergebnisse/` carries a heading, "Rechnungsverarbeitung"; ours has none. Adding it is copy, so it was left alone.
 - The teal section headings on the four case-study pages sit at 2.56:1 against white, under the 3:1 WCAG needs for large text. That colour is the U2care original's and Hari asked for it, so it was not changed. `--c-accent-dark` (#5f9295) would clear it at ~3.6:1 if he wants.
-- Automatische Rechnungsprüfung opens with a construction-site photograph on the live page; ours is a dashed placeholder.
-- The hero quote avatars on U2care, Kommunikation and Potenzial Analyse are dashed „Foto“ circles — the live site has real portraits there.
 
 ## Open — waiting on Willy
 
