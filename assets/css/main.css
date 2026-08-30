@@ -454,31 +454,15 @@ button {
   width: auto;
   height: 46px;
 }
-
-.brand__mark {
-  font-family: var(--font-display);
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  background: var(--c-primary);
-  color: var(--c-white);
-  font-weight: 600;
-  font-size: 0.8125rem;
-  letter-spacing: 0.02em;
-}
-
-.brand__text {
-  display: flex;
+/* Footer: the wordmark sits above the tagline rather than beside it, and gets
+   more room than in the header because no nav is competing for the space. */
+.brand--stack {
   flex-direction: column;
-  line-height: 1.15;
+  align-items: flex-start;
+  gap: var(--sp-3);
 }
-.brand__name {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: var(--fs-small);
-}
+.site-footer .brand__logo { height: 60px; }
+
 .brand__tag {
   font-size: 0.6875rem;
   color: var(--c-text-muted);
@@ -3128,19 +3112,8 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .site-footer a { color: var(--c-lime); }
 .site-footer a:hover { color: var(--c-accent); }
 
-.site-footer .brand__mark {
-  background: var(--c-accent);
-  color: var(--c-ink);
-}
 .site-footer .brand { color: var(--c-white); }
 .site-footer .brand__tag { color: var(--c-lime); font-size: var(--fs-body); }
-.site-footer .brand__mark {
-  width: 84px;
-  height: 84px;
-  border-radius: 14px;
-  font-size: var(--fs-h2);
-}
-.site-footer .brand__name { font-size: var(--fs-body-lg); font-weight: 400; }
 
 .site-footer__tagline {
   margin-top: var(--sp-4);
