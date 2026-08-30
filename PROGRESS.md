@@ -212,6 +212,8 @@ Verified by driving both pages with Playwright, not by reading markup.
 15. CSS trap worth remembering: an `auto` grid row sizes to its own content, so a percentage height cap on an image inside it is circular and the image simply overflows. The circle is a fixed-size flex container for that reason.
 16. Footer wordmark, commit `875dc5e`. It was still carrying the stand-in — a teal 84px square reading "KIBH" beside the name in type. Now the same logo file as the header at 60px, with the lime tagline under it; the "KI Beratung Hessen" line is gone because the logo says it. That was the last use of the stand-in, so `.brand__mark`, `.brand__text`, `.brand__name` and their three footer overrides were deleted rather than left as dead rules.
 17. **Every placeholder on the site is now a real asset.**
+18. Browser-tab icon, same as the original: the teal robot-head-over-KI mark. Was a hand-drawn stand-in SVG. The three PNGs WordPress serves (32, 192, 180) are copied in byte-identical and linked the same way the live head links them; `favicon.svg` deleted. The 270×270 `msapplication-TileImage` was skipped — Windows 8/10 start-tile pinning, dead tech, 22 KB.
+19. Verification trap: headless Chromium never requests a favicon at all — no tab UI to draw it in. The first check reported all 12 pages broken. Confirmed against the live WordPress site, which behaves identically headless. `scratchpad/u2/favcheck.py` runs headed for that reason; 12/12 pages fetch `favicon-32.png`, no `/favicon.ico` fallback, no failed requests.
 
 ## Open — waiting on Willy
 
