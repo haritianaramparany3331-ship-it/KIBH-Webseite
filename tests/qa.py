@@ -69,6 +69,11 @@ def audit_overflow(page):
             if (el.classList.contains('visually-hidden')) continue;
             // decorative-only subtrees are allowed to be clipped
             if (el.getAttribute('aria-hidden') === 'true') continue;
+            // The logo marquee is deliberately wider than its box: it holds two
+            // copies of the strip and slides one copy's width per cycle, with
+            // `overflow: hidden` doing the clipping. Over-wide is the mechanism
+            // here, not a defect.
+            if (el.classList.contains('is-marquee')) continue;
             // An absolutely-positioned descendant (the nav dropdown) is meant to
             // extend past its parent; that inflates scrollWidth without being a
             // layout defect.

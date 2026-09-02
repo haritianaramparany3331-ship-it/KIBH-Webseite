@@ -1150,7 +1150,9 @@ img.case__shot,
   padding-left: var(--sp-5);
 }
 .prose li { padding-left: var(--sp-1); }
-.prose a { text-decoration: underline; text-underline-offset: 2px; }
+/* The underline itself is drawn in the micro-interactions block at the foot
+   of this file, as a pair of background bars, so that it can wipe in on
+   hover and still survive a link that wraps across two lines. */
 .prose strong { color: var(--c-text); }
 
 .prose__meta {
@@ -1990,17 +1992,30 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .page-ergebnisse .case {
   gap: 0;
   padding: 20px;
-  border: 0;
+  /*
+    Transparent rather than absent, so the hover below can colour it without
+    the card changing size. The box is border-box, so the 1px costs nothing
+    on the outside.
+  */
+  border: 1px solid transparent;
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.15) 3px 0 12px 0;
-  transition: none;
 }
-/* The original's cards have no hover state at all -- and ours are not
-   clickable as a whole, so a lift here would promise a link that is not
-   there. Only the "Mehr Lesen" link below reacts. */
+/*
+  The same lift the homepage testimonial cards use: identical transform,
+  shadow, border colour and timing. It has to be restated rather than left to
+  the base `.case:hover` rule, because the page-scoped resting rule above
+  (0,2,0) outranks that rule's (0,1,1) and would keep its own shadow and
+  transparent border throughout the hover.
+
+  The original WordPress page has no hover state on these at all; this is a
+  deliberate departure from it so both sets of testimonial cards behave the
+  same way.
+*/
 .page-ergebnisse .case:hover {
-  transform: none;
-  box-shadow: rgba(0, 0, 0, 0.15) 3px 0 12px 0;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--c-accent);
 }
 
 /*
@@ -2335,9 +2350,8 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .case-body p { line-height: 1.34; }
 .case-body :is(strong, b) { font-weight: 700; }
 .case-body a {
+  /* Underline drawn in the micro-interactions block at the foot of this file. */
   color: var(--c-accent-dark);
-  text-decoration: underline;
-  text-underline-offset: 2px;
 }
 .case-body a:hover { color: var(--c-teal-dark); }
 
@@ -2972,12 +2986,17 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   border: 1px solid #dadada;
   border-radius: 4px;
 }
-.kform__row { margin: 0 0 10px; }
+.kform__row { position: relative; margin: 0 0 10px; }
 .kform__row:last-child { margin-bottom: 0; }
 .kform__field {
   display: block;
   width: 100%;
-  padding: 8px 16px;
+  /*
+    Top padding carries the floated label. The field's own text sits below it
+    at rest, exactly where the label sits before it floats, so the two swap
+    places rather than the text jumping.
+  */
+  padding: 22px 16px 7px;
   background: var(--c-white);
   border: 1px solid #f0f0f0;
   border-radius: 3px;
@@ -2985,14 +3004,53 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   font-size: var(--fs-body);
   line-height: 1.6;
   color: var(--c-text);
+  transition: border-color var(--transition);
 }
 .kform__field--area {
-  padding: 5px 14px;
   resize: vertical;
 }
+
+/*
+  Floating label. The input keeps a single-space placeholder so
+  `:placeholder-shown` can tell an empty field from a filled one -- that is
+  what holds the label up after the field loses focus but still has content,
+  and it works for autofill too. The label follows the input in the DOM so a
+  plain sibling combinator can reach it; `for`/`id` still pair them up.
+*/
+.kform__label {
+  position: absolute;
+  top: 22px;
+  /* 16px of field padding + the 1px border */
+  left: 17px;
+  max-width: calc(100% - 34px);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--c-text-muted);
+  white-space: nowrap;
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform var(--transition), color var(--transition);
+}
+.kform__field:focus + .kform__label,
+.kform__field:not(:placeholder-shown) + .kform__label {
+  /* 0.75 x 16px = the 12px eyebrow size, reached by scaling so the whole
+     move is one composited transform rather than a font-size reflow. */
+  transform: translateY(-15px) scale(0.75);
+  color: var(--c-accent-dark);
+}
+
+/*
+  Focus is a flat border-colour change and nothing else -- no outline, no ring,
+  no halo. `--c-accent-dark` rather than `--c-accent` because the darker teal
+  clears 3:1 against both the white field and the form's own ground, which the
+  lighter one does not; the label floating up and turning teal is the second
+  half of the indicator.
+*/
+.kform__field:focus,
 .kform__field:focus-visible {
-  outline: 2px solid var(--c-accent);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--c-accent-dark);
 }
 .kform__submit {
   width: 100%;
@@ -3287,4 +3345,205 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 @media print {
   .site-header, .site-footer, .cta, .nav-toggle { display: none; }
   body { color: #000; }
+}
+
+/* ==========================================================================
+   Micro-interactions
+
+   Six small behaviours added on top of the finished layout. Every one of them
+   reuses an existing colour and the existing `--transition` timing rather than
+   introducing its own, so they read as one set. All six degrade cleanly: the
+   two that need JS (magnetic CTAs, logo marquee, cursor glow) leave the page
+   exactly as it was when it is unavailable, and the global
+   `prefers-reduced-motion` block above flattens the CSS-driven ones.
+   ========================================================================== */
+
+/* --- 1. Underline that wipes in on hover -------------------------------- */
+
+/*
+  Two stacked background bars rather than an ::after, because an absolutely
+  positioned pseudo-element only underlines the first line box when a link
+  wraps mid-paragraph -- which happens in the legal pages' long German
+  sentences. The lower bar is the resting underline and only body-copy links
+  carry one; the upper bar is the accent that wipes in from the left.
+
+  `currentColor` on both means each context keeps its own link colour without
+  a second set of rules: teal in body copy, lime in the footer.
+
+  Nav links are deliberately not in this list. They already have a distinct
+  hover state -- a tinted pill behind the label -- and a second indicator
+  underneath it reads as noise rather than polish.
+*/
+.prose a,
+.case-body a,
+.booking__mail a,
+.site-footer li a,
+.case__more,
+.er-card__more,
+.member__link,
+.btn--ghost {
+  /* width of the resting bar: 0 for standalone links, 100% for body copy */
+  --ul-rest: 0%;
+  text-decoration: none;
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  /*
+    Positioned against the content box, not the padding box. `.btn--ghost`
+    inherits 13px of vertical padding from `.btn`, which parked the bar that
+    far below the text and made it read as a rule under the link rather than
+    an underline on it. On links with no padding this changes nothing.
+  */
+  background-origin: content-box;
+  background-position: 0 100%, 0 100%;
+  background-size: 0% 2px, var(--ul-rest) 1px;
+  transition: background-size var(--transition), color var(--transition);
+}
+
+/*
+  Body-copy links keep a permanent underline so they are still recognisable as
+  links inside a block of text. The hover bar wipes across on top of it.
+*/
+.prose a,
+.case-body a,
+.booking__mail a {
+  --ul-rest: 100%;
+}
+
+.prose a:hover,
+.prose a:focus-visible,
+.case-body a:hover,
+.case-body a:focus-visible,
+.booking__mail a:hover,
+.booking__mail a:focus-visible,
+.site-footer li a:hover,
+.site-footer li a:focus-visible,
+.case__more:hover,
+.case__more:focus-visible,
+.er-card__more:hover,
+.er-card__more:focus-visible,
+.member__link:hover,
+.member__link:focus-visible,
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  background-size: 100% 2px, var(--ul-rest) 1px;
+}
+
+/* --- 4. Magnetic booking CTAs ------------------------------------------- */
+
+/*
+  JS sets --mag-x / --mag-y; the transform is composed here so the button's
+  own 1px hover lift survives instead of being overwritten by an inline
+  style. The class is added by JS only on devices with a real cursor, so a
+  touch device never sees any of this.
+
+  Specificity note: `.btn.is-magnet` (0,2,0) has to beat `.btn:hover` (0,1,1),
+  which is why the lift moves into a custom property here.
+*/
+.btn.is-magnet,
+.er-btn.is-magnet {
+  --mag-x: 0px;
+  --mag-y: 0px;
+  --mag-lift: 0px;
+  transform: translate3d(var(--mag-x), calc(var(--mag-y) + var(--mag-lift)), 0);
+}
+.btn.is-magnet { transition: background var(--transition), color var(--transition),
+    border-color var(--transition), transform var(--transition); }
+.er-btn.is-magnet { transition: background 0.3s, color 0.3s, transform var(--transition); }
+
+.btn.is-magnet:hover { --mag-lift: -1px; }
+.btn.is-magnet:active { --mag-lift: 0px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn.is-magnet,
+  .er-btn.is-magnet { --mag-x: 0px; --mag-y: 0px; }
+}
+
+/* --- 5. Client logo strip, scrolling ------------------------------------ */
+
+/*
+  Upgraded from the static grid by JS: the seven logos move into a flex track
+  which is then duplicated, and the track slides exactly one group's width
+  before repeating -- so the seam never shows. Without JS the grid above stays
+  as it is.
+*/
+.logos.is-marquee {
+  display: block;
+  overflow: hidden;
+  /* Softens both ends so logos enter and leave rather than being cut off. */
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.logos__track {
+  display: flex;
+  width: max-content;
+  animation: logos-scroll 30s linear infinite;
+}
+.logos.is-marquee:hover .logos__track,
+.logos.is-marquee:focus-within .logos__track {
+  animation-play-state: paused;
+}
+.logos__group {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  /* Matches the inter-logo gap, so the join between the two groups keeps the
+     same rhythm as the rest of the strip. */
+  padding-right: var(--sp-5);
+}
+.logos.is-marquee .logos__item {
+  width: 9rem;
+  flex: none;
+}
+
+@keyframes logos-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logos__track { animation: none; }
+}
+
+/* --- 6. Cursor-following background glow -------------------------------- */
+
+/*
+  One fixed element, created by JS and parked at the bottom of the stack. The
+  negative z-index is what keeps it genuinely behind the page: `body`'s white
+  background propagates to the canvas, so this paints above that and below
+  every section, card and paragraph. It shows through wherever a section has
+  no opaque ground of its own, and is simply hidden where one does -- which is
+  the point, it is a ground, not an overlay.
+
+  The teal is `--c-accent`, the same #76abae the testimonial quote panels are
+  tinted with. At 0.16 over white it is roughly a 6% wash at the centre, fading
+  to nothing over a 22rem radius: read as a warmth in the page rather than as a
+  spot you can point at. The stops run all the way to 100% so the falloff uses
+  the whole circle -- an earlier 72% cut-off made it a small patch instead of a
+  wash.
+*/
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 44rem;
+  height: 44rem;
+  margin: -22rem 0 0 -22rem;
+  pointer-events: none;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(118, 171, 174, 0.16),
+    rgba(118, 171, 174, 0.08) 50%,
+    rgba(118, 171, 174, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity 700ms linear;
+  will-change: transform;
+}
+.cursor-glow.is-on { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-glow { display: none; }
 }

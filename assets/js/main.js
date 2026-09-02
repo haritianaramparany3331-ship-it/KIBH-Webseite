@@ -296,3 +296,212 @@
     form.addEventListener("submit", function (e) { e.preventDefault(); });
   });
 })();
+
+/* --------------------------------------------------------------------------
+   Magnetic booking CTAs.
+
+   Scoped to button-styled links pointing at the booking page and nothing else.
+   The cursor pulls the button a fraction of its own offset from the button's
+   centre, capped at a few pixels, and it eases back when the cursor leaves.
+   CSS composes --mag-x/--mag-y with the button's existing hover lift, so this
+   never fights the styles already on it.
+   -------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  // A magnet needs something to attract: no cursor, no effect.
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  var btns = document.querySelectorAll(
+    'a.btn[href="/kontakt/"], a.er-btn[href="/kontakt/"]'
+  );
+  if (!btns.length) return;
+
+  var PULL = 0.18;  // fraction of the cursor's offset from centre
+  var MAX = 6;      // px, hard cap on the shift
+  var NEAR = 26;    // px of reactive margin around the button's own box
+
+  Array.prototype.forEach.call(btns, function (b) { b.classList.add("is-magnet"); });
+
+  var frame = 0;
+  var mx = -1e4;
+  var my = -1e4;
+
+  function clamp(v) { return Math.max(-MAX, Math.min(MAX, v)); }
+
+  function apply() {
+    frame = 0;
+    Array.prototype.forEach.call(btns, function (b) {
+      var r = b.getBoundingClientRect();
+      if (!r.width) return;
+
+      /*
+        The rect already carries whatever shift is currently applied, so the
+        centre it reports is the displaced one. Subtracting the shift we asked
+        for gets back to the resting centre; without this the button chases
+        its own transform.
+      */
+      var ox = parseFloat(b.style.getPropertyValue("--mag-x")) || 0;
+      var oy = parseFloat(b.style.getPropertyValue("--mag-y")) || 0;
+      var dx = mx - (r.left + r.width / 2 - ox);
+      var dy = my - (r.top + r.height / 2 - oy);
+
+      if (Math.abs(dx) <= r.width / 2 + NEAR && Math.abs(dy) <= r.height / 2 + NEAR) {
+        b.style.setProperty("--mag-x", clamp(dx * PULL).toFixed(2) + "px");
+        b.style.setProperty("--mag-y", clamp(dy * PULL).toFixed(2) + "px");
+      } else if (ox || oy) {
+        b.style.removeProperty("--mag-x");
+        b.style.removeProperty("--mag-y");
+      }
+    });
+  }
+
+  function schedule() {
+    if (!frame) frame = window.requestAnimationFrame(apply);
+  }
+
+  window.addEventListener("pointermove", function (e) {
+    if (e.pointerType && e.pointerType !== "mouse") return;
+    mx = e.clientX;
+    my = e.clientY;
+    schedule();
+  }, { passive: true });
+
+  // Scrolling moves the buttons past a stationary cursor, so the shift has to
+  // be recomputed even though the pointer itself has not moved.
+  window.addEventListener("scroll", schedule, { passive: true });
+
+  document.addEventListener("pointerleave", function () {
+    mx = my = -1e4;
+    schedule();
+  });
+})();
+
+/* --------------------------------------------------------------------------
+   Client logo strip -> continuous marquee.
+
+   The seven logos move into a flex track which is then duplicated, and the
+   track slides exactly one group's width before the animation repeats, so the
+   loop has no visible seam. Without JS the strip stays the static grid it is
+   in the markup.
+   -------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  var strips = document.querySelectorAll("[data-marquee]");
+  if (!strips.length) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  var SPEED = 42; // px per second
+
+  Array.prototype.forEach.call(strips, function (strip) {
+    var items = Array.prototype.slice.call(strip.children);
+    if (items.length < 2) return;
+
+    var track = document.createElement("div");
+    track.className = "logos__track";
+
+    var group = document.createElement("div");
+    group.className = "logos__group";
+    items.forEach(function (el) {
+      /*
+        Lazy loading has to come off here. In the static grid the whole strip
+        is on screen, but in the track the later logos sit hundreds of pixels
+        off to the right, so the browser defers them and they pop in blank as
+        the marquee brings them round -- worst at narrow viewports, where the
+        last two never loaded at all. The seven files are 113 KB together.
+      */
+      if (el.tagName === "IMG") el.loading = "eager";
+      group.appendChild(el);
+    });
+    track.appendChild(group);
+
+    // The second group exists only to fill the space the first one vacates as
+    // it scrolls out. It carries no information a reader has not already had,
+    // so it is hidden from assistive technology.
+    var clone = group.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    track.appendChild(clone);
+
+    strip.appendChild(track);
+    strip.classList.add("is-marquee");
+
+    /*
+      One group's width is exactly how far the track travels per cycle, so
+      deriving the duration from it keeps the strip moving at the same speed
+      whatever the viewport. Logo widths are fixed in CSS, so this measures
+      correctly whether or not the images have decoded yet.
+    */
+    var w = group.getBoundingClientRect().width;
+    if (w) track.style.animationDuration = (w / SPEED).toFixed(1) + "s";
+  });
+})();
+
+/* --------------------------------------------------------------------------
+   Cursor-following background glow.
+
+   One fixed element at the bottom of the stack (z-index -1 in CSS), trailing
+   the cursor rather than tracking it exactly. It is a ground, not an overlay:
+   it paints below every section, card and paragraph, and takes no pointer
+   events, so it can never intercept a click or a selection.
+   -------------------------------------------------------------------------- */
+(function () {
+  "use strict";
+
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  var glow = document.createElement("div");
+  glow.className = "cursor-glow";
+  glow.setAttribute("aria-hidden", "true");
+  document.body.appendChild(glow);
+
+  var EASE = 0.075;  // fraction of the remaining distance covered per frame
+  var tx = 0, ty = 0;   // where the cursor is
+  var gx = 0, gy = 0;   // where the glow has got to
+  var placed = false;
+  var running = false;
+
+  function frame() {
+    var dx = tx - gx;
+    var dy = ty - gy;
+    gx += dx * EASE;
+    gy += dy * EASE;
+    glow.style.transform =
+      "translate3d(" + gx.toFixed(1) + "px," + gy.toFixed(1) + "px,0)";
+
+    // Stop once it has caught up, so an idle page schedules no frames at all.
+    if (Math.abs(dx) > 0.4 || Math.abs(dy) > 0.4) {
+      window.requestAnimationFrame(frame);
+    } else {
+      running = false;
+    }
+  }
+
+  window.addEventListener("pointermove", function (e) {
+    if (e.pointerType && e.pointerType !== "mouse") return;
+    tx = e.clientX;
+    ty = e.clientY;
+
+    if (!placed) {
+      // Start where the cursor already is, rather than sliding in from 0,0.
+      placed = true;
+      gx = tx;
+      gy = ty;
+      glow.style.transform = "translate3d(" + gx + "px," + gy + "px,0)";
+      glow.classList.add("is-on");
+    }
+    if (!running) {
+      running = true;
+      window.requestAnimationFrame(frame);
+    }
+  }, { passive: true });
+
+  document.addEventListener("pointerleave", function () {
+    glow.classList.remove("is-on");
+  });
+  document.addEventListener("pointerenter", function () {
+    if (placed) glow.classList.add("is-on");
+  });
+})();

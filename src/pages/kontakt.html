@@ -63,31 +63,40 @@
       <div class="kontakt__panel" id="panel-kontakt" role="tabpanel"
            aria-labelledby="tab-kontakt" data-panel="kontakt" hidden>
         <!--
-          Field labels are the original's, kept for screen readers the way the
-          original keeps them (`elementor-screen-only`); a sighted visitor sees
-          only the placeholders. No backend yet, so `data-inert` stops the
-          submit rather than posting the page to itself.
+          Field labels are the original's. They were hidden the way the
+          original hides them (`elementor-screen-only`), with the placeholder
+          doing the visible work; they are now real floating labels instead —
+          same words, sitting inside the field at rest and rising above the
+          text on focus or once the field has content.
+
+          The placeholder is a single space rather than empty, because
+          `:placeholder-shown` is what tells CSS an empty field from a filled
+          one, and that is what keeps the label up after focus moves away. The
+          label follows its input so a sibling combinator can reach it.
+
+          No backend yet, so `data-inert` stops the submit rather than posting
+          the page to itself.
         -->
         <form class="kform" data-inert novalidate>
           <p class="kform__row">
-            <label class="visually-hidden" for="k-name">Name</label>
             <input class="kform__field" id="k-name" name="name" type="text"
-                   placeholder="Name" autocomplete="name">
+                   placeholder=" " autocomplete="name">
+            <label class="kform__label" for="k-name">Name</label>
           </p>
           <p class="kform__row">
-            <label class="visually-hidden" for="k-tel">Telefon</label>
             <input class="kform__field" id="k-tel" name="tel" type="tel"
-                   placeholder="Telefon" autocomplete="tel">
+                   placeholder=" " autocomplete="tel">
+            <label class="kform__label" for="k-tel">Telefon</label>
           </p>
           <p class="kform__row">
-            <label class="visually-hidden" for="k-mail">Email</label>
             <input class="kform__field" id="k-mail" name="email" type="email"
-                   placeholder="Email" autocomplete="email">
+                   placeholder=" " autocomplete="email">
+            <label class="kform__label" for="k-mail">Email</label>
           </p>
           <p class="kform__row">
-            <label class="visually-hidden" for="k-msg">Nachricht</label>
             <textarea class="kform__field kform__field--area" id="k-msg" name="message"
-                      rows="4" placeholder="Nachricht"></textarea>
+                      rows="4" placeholder=" "></textarea>
+            <label class="kform__label" for="k-msg">Nachricht</label>
           </p>
           <p class="kform__row">
             <button class="kform__submit" type="submit">Senden</button>
