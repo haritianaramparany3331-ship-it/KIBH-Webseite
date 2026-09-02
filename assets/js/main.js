@@ -441,10 +441,17 @@
 /* --------------------------------------------------------------------------
    Cursor-following background glow.
 
-   One fixed element at the bottom of the stack (z-index -1 in CSS), trailing
-   the cursor rather than tracking it exactly. It is a ground, not an overlay:
-   it paints below every section, card and paragraph, and takes no pointer
+   Trails the cursor rather than tracking it exactly. It is a ground, not an
+   overlay: it paints below every section's content and takes no pointer
    events, so it can never intercept a click or a selection.
+
+   Two kinds of copy. One fixed copy behind the whole page, which shows
+   wherever a section paints no ground of its own; and one clipped copy inside
+   each section that does paint a ground, because an opaque background would
+   otherwise hide the fixed copy completely -- which is what happened across
+   the whole of /ergebnisse/ and /deep-reading-engine/, and over the homepage
+   hero. Both copies move together, so the glow reads as one continuous thing
+   as the cursor crosses a section boundary.
    -------------------------------------------------------------------------- */
 (function () {
   "use strict";
@@ -452,10 +459,45 @@
   if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  var glow = document.createElement("div");
-  glow.className = "cursor-glow";
-  glow.setAttribute("aria-hidden", "true");
-  document.body.appendChild(glow);
+  function makeSpot() {
+    var el = document.createElement("div");
+    el.className = "cursor-glow";
+    el.setAttribute("aria-hidden", "true");
+    return el;
+  }
+
+  var base = makeSpot();
+  document.body.appendChild(base);
+
+  var spots = [base];
+  var grounds = [];
+
+  Array.prototype.forEach.call(
+    document.querySelectorAll("main > *, .site-footer"),
+    function (el) {
+      var c = window.getComputedStyle(el);
+      var m = /rgba?\(([^)]+)\)/.exec(c.backgroundColor);
+      var parts = m ? m[1].split(",") : null;
+      var alpha = parts ? (parts[3] === undefined ? 1 : parseFloat(parts[3])) : 0;
+      // Nothing to hide the fixed copy: leave this section to it.
+      if (alpha < 0.9 && c.backgroundImage === "none") return;
+
+      // Set inline and only when static, so a sticky or absolute section keeps
+      // whatever positioning it already relies on.
+      if (c.position === "static") el.style.position = "relative";
+      el.classList.add("has-glow-ground");
+
+      var layer = document.createElement("span");
+      layer.className = "glow-ground";
+      layer.setAttribute("aria-hidden", "true");
+      var spot = makeSpot();
+      layer.appendChild(spot);
+      el.insertBefore(layer, el.firstChild);
+
+      spots.push(spot);
+      grounds.push({ el: el, spot: spot });
+    }
+  );
 
   var EASE = 0.075;  // fraction of the remaining distance covered per frame
   var tx = 0, ty = 0;   // where the cursor is
@@ -463,19 +505,40 @@
   var placed = false;
   var running = false;
 
+  function paint() {
+    /*
+      Every rect is read before any transform is written. Interleaving them
+      would force a layout on each ground, every frame.
+    */
+    var rects = grounds.map(function (g) { return g.el.getBoundingClientRect(); });
+    var x = gx.toFixed(1), y = gy.toFixed(1);
+    base.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+    for (var i = 0; i < grounds.length; i++) {
+      grounds[i].spot.style.transform =
+        "translate3d(" + (gx - rects[i].left).toFixed(1) + "px," +
+        (gy - rects[i].top).toFixed(1) + "px,0)";
+    }
+  }
+
   function frame() {
     var dx = tx - gx;
     var dy = ty - gy;
     gx += dx * EASE;
     gy += dy * EASE;
-    glow.style.transform =
-      "translate3d(" + gx.toFixed(1) + "px," + gy.toFixed(1) + "px,0)";
+    paint();
 
     // Stop once it has caught up, so an idle page schedules no frames at all.
     if (Math.abs(dx) > 0.4 || Math.abs(dy) > 0.4) {
       window.requestAnimationFrame(frame);
     } else {
       running = false;
+    }
+  }
+
+  function run() {
+    if (!running) {
+      running = true;
+      window.requestAnimationFrame(frame);
     }
   }
 
@@ -489,19 +552,20 @@
       placed = true;
       gx = tx;
       gy = ty;
-      glow.style.transform = "translate3d(" + gx + "px," + gy + "px,0)";
-      glow.classList.add("is-on");
+      paint();
+      spots.forEach(function (s) { s.classList.add("is-on"); });
     }
-    if (!running) {
-      running = true;
-      window.requestAnimationFrame(frame);
-    }
+    run();
   }, { passive: true });
 
+  // Scrolling slides the grounds past a stationary cursor, so their local
+  // coordinates change even though the pointer has not moved.
+  window.addEventListener("scroll", run, { passive: true });
+
   document.addEventListener("pointerleave", function () {
-    glow.classList.remove("is-on");
+    spots.forEach(function (s) { s.classList.remove("is-on"); });
   });
   document.addEventListener("pointerenter", function () {
-    if (placed) glow.classList.add("is-on");
+    if (placed) spots.forEach(function (s) { s.classList.add("is-on"); });
   });
 })();

@@ -95,6 +95,13 @@
     0 12px 32px rgba(34, 40, 49, 0.07);
 
   --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /*
+    Strength of the cursor glow, as one dial. 0.26 reads as a soft teal wash on
+    both the light grounds and the dark bands; 0.15 is barely perceptible, 0.35
+    starts to read as a spot you can point at rather than a warmth in the page.
+  */
+  --glow-a: 0.26;
 }
 
 /* --- Reset -------------------------------------------------------------- */
@@ -3517,11 +3524,9 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   the point, it is a ground, not an overlay.
 
   The teal is `--c-accent`, the same #76abae the testimonial quote panels are
-  tinted with. At 0.16 over white it is roughly a 6% wash at the centre, fading
-  to nothing over a 22rem radius: read as a warmth in the page rather than as a
-  spot you can point at. The stops run all the way to 100% so the falloff uses
-  the whole circle -- an earlier 72% cut-off made it a small patch instead of a
-  wash.
+  tinted with, and `--glow-a` in the tokens block is the single dial for how
+  strong it is. The stops run all the way to 100% so the falloff uses the whole
+  22rem radius -- an earlier 72% cut-off made it a small patch instead of a wash.
 */
 .cursor-glow {
   position: fixed;
@@ -3534,8 +3539,8 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   pointer-events: none;
   background: radial-gradient(
     circle closest-side,
-    rgba(118, 171, 174, 0.16),
-    rgba(118, 171, 174, 0.08) 50%,
+    rgba(118, 171, 174, var(--glow-a)),
+    rgba(118, 171, 174, calc(var(--glow-a) * 0.5)) 50%,
     rgba(118, 171, 174, 0) 100%
   );
   opacity: 0;
@@ -3543,6 +3548,29 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   will-change: transform;
 }
 .cursor-glow.is-on { opacity: 1; }
+
+/*
+  A section that paints its own opaque ground hides the fixed copy above
+  completely. On /ergebnisse/ and /deep-reading-engine/ every section does, so
+  the glow never appeared there at all, and on the homepage the hero swallowed
+  the whole first screen.
+
+  So each ground-painting section gets its own clipped copy, inserted by JS.
+  The section is made a stacking context for the purpose, and the copy sits at
+  z-index -1 inside it. Paint order within that context is: the section's own
+  background first, then this, then everything the section contains -- so the
+  glow lies on the ground and still passes under every card, heading, image and
+  paragraph, and takes no pointer events. It is a ground, not an overlay.
+*/
+.has-glow-ground { isolation: isolate; }
+.glow-ground {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.glow-ground > .cursor-glow { position: absolute; }
 
 @media (prefers-reduced-motion: reduce) {
   .cursor-glow { display: none; }
