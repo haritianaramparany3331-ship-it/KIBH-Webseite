@@ -224,10 +224,12 @@ Verified by driving both pages with Playwright, not by reading markup.
 22. Frame cost with the cursor moving: median 16 ms, p95 22–24 ms, on all four heaviest pages.
 23. All six honour `prefers-reduced-motion`; the three JS ones also bail on coarse pointers except the marquee, which is the point on touch.
 24. `tests/qa.py` green (11 pages × 5 viewports). `scratchpad/u2/wt_site.py` green (12 pages × 5 viewports). Zero console errors. Scripts in `scratchpad/micro/`: `verify.py` (all six, computed-style assertions), `glow.py` (pixel deltas, own PNG decoder), `coverage.py` (what fraction of each page can show the glow), `zoom.py`/`crops.py` (3× crops), `before.py`/`after.py` (pixel-identity proof), `glow2.py` (visibility by pixel diff), `perf.py` (frame cost).
-25. **Not** pushed — waiting on Hari.
+25. Commits `ae99db8` (the six interactions) and `e2c56c7` (the glow fix). Pushed to `origin/main` on Hari's go-ahead.
 
 ## Open — waiting on Hari
 
+- **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.
+- **The logo marquee has no pause control on touch.** It scrolls indefinitely, which WCAG 2.2.2 wants a pause/stop/hide mechanism for. `prefers-reduced-motion` turns it off entirely and hover pauses it, but neither helps a touch user who has not set that preference. A visible pause button would be new UI the original does not have, so it was not added unasked.
 - **Page weight.** With the real images in, the homepage is 2 189 KB and E-Rechnung 4 044 KB, against the 101 KB measured in `docs/performance-baseline.md`. The comparison there no longer holds — the biggest single files are `zertifikat-ai-consultant.png` (1 184 KB) and the four E-Rechnung PNGs (3 053 KB together). Re-encoding to WebP at display size would win most of it back; not done unasked because it changes the uploaded assets.
 - `ergebnisse/torsten-krueger.jpg` (the wide crop) is now unused — the square one reads better at avatar size. Kept in case it is wanted somewhere.
 - The logo's "HESSEN" line is drawn in a light grey meant for a white ground, so it goes faint on the dark footer. A light-on-dark variant of the file would fix it; not filtered in CSS because that shifts the brand colour.
