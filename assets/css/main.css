@@ -2446,6 +2446,17 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   line-height: 1.2;
   color: var(--c-text);
 }
+/*
+  The narrative runs at the site's body size rather than the 18px it inherits
+  from `.page-case main`.
+
+  18px is the size measured off the original, and at that size a page of
+  continuous prose read as one uniform oversized block -- Hari's words were that
+  it looked "a little bit like every text is too big". Dropping it to 16px puts
+  it on the site's own body size and opens a real step above it for the pull
+  quote, which stays at 18px, and below it for the card and list copy at 15px.
+*/
+.case-body > :is(p, ul, ol) { font-size: var(--fs-body); }
 .case-body p { line-height: 1.34; }
 .case-body :is(strong, b) { font-weight: 700; }
 .case-body a {
@@ -2476,8 +2487,10 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   padding: 20px;
   border: 1px solid var(--c-accent);
   border-radius: var(--radius-lg);
-  font-size: var(--fs-body);
-  line-height: 1.45;
+  /* A step under the narrative, the same relationship the Deep Reading Engine
+     page has between its card copy and its section leads. */
+  font-size: var(--fs-small);
+  line-height: 1.5;
   text-align: center;
 }
 .case-card > * { margin: 0; }
@@ -2549,7 +2562,8 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .case-panel .ticks {
   padding: 0;
   gap: var(--sp-3);
-  font-size: var(--fs-body);
+  /* Supporting copy, sized with the cards. */
+  font-size: var(--fs-small);
   color: var(--c-text);
 }
 /*
@@ -2801,18 +2815,22 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 }
 .er-asks .ico { color: rgba(255, 255, 255, 0.75); }
 /*
-  16px, not the 14px the original sets here.
+  15px, against the original's 14px.
 
-  The live page runs these two blocks at 14px while everything else on the site
-  reads at 16px, and the rebuild copied that faithfully. Hari noticed the
-  difference and asked for them to match the rest of the site, so this is a
-  deliberate departure from the original, like the typeface. The line-heights
-  came with the 14px -- 1.05 and 1.15 are set for caption-sized type and are far
-  too tight once the text is body size -- so they loosen with it.
+  Two passes got here. The live page runs this and the feature copy below at
+  14px while the rest of the site reads at 16px; the rebuild copied that
+  faithfully, Hari spotted the difference and asked for 16px, then looked at the
+  result and found the page read as though every line were the same oversized
+  block. So these settle a step down at --fs-small, the size the Deep Reading
+  Engine page uses for the same job: supporting copy under a heading, with the
+  leads and section intros left at 18px above it.
+
+  The line-heights do not come from the original either -- its 1.05 and 1.15 are
+  set for caption-sized type and collide once the text is any larger.
 */
 .er-asks p {
-  font-size: 1rem;
-  line-height: 1.4;
+  font-size: var(--fs-small);
+  line-height: 1.45;
   color: rgba(255, 255, 255, 0.75);
 }
 .er-asks__close {
@@ -2865,10 +2883,9 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 }
 .er-features__title + p {
   margin-top: 0.5rem;
-  /* Raised from the original's 14px/1.15 with `.er-asks p` above, so the whole
-     page reads at the site's body size. */
-  font-size: 1rem;
-  line-height: 1.4;
+  /* Sized with `.er-asks p` above -- see the note there. */
+  font-size: var(--fs-small);
+  line-height: 1.45;
   color: rgba(0, 0, 0, 0.75);
 }
 
@@ -2898,7 +2915,9 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   font-weight: 600;
 }
 .er-card h4 { font-size: 1.1875rem; line-height: 1.3; font-weight: 600; }
-.er-card p { margin-top: 1rem; font-size: 1rem; font-weight: 500; line-height: 1.375; }
+/* Card copy sits a step under the section leads, as it does on the Deep
+   Reading Engine page. */
+.er-card p { margin-top: 1rem; font-size: var(--fs-small); font-weight: 500; line-height: 1.45; }
 .er-card__more {
   display: inline-flex;
   align-items: center;
