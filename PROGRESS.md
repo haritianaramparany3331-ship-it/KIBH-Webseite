@@ -477,12 +477,51 @@ twenty.
     `/ergebnisse/automatische-rechnungspruefung/`, and the shift sources are the
     nav and body text, not any image — it is the web font swapping in, which
     predates this work.
-12. Commit `e766fea`. **Not** pushed.
-13. **Next, not yet started:** unify on Verdana + Mulish and drop Plus Jakarta
-    Sans, which Hari chose after I explained that the third typeface is not our
-    mistake — the live WordPress site uses it on E-Rechnung and the four case
-    pages, and our rebuild copied that faithfully. That stage changes how five
-    pages look and is committed separately so it can be dropped on its own.
+12. Commit `e766fea`.
+13. **The hero too**, commit `1b0b3fd`, after Hari lifted the exclusion. 216 KB
+    8-bit palette PNG to 97 KB WebP at quality 0.90 — more headroom than the
+    0.82 the other photographs use, because it is the largest single image and
+    is upscaled on retina, shown at 544px CSS from a 656px source. Compared
+    against the original and against 0.82 at display size first: all three
+    indistinguishable, and the cut-out's transparency survives (300 050
+    non-opaque pixels). Homepage 740 → 621 KB.
+14. Final honest figures: **6.8x lighter on load** (2 464 KB vs 362 KB),
+    **4.4x fully read** (2 735 KB vs 621 KB). Images are the one line WordPress
+    still wins, 365 KB to 412 KB, because it serves `srcset` variants sized to
+    the viewport and we serve one file each. Closing that would mean generating
+    a srcset set here; noted in the doc as not worth the complexity today.
+
+## 2026-09-03 — one typeface pair, site-wide
+
+15. **Plus Jakarta Sans dropped**, commit `036d6e4`. E-Rechnung and the four
+    case pages were set in it while everything else used Verdana + Mulish, so
+    the site read as two sites.
+16. Worth recording because it changes how this reads: **that was not a mistake
+    in the rebuild.** The live WordPress site sets exactly those pages in Plus
+    Jakarta Sans — they were evidently built later, with a different face — and
+    the rebuild copied it faithfully, which is what the 1:1 brief asked for. The
+    original is the inconsistent one. Hari's call was to stop copying that
+    particular inconsistency, which means these five pages no longer match their
+    live counterparts letter for letter.
+17. Only the family changed. Sizes and weights measured off the original are
+    untouched, including the 600 on case-page headings — Mulish has a real 600
+    just as Plus Jakarta did, so that stays the weight the original asks for
+    rather than the 700 the Avenir-derived pages use as a stand-in for bold.
+18. The font request in `base.html` asked for both families on all twelve pages.
+    Now one: every page carries 29 KB of Mulish, where E-Rechnung and the case
+    pages carried 56 KB. Verdana is a system face and costs nothing.
+19. Verdana is wider with a larger x-height, so those five pages grew 1–5% at
+    desktop and 2.5–5.6% at mobile. **No overflow anywhere** — `tests/qa.py`,
+    `scratchpad/u2/wt_site.py` and the responsive audit across 6 touch viewports
+    all green and unchanged. The other seven pages are identical to the pixel,
+    which confirms the change landed only where it was meant to.
+20. Per page after both stages: `/` 614 KB, `/e-rechnung/` 426 KB,
+    `/ergebnisse/` 252 KB, ARP 222 KB, U2care 198 KB, the rest ~192 KB.
+21. **My own note, not acted on:** Verdana at the case pages' 18px reads heavier
+    and more system-like than Plus Jakarta did at the same size — the bold runs
+    especially. Bringing `.case-body` to the site's own 16px would settle it,
+    but that is a look change beyond what was asked, so it waits for Hari.
+22. **Not** pushed.
 
 ## Open — waiting on Hari
 
