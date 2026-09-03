@@ -304,6 +304,13 @@ Verified by driving both pages with Playwright, not by reading markup.
     is Hari's own call (see 2026-08-30, item 14).
 17. `tests/qa.py` green, `scratchpad/u2/wt_site.py` green, all six
     micro-interactions still verified with a mouse, zero console errors.
+18. Scripts, all re-runnable against the dev server: `scratchpad/resp/audit.py`
+    (the 12 × 6 sweep, grouped by defect), `behave.py` (nav, touch behaviour,
+    reduced motion), `nav_form.py` and `nav2.py` (drawer reachability, form,
+    layout metrics per breakpoint), `hovergate.py` (every gated hover, mouse
+    vs touch), `hold.py` (marquee press-and-hold), `hero.py` (the compound
+    word against its column at each width), `shot.py` (phone screenshots).
+19. Commit `709e5ed`. Pushed to `origin/main` on Hari's go-ahead.
 
 ## Open — waiting on Hari
 
