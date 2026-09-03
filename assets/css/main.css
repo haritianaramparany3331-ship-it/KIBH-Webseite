@@ -2612,7 +2612,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 
 .er-hero {
   padding-block: 9.625rem 11rem;
-  background: #000 url("/assets/img/erechnung/bg-1.png") 0 0 / cover no-repeat;
+  background: #000 url("/assets/img/erechnung/bg-1.webp") 0 0 / cover no-repeat;
   color: var(--c-white);
   text-align: center;
 }
@@ -2659,7 +2659,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .er-section--ask,
 .er-section--solutions,
 .er-section--cta {
-  background: #000 url("/assets/img/erechnung/bg-1.png") 50% 100% / cover no-repeat;
+  background: #000 url("/assets/img/erechnung/bg-1.webp") 50% 100% / cover no-repeat;
   color: var(--c-white);
 }
 .er-section--ask .er-h2,
