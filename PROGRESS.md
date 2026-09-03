@@ -389,12 +389,14 @@ commit; he kept one.
    better than black even though it is the same color as the button, the user
    can still see the focus." Left as it was; recorded here so it is not raised
    again.
-7. Nothing was pushed at any point, so the three rejected commits were rewound
-   rather than reverted, and the branch carries only the kept work. They remain
-   in the reflog: `75564d5` measure, `6004882` contrast, `3f427be` the full
-   stage 3 including the focus ring.
+7. None of the three had been pushed, so the rejected ones were rewound rather
+   than reverted and the branch carries only the kept work — no revert commits
+   in the history. They remain in the reflog for about 90 days if any part is
+   wanted after all: `75564d5` measure, `6004882` contrast, `3f427be` the full
+   stage 3 including the two-tone focus ring.
 8. `tests/qa.py` green, `scratchpad/u2/wt_site.py` green, responsive audit
    unchanged at its 3 known findings, zero console errors.
+9. Commit `fd1483a`. Pushed to `origin/main` on Hari's go-ahead.
 
 ## Still missing, in my view — recorded, not acted on
 
