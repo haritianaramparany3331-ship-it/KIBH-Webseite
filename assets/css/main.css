@@ -2242,16 +2242,24 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
    container width and type scale -- none of which match the rest of the site.
    Values here come from measuring the rendered original, not from the tokens. */
 
-/* Two of the live pages are set in Plus Jakarta Sans throughout rather than
-   the site's Verdana/Avenir pair -- E-Rechnung and the U2care case study, both
-   evidently built later. Scoped to <main> so the header and footer keep the
-   site face on those pages, exactly as the live site does. */
+/*
+  These pages were set in Plus Jakarta Sans, because the live site sets them
+  that way -- E-Rechnung and the case studies were evidently built later than
+  the rest of it, with a different face. The rebuild copied that faithfully, so
+  the site read as two sites, which the original does too.
+
+  Hari's call is to stop copying that particular inconsistency: one pair,
+  Verdana for running text and Mulish for headings, everywhere. These five
+  pages therefore no longer match their live counterparts letter for letter.
+  Only the family changed; the sizes and weights measured off the original are
+  untouched.
+*/
 .page-erechnung main :is(h1, h2, h3, h4, h5, h6),
 .page-erechnung main .eyebrow,
 .page-erechnung main .btn,
 .page-erechnung main .case__quote,
 .page-erechnung main .quote p {
-  font-family: "Plus Jakarta Sans", var(--font-display);
+  font-family: var(--font-display);
 }
 
 /* ==========================================================================
@@ -2283,7 +2291,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .page-case main .container { max-width: calc(var(--container) + 2 * var(--sp-5)); }
 
 .page-case main {
-  font-family: "Plus Jakarta Sans", var(--font-sans);
+  font-family: var(--font-sans);
   font-size: var(--fs-body-lg);
   line-height: 1.34;
   color: var(--c-text);
@@ -2291,11 +2299,11 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .page-case main :is(h1, h2, h3, h4, h5, h6),
 .page-case main .btn,
 .page-case main .eyebrow {
-  font-family: "Plus Jakarta Sans", var(--font-display);
+  font-family: var(--font-display);
 }
-/* Plus Jakarta Sans ships a real 600, so unlike the Avenir pages elsewhere on
-   the site a literal 600 here is the weight asked for, not a stand-in for
-   bold. */
+/* Mulish has a real 600, as Plus Jakarta did before it, so this stays the
+   weight the original asks for rather than the 700 the Avenir pages use as a
+   stand-in for bold. */
 .page-case main :is(h1, h2, h3) { font-weight: 600; }
 
 /* --- hero --------------------------------------------------------------- */
@@ -2597,7 +2605,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 }
 
 .page-erechnung main {
-  font-family: "Plus Jakarta Sans", var(--font-sans);
+  font-family: var(--font-sans);
   color: var(--c-text);
   /* the slide-in animations start off-canvas */
   overflow-x: clip;

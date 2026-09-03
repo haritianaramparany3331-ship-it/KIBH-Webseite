@@ -37,8 +37,10 @@ comparison flatters us by counting only what arrives before the visitor moves.
 The stylesheet line is where the difference really is: Elementor ships a single
 **1.36 MB** combined stylesheet, nearly all of it widget CSS for components this
 site never uses, against **126 KB** here. Scripts are 14× lighter and fonts 17×,
-because the rebuild loads two families from Google Fonts where WordPress
-self-hosts Avenir as uncompressed `.ttf`.
+because the rebuild loads one webfont file from Google Fonts — Mulish, since
+Verdana is a system face and costs nothing — where WordPress self-hosts Avenir
+as uncompressed `.ttf`. Every page carries the same 29 KB; before Plus Jakarta
+Sans was dropped, E-Rechnung and the four case pages carried 56 KB.
 
 **Images are the one line WordPress still wins**, 365 KB against 412 KB, and it
 is worth being straight about why: WordPress generates `srcset` variants at half
@@ -51,12 +53,12 @@ it is not currently worth the complexity.
 
 | page | transferred |
 |---|---|
-| `/` | 621 KB |
-| `/e-rechnung/` | 459 KB |
-| `/ergebnisse/` | 258 KB |
-| `/ergebnisse/automatische-rechnungspruefung/` | 255 KB |
-| `/ergebnisse/u2care/` | 231 KB |
-| `/deep-reading-engine/`, `/kontakt/`, `/impressum/`, `/vertraulichkeit/` | ~198 KB |
+| `/` | 614 KB |
+| `/e-rechnung/` | 426 KB |
+| `/ergebnisse/` | 252 KB |
+| `/ergebnisse/automatische-rechnungspruefung/` | 222 KB |
+| `/ergebnisse/u2care/` | 198 KB |
+| `/deep-reading-engine/`, `/kontakt/`, `/impressum/`, `/vertraulichkeit/` | ~192 KB |
 
 Reproduce with `python scratchpad/look/weight2.py`.
 
