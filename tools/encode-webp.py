@@ -42,10 +42,19 @@ QUALITY_GRAPHIC = 0.94
 GRAPHIC = (
     "zertifikat", "tuev-rheinland", "logos/", "logo-", "wortmarke", "avatar-",
 )
+# The hero is the first thing anyone sees and the largest single image on the
+# site, so it gets more headroom than the other photographs. Its source is an
+# 8-bit palette PNG -- capped at 256 colours, which is where the banding in the
+# gold comes from -- and re-encoding cannot undo that, only avoid adding to it.
+QUALITY_BY_FILE = {"startseite/hero-robot.png": 0.90}
 
 # path relative to assets/img  ->  (target width, target height)
 # None means "keep the file's natural size".
 TARGETS = {
+    # Shown at most 544x800, so 2x would be 1088x1600 -- larger than the source,
+    # which means it stays at its own 656x965. It carries a tRNS chunk, so it is
+    # a cut-out and the alpha has to survive the round trip.
+    "startseite/hero-robot.png": (1088, 1600),
     "startseite/zertifikat-ai-consultant.png": (1440, 1012),
     "startseite/tuev-rheinland-pruefzeichen.png": (1440, 532),
     "startseite/willy-li.png": (1376, 1370),
@@ -75,7 +84,6 @@ TARGETS = {
 }
 
 # Deliberately untouched:
-#   startseite/hero-robot.png  -- Hari asked for the hero to be left alone
 #   kibh-logo.png              -- 10 KB, and it is the brand mark
 #   *.svg                      -- already smaller than any raster would be
 #   *.webp                     -- already done
@@ -120,7 +128,8 @@ def main():
             data_url = ("data:" + MIME[src.suffix.lower()] + ";base64,"
                         + base64.b64encode(raw).decode())
             tw, th = target if target else (None, None)
-            q = QUALITY_GRAPHIC if any(g in rel for g in GRAPHIC) else QUALITY
+            q = QUALITY_BY_FILE.get(
+                rel, QUALITY_GRAPHIC if any(g in rel for g in GRAPHIC) else QUALITY)
             out = page.evaluate(ENCODE, [data_url, tw, th, q])
             blob = base64.b64decode(out["url"].split(",", 1)[1])
 

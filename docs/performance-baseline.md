@@ -14,25 +14,25 @@ comparison flatters us by counting only what arrives before the visitor moves.
 | | Requests | Transferred |
 |---|---|---|
 | **WordPress (live)** | 12 | 2 464 KB |
-| **Static rebuild** | 16 | 481 KB |
+| **Static rebuild** | 16 | 362 KB |
 
-**5.1× lighter.**
+**6.8× lighter.**
 
 ## Fully read — what a visitor who reads the page downloads
 
 | | Requests | Transferred |
 |---|---|---|
 | **WordPress (live)** | 21 | 2 735 KB |
-| **Static rebuild** | 20 | 740 KB |
+| **Static rebuild** | 20 | 621 KB |
 
-**3.7× lighter.**
+**4.4× lighter.**
 
 ### By resource type, fully read (KB)
 
 | | document | stylesheet | script | font | image |
 |---|---|---|---|---|---|
 | WordPress | 202 | **1 363** | 310 | 496 | 365 |
-| Static rebuild | 32 | **126** | 22 | 29 | **531** |
+| Static rebuild | 32 | **126** | 22 | 29 | 412 |
 
 The stylesheet line is where the difference really is: Elementor ships a single
 **1.36 MB** combined stylesheet, nearly all of it widget CSS for components this
@@ -40,22 +40,18 @@ site never uses, against **126 KB** here. Scripts are 14× lighter and fonts 17�
 because the rebuild loads two families from Google Fonts where WordPress
 self-hosts Avenir as uncompressed `.ttf`.
 
-**Images are the one line WordPress wins**, 365 KB against 531 KB, and it is
-worth being straight about why:
-
-- WordPress generates `srcset` variants at half a dozen widths and serves the
-  one that fits the viewport. The rebuild serves one file per image.
-- `hero-robot.png` alone is **216 KB** of our 531 KB. It is the only raster on
-  the site still in its original format, left untouched at Hari's request. Its
-  WebP equivalent would be roughly 30–40 KB, which would put the rebuild at
-  about 560 KB fully read — **4.9× lighter** — and take images below WordPress's
-  figure as well.
+**Images are the one line WordPress still wins**, 365 KB against 412 KB, and it
+is worth being straight about why: WordPress generates `srcset` variants at half
+a dozen widths and serves whichever fits the viewport, where the rebuild serves
+one file per image. Closing that last gap would mean generating a `srcset` set
+here too. It is the obvious next step if the number ever needs to be larger, and
+it is not currently worth the complexity.
 
 ## Per page, fully scrolled
 
 | page | transferred |
 |---|---|
-| `/` | 740 KB |
+| `/` | 621 KB |
 | `/e-rechnung/` | 459 KB |
 | `/ergebnisse/` | 258 KB |
 | `/ergebnisse/automatische-rechnungspruefung/` | 255 KB |
@@ -66,11 +62,12 @@ Reproduce with `python scratchpad/look/weight2.py`.
 
 ## How the images got there
 
-`assets/img` went from **6.6 MB to 908 KB** — 24 files re-encoded to WebP at the
+`assets/img` went from **6.6 MB to 789 KB** — 25 files re-encoded to WebP at the
 size they are actually displayed (largest rendered size across 1440 / 768 / 390,
 doubled for retina, never upscaled past the source). Photographs at quality
 0.82, flat graphics carrying lettering at 0.94, because lossy WebP softens hard
-edges and small type first.
+edges and small type first, and the hero at 0.90 — it is the largest single
+image and it is upscaled on a retina display, so it gets more headroom.
 
 `tools/encode-webp.py` does it with **no build dependency**: `package.json` still
 has none. Chromium already ships a WebP encoder and Playwright is already here
