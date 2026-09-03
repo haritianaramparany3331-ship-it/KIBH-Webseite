@@ -2784,9 +2784,19 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   min-width: 0;
 }
 .er-asks .ico { color: rgba(255, 255, 255, 0.75); }
+/*
+  16px, not the 14px the original sets here.
+
+  The live page runs these two blocks at 14px while everything else on the site
+  reads at 16px, and the rebuild copied that faithfully. Hari noticed the
+  difference and asked for them to match the rest of the site, so this is a
+  deliberate departure from the original, like the typeface. The line-heights
+  came with the 14px -- 1.05 and 1.15 are set for caption-sized type and are far
+  too tight once the text is body size -- so they loosen with it.
+*/
 .er-asks p {
-  font-size: 0.875rem;
-  line-height: 1.05;
+  font-size: 1rem;
+  line-height: 1.4;
   color: rgba(255, 255, 255, 0.75);
 }
 .er-asks__close {
@@ -2839,8 +2849,10 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 }
 .er-features__title + p {
   margin-top: 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.15;
+  /* Raised from the original's 14px/1.15 with `.er-asks p` above, so the whole
+     page reads at the site's body size. */
+  font-size: 1rem;
+  line-height: 1.4;
   color: rgba(0, 0, 0, 0.75);
 }
 
