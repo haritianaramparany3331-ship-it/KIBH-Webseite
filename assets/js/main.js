@@ -435,6 +435,32 @@
     */
     var w = group.getBoundingClientRect().width;
     if (w) track.style.animationDuration = (w / SPEED).toFixed(1) + "s";
+
+    /*
+      Pausing used to be a :hover rule. On a touch screen :hover latches when
+      you tap and, on iOS, stays latched until you tap somewhere else -- so
+      one stray touch froze the strip for good. Driving the class from pointer
+      events instead gives a mouse the same hover-to-pause it had, and gives a
+      finger press-and-hold, which is the only way a touch visitor has to stop
+      it at all.
+    */
+    var pause = function () { strip.classList.add("is-paused"); };
+    var resume = function () { strip.classList.remove("is-paused"); };
+
+    strip.addEventListener("pointerenter", function (e) {
+      if (e.pointerType === "mouse") pause();
+    });
+    strip.addEventListener("pointerleave", function (e) {
+      if (e.pointerType === "mouse") resume();
+    });
+    strip.addEventListener("pointerdown", function (e) {
+      if (e.pointerType !== "mouse") pause();
+    }, { passive: true });
+    ["pointerup", "pointercancel"].forEach(function (ev) {
+      strip.addEventListener(ev, function (e) {
+        if (e.pointerType !== "mouse") resume();
+      }, { passive: true });
+    });
   });
 })();
 

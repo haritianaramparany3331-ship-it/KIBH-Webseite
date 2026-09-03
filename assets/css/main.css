@@ -175,6 +175,13 @@ h1, h2, h3, h4, h5, h6 {
   */
   overflow-wrap: break-word;
   hyphens: manual;
+  /*
+    Evens out the line lengths instead of filling each line greedily, which is
+    what stranded single short words on a heading's last line -- worst on the
+    numbered headings of the legal pages at phone widths. Browsers without it
+    fall back to normal wrapping.
+  */
+  text-wrap: balance;
 }
 
 /*
@@ -343,6 +350,16 @@ button {
 }
 .section--dark .section-head p { color: rgba(255, 255, 255, 0.75); }
 
+/* `pretty` only reflows the last few lines, so long body copy keeps its
+   normal wrapping but does not end on a lone word. */
+.prose p,
+.prose li,
+.case-body p,
+.lead,
+.section-head p {
+  text-wrap: pretty;
+}
+
 .lead {
   font-size: var(--fs-lead);
   color: var(--c-text-muted);
@@ -368,7 +385,9 @@ button {
     border-color var(--transition), transform var(--transition);
 }
 
-.btn:hover { transform: translateY(-1px); }
+@media (hover: hover) {
+  .btn:hover { transform: translateY(-1px); }
+}
 .btn:active { transform: translateY(0); }
 
 .btn--primary {
@@ -904,10 +923,20 @@ img.case__shot,
     border-color var(--transition);
 }
 
-.card--link:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--c-accent);
+/*
+  Gated on a real pointer. A touch browser applies :hover on tap and, on iOS,
+  leaves it applied until the visitor taps somewhere else -- so without this
+  the card stays lifted, or recoloured, long after the tap that caused it.
+  The effect is decoration, so not running it on touch at all is the right
+  answer rather than trying to time it out. The same gate is on every other
+  decorative hover in this file.
+*/
+@media (hover: hover) {
+  .card--link:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--c-accent);
+  }
 }
 
 .card h3 {
@@ -935,10 +964,12 @@ img.case__shot,
   transition: transform var(--transition), box-shadow var(--transition),
     border-color var(--transition);
 }
-.case:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--c-accent);
+@media (hover: hover) {
+  .case:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--c-accent);
+  }
 }
 .case h3 { font-size: var(--fs-h4); }
 .case__result {
@@ -1160,6 +1191,17 @@ img.case__shot,
 /* The underline itself is drawn in the micro-interactions block at the foot
    of this file, as a pair of background bars, so that it can wipe in on
    hover and still survive a link that wraps across two lines. */
+/*
+  A link that is the whole of its paragraph -- the contact address on the
+  Impressum -- is a target in its own right rather than a word inside a
+  sentence, so it gets the padding that takes it over the 24px minimum. A
+  link inside running text deliberately does not: making those inline-block
+  would stop a long URL wrapping.
+*/
+.prose .prose__link-row a {
+  display: inline-block;
+  padding-block: 0.3125rem;
+}
 .prose strong { color: var(--c-text); }
 
 .prose__meta {
@@ -1374,16 +1416,20 @@ img.case__shot,
   transition: transform var(--transition), box-shadow var(--transition),
     border-color var(--transition);
 }
-.dre-pillar:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--c-accent);
+@media (hover: hover) {
+  .dre-pillar:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--c-accent);
+  }
 }
 .dre-pillar .ico {
   color: var(--c-accent);
   transition: transform var(--transition);
 }
-.dre-pillar:hover .ico { transform: scale(1.09); }
+@media (hover: hover) {
+  .dre-pillar:hover .ico { transform: scale(1.09); }
+}
 .dre-pillar p {
   font-size: var(--fs-small);
   color: var(--c-text-muted);
@@ -1424,12 +1470,14 @@ img.case__shot,
   background: var(--c-accent);
   transition: width var(--transition);
 }
-.dre-case:hover {
-  transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(118, 171, 174, 0.7);
+@media (hover: hover) {
+  .dre-case:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(118, 171, 174, 0.7);
+  }
+  .dre-case:hover::before { width: 5rem; }
 }
-.dre-case:hover::before { width: 5rem; }
 .dre-case h3 {
   font-size: var(--fs-body-lg);
   color: var(--c-white);
@@ -1572,12 +1620,14 @@ img.case__shot,
 .card__icon .ico,
 .step__icon .ico { width: 100%; height: 100%; }
 
-.page-home .card:hover { background: var(--c-accent); }
-.page-home .card:hover h3,
-.page-home .card:hover p { color: #eee; }
-.page-home .card:hover .card__icon {
-  background: var(--c-lime);
-  color: var(--c-accent);
+@media (hover: hover) {
+  .page-home .card:hover { background: var(--c-accent); }
+  .page-home .card:hover h3,
+  .page-home .card:hover p { color: #eee; }
+  .page-home .card:hover .card__icon {
+    background: var(--c-lime);
+    color: var(--c-accent);
+  }
 }
 
 /* --- process steps ------------------------------------------------------- */
@@ -1745,6 +1795,15 @@ img.case__shot,
   width: 18px;
   flex: none;
   color: var(--c-accent);
+  /*
+    Aligned to the top rather than the centre. The label sits on one line at
+    desktop width, where centring and top alignment look the same, but it
+    wraps to two or three lines on a phone -- and the glyph then floated to
+    the middle of the block instead of marking its first line. The offset is
+    what centres it against that first line.
+  */
+  align-self: flex-start;
+  margin-top: 0.28em;
 }
 .hero__grip svg { width: 100%; height: auto; }
 
@@ -2019,10 +2078,12 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   deliberate departure from it so both sets of testimonial cards behave the
   same way.
 */
-.page-ergebnisse .case:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--c-accent);
+@media (hover: hover) {
+  .page-ergebnisse .case:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--c-accent);
+  }
 }
 
 /*
@@ -2132,6 +2193,9 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .page-ergebnisse .case__more {
   display: inline-flex;
   align-items: center;
+  /* 18px of line box plus 14px of padding clears the 24px touch minimum. The
+     underline is positioned against the content box, so it does not move. */
+  padding-block: 0.4375rem;
   gap: 0.25em;
   font-size: var(--fs-body-lg);
   font-weight: 700;
@@ -3008,7 +3072,12 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   border: 1px solid #f0f0f0;
   border-radius: 3px;
   font-family: var(--font-sans);
-  font-size: var(--fs-body);
+  /*
+    Pinned at 16px rather than following --fs-body. iOS Safari zooms the whole
+    page in when a focused field is under 16px, and leaves the visitor at that
+    zoom for the rest of the form.
+  */
+  font-size: 1rem;
   line-height: 1.6;
   color: var(--c-text);
   transition: border-color var(--transition);
@@ -3170,8 +3239,18 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .site-footer ul {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-3);
+  /*
+    The gap carried the whole rhythm while each link was only its own 18px
+    line box -- under the 24px minimum for a touch target. The padding below
+    does that spacing now, so the gap shrinks by the same amount and the list
+    keeps its pitch.
+  */
+  gap: var(--sp-1);
   list-style: none;
+}
+.site-footer li a {
+  display: inline-block;
+  padding-block: 0.4rem;
 }
 
 .site-footer a { color: var(--c-lime); }
@@ -3307,10 +3386,22 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 
 @media (max-width: 767px) {
   :root {
-    --fs-body: 0.9375rem;  /* 15 */
-    /* 40px, not the original's 46px: at 46 the longest compound in the hero
-       ("maßgeschneiderte") cannot fit a 390px viewport and breaks mid-word. */
-    --fs-hero: 2.5rem;
+    /*
+      16px, not 15. Running text should not get smaller on the screen held
+      closest to the face, and 16px is also the threshold below which iOS
+      Safari zooms the page in when a form field takes focus.
+    */
+    --fs-body: 1rem;       /* 16 */
+    /*
+      Sized so the hero's longest compound always fits the column rather than
+      being chopped. "maßgeschneiderte" is about 8.9x the font size wide in
+      Mulish 700, and the column is the viewport less the 2rem of gutter, so
+      dividing by 9.1 keeps it on one line with a little room to spare. It
+      reaches the 40px cap at 390px and steps down from there -- at 360px the
+      word was 356px wide in a 328px column and broke mid-word, with no hyphen,
+      because `hyphens: manual` is on for display headings.
+    */
+    --fs-hero: clamp(2rem, calc((100vw - 2rem) / 9.1), 2.5rem);
     --fs-h1: 2.375rem;     /* 38 */
     --fs-display: 2.375rem;/* 38 */
     --fs-h2: 2rem;         /* 32 */
@@ -3339,12 +3430,55 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   .step { padding-top: var(--sp-6); }
   .step h3 { padding-right: 0; }
 
+  /*
+    --sp-9 drops to 3.5rem below this width, so a normal .section becomes
+    56px while .section--tight stayed on --sp-8 at 64px -- the tight sections
+    ended up looser than the normal ones. Scaled here so the order holds.
+  */
+  .section--tight { padding-block: var(--sp-7); }
+
+  /*
+    The legal pages' numbered headings are long even by German standards
+    ("2. Vorabinformationen für die Übermittlung personenbezogener Daten an
+    Dritte im Falle einer Fusion/Akquisition"). At 32px in a 328px column that
+    ran to seven lines and pushed the section it introduces off the screen. The
+    step down to 26px keeps it clearly a heading and clearly above the 24px h3
+    below it. Their 64px top margin is desktop spacing in a viewport with a
+    fraction of the room, so it scales with them.
+  */
+  .prose h2 {
+    font-size: 1.625rem;
+    margin-top: var(--sp-7);
+  }
+  .prose h3 { margin-top: var(--sp-6); }
+
   .quote { padding: var(--sp-5); }
   .quote p { font-size: var(--fs-body-lg); }
 
   .btn { width: 100%; }
   .btn--ghost { width: auto; }
   .btn-row { flex-direction: column; align-items: stretch; }
+}
+
+/* --- Short viewports (phone in landscape) -------------------------------- */
+
+/*
+  A phone on its side is about 360px tall. A 76px sticky header takes a fifth
+  of that and never gives it back, and the drawer it opens is then squeezed
+  into what is left. Trimming the header for short viewports gives both the
+  page and the drawer that space; nothing else about the layout changes.
+*/
+@media (orientation: landscape) and (max-height: 500px) {
+  :root { --header-h: 56px; }
+  .brand__logo { height: 34px; }
+  .site-footer .brand__logo { height: 46px; }
+
+  /* Sections carry desktop-height padding into a viewport with almost no
+     vertical room, which leaves a landscape phone scrolling through empty
+     bands between every block. */
+  .section { padding-block: var(--sp-7); }
+  .section--tight { padding-block: var(--sp-6); }
+  .hero { padding-block: var(--sp-7) var(--sp-6); }
 }
 
 /* --- Print -------------------------------------------------------------- */
@@ -3418,23 +3552,33 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   --ul-rest: 100%;
 }
 
-.prose a:hover,
+/*
+  Keyboard focus always sweeps the underline in. Hover only does so where
+  there is a pointer that can hover: a tap on a touch screen would otherwise
+  leave the bar drawn under the link until the visitor tapped elsewhere.
+*/
 .prose a:focus-visible,
-.case-body a:hover,
 .case-body a:focus-visible,
-.booking__mail a:hover,
 .booking__mail a:focus-visible,
-.site-footer li a:hover,
 .site-footer li a:focus-visible,
-.case__more:hover,
 .case__more:focus-visible,
-.er-card__more:hover,
 .er-card__more:focus-visible,
-.member__link:hover,
 .member__link:focus-visible,
-.btn--ghost:hover,
 .btn--ghost:focus-visible {
   background-size: 100% 2px, var(--ul-rest) 1px;
+}
+
+@media (hover: hover) {
+  .prose a:hover,
+  .case-body a:hover,
+  .booking__mail a:hover,
+  .site-footer li a:hover,
+  .case__more:hover,
+  .er-card__more:hover,
+  .member__link:hover,
+  .btn--ghost:hover {
+    background-size: 100% 2px, var(--ul-rest) 1px;
+  }
 }
 
 /* --- 4. Magnetic booking CTAs ------------------------------------------- */
@@ -3487,7 +3631,14 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   width: max-content;
   animation: logos-scroll 30s linear infinite;
 }
-.logos.is-marquee:hover .logos__track,
+/*
+  Paused by a class the script toggles, not by :hover. On a touch screen
+  :hover latches on tap, which froze the strip for good the first time anyone
+  touched it. The script hooks pointerenter/leave for a mouse and
+  pointerdown/up for a finger, so a press-and-hold pauses it there -- which is
+  also the only pause mechanism a touch visitor has (WCAG 2.2.2).
+*/
+.logos.is-marquee.is-paused .logos__track,
 .logos.is-marquee:focus-within .logos__track {
   animation-play-state: paused;
 }

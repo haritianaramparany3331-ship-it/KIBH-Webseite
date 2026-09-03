@@ -226,10 +226,89 @@ Verified by driving both pages with Playwright, not by reading markup.
 24. `tests/qa.py` green (11 pages × 5 viewports). `scratchpad/u2/wt_site.py` green (12 pages × 5 viewports). Zero console errors. Scripts in `scratchpad/micro/`: `verify.py` (all six, computed-style assertions), `glow.py` (pixel deltas, own PNG decoder), `coverage.py` (what fraction of each page can show the glow), `zoom.py`/`crops.py` (3× crops), `before.py`/`after.py` (pixel-identity proof), `glow2.py` (visibility by pixel diff), `perf.py` (frame cost).
 25. Commits `ae99db8` (the six interactions) and `e2c56c7` (the glow fix). Pushed to `origin/main` on Hari's go-ahead.
 
+## 2026-09-03 — mobile/tablet responsive audit and fix pass
+
+1. **Method.** 12 pages × 6 viewports, every context emulated as a touch device
+   (`is_mobile`, `has_touch`), which is what makes `hover: none` /
+   `pointer: coarse` report correctly: 360×740 and 414×896 portrait, 640×360 and
+   896×414 landscape, 768×1024 tablet portrait, 1024×768 tablet landscape.
+   Scripts in `scratchpad/resp/`.
+2. **The structure was already sound.** Zero horizontal page overflow, zero
+   elements past the viewport edge, zero clipped text boxes, zero headings
+   escaping their container — at every one of those 72 combinations, before any
+   fix. The audit groups findings by defect rather than by page, so one CSS bug
+   reads as one line: 35 distinct at the start, 3 at the end, all three
+   deliberate.
+3. **Hero compound chopped below 390px.** `--fs-hero` was pinned at 40px, where
+   "maßgeschneiderte" is 356px wide; at 360px the column is 328px, so it broke
+   mid-word with no hyphen (`hyphens: manual` is on for display headings). Now
+   `clamp(2rem, calc((100vw - 2rem) / 9.1), 2.5rem)` — the word is about 8.9×
+   the font size wide, so dividing the column by 9.1 keeps it whole with room to
+   spare. Verified fitting from 320px up.
+4. **Eyebrow glyph floated to the middle of the block** once the label wrapped
+   to two lines on a phone. `align-self: flex-start` plus a 0.28em offset marks
+   the first line instead.
+5. **Body text 15px → 16px on phones.** Running text should not get smaller on
+   the screen held closest to the face, and 16px is also the threshold under
+   which iOS Safari zooms the page when a field takes focus.
+6. **Form fields pinned to 16px** independently of `--fs-body`, so that
+   threshold can never be crossed by a later token change. Every field and
+   button on Kontakt now clears 16px and 44px at every width.
+7. **Touch targets.** Footer links were 18px tall on every page — the `gap`
+   carried the rhythm while each link was only its own line box. They now carry
+   `padding-block` and the gap shrinks to match, so the pitch is unchanged and
+   the targets are 31px. Same for "Mehr Lesen" on Ergebnisse (18 → 32px) and the
+   contact address on the Impressum, which is a whole paragraph rather than a
+   word in a sentence and so is a target in its own right. Links inside running
+   text are deliberately left alone: WCAG 2.2 exempts them, and making them
+   `inline-block` would stop a long URL wrapping.
+8. **`.section--tight` was looser than a normal section on mobile** — normal
+   sections scale 80 → 56px through `--sp-9`, but tight ones sat on `--sp-8` at
+   64px at every width. Scaled so the order holds.
+9. **Legal-page headings.** `.prose h2` at 32px ran to seven lines in a 328px
+   column and pushed the section it introduces off screen. 26px on phones, with
+   the 64px top margin scaled to 48px.
+10. **Landscape phones** had a 76px sticky header eating a fifth of a 360px-tall
+    viewport, and desktop-height section padding in a viewport with almost no
+    vertical room. Under `(orientation: landscape) and (max-height: 500px)` the
+    header is 56px and sections scale down.
+11. **Orphaned words.** `text-wrap: balance` on every heading and
+    `text-wrap: pretty` on prose took 13 headings ending on a lone short word
+    down to 1. The survivor is `/ergebnisse/` h1 at 414px, where
+    "Umsatzpotenziale" is 305px wide in a 382px column — balance is applied and
+    this is its own best answer. Not fixable without touching the text.
+12. **Hover effects can latch on touch.** A touch browser applies `:hover` on
+    tap and iOS keeps it applied until the visitor taps elsewhere. Ten
+    decorative rules are now inside `@media (hover: hover)`: the three card
+    lifts, the homepage solution card's full teal fill, the DRE pillar and case
+    tiles, the button lift, and the link underline reveal. Keyboard
+    `:focus-visible` keeps the underline in all cases. Verified both ways —
+    every one fires with a mouse, none fires under touch emulation.
+13. **The logo marquee froze permanently on the first tap.** Pausing was a
+    `:hover` rule, so a latched hover stopped it for good. It is now a class the
+    script toggles from pointer events: `pointerenter`/`leave` for a mouse,
+    `pointerdown`/`up` for a finger. That also gives a touch visitor
+    press-and-hold, the only way they had to stop it at all (WCAG 2.2.2).
+14. **Checked and found correct, no change needed:** viewport meta; the drawer
+    at every width (all 10 links reachable, scrolls internally where the screen
+    is short, closes again); the magnetic CTAs and cursor glow, which already
+    bail on coarse pointers and create nothing at all; `prefers-reduced-motion`,
+    under which the marquee is never upgraded, no glow or magnet exists, and no
+    element is animating.
+15. **One audit false positive, corrected in the checker:**
+    `.case-quote__logo` reported as distorted at every width. Its content box is
+    3.012 against a natural 3.012 — the padded chip around it inflates only the
+    border box. The image aspect check now measures the content box.
+16. **Left deliberately:** the 12px `.eyebrow`, which is a tracked uppercase
+    label rather than running text; and the 7px "BE Renovierung" wordmark, which
+    is Hari's own call (see 2026-08-30, item 14).
+17. `tests/qa.py` green, `scratchpad/u2/wt_site.py` green, all six
+    micro-interactions still verified with a mouse, zero console errors.
+
 ## Open — waiting on Hari
 
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.
-- **The logo marquee has no pause control on touch.** It scrolls indefinitely, which WCAG 2.2.2 wants a pause/stop/hide mechanism for. `prefers-reduced-motion` turns it off entirely and hover pauses it, but neither helps a touch user who has not set that preference. A visible pause button would be new UI the original does not have, so it was not added unasked.
+- **The logo marquee's only touch pause is press-and-hold.** Added 2026-09-03 alongside the hover pause. `prefers-reduced-motion` still turns it off entirely. WCAG 2.2.2 wants a mechanism a visitor can find, and a hold gesture is not discoverable — a visible pause button would be, but it is new UI the original does not have, so it was not added unasked.
 - **Page weight.** With the real images in, the homepage is 2 189 KB and E-Rechnung 4 044 KB, against the 101 KB measured in `docs/performance-baseline.md`. The comparison there no longer holds — the biggest single files are `zertifikat-ai-consultant.png` (1 184 KB) and the four E-Rechnung PNGs (3 053 KB together). Re-encoding to WebP at display size would win most of it back; not done unasked because it changes the uploaded assets.
 - `ergebnisse/torsten-krueger.jpg` (the wide crop) is now unused — the square one reads better at avatar size. Kept in case it is wanted somewhere.
 - The logo's "HESSEN" line is drawn in a light grey meant for a white ground, so it goes faint on the dark footer. A light-on-dark variant of the file would fix it; not filtered in CSS because that shifts the brand colour.
