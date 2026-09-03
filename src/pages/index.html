@@ -169,7 +169,7 @@
          toggle hides itself, so nothing is unreachable. -->
     <div class="grid grid--3 solutions" id="solutions-grid">
       <div data-anim="left">
-        <article class="card card--title-sm">
+        <article class="card">
           <span class="card__icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3.2 6.6 8.8 6.4 8.8-6.4"/></svg></span>
           <h3>E-Mail- und Dokumentenverarbeitung (z.&#8239;B. Rechnungen, Angebote, Anfragen)</h3>
           <p>
@@ -214,7 +214,7 @@
       </div>
 
       <div data-anim="up">
-        <article class="card card--title-md">
+        <article class="card">
           <span class="card__icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3.6"/><path d="M4.6 20.2a7.4 7.4 0 0 1 14.8 0"/></svg></span>
           <h3>Personalprozesse: HR Anfragen, Bewerberauswahl &amp; Mitarbeiterumfragen</h3>
           <p>
@@ -271,10 +271,12 @@
     </div>
 
     <div class="btn-row btn-row--center solutions__more">
-      <button class="btn btn--ghost" type="button"
+      <!-- The label is its own span so the script can swap the words without
+           throwing away the chevron beside them. -->
+      <button class="btn btn--ghost solutions__toggle" type="button"
               data-disclosure="solutions-grid"
-              data-label-more="Mehr &gt;" data-label-less="Weniger"
-              aria-expanded="false" aria-controls="solutions-grid">Mehr &gt;</button>
+              data-label-more="Mehr" data-label-less="Weniger"
+              aria-expanded="false" aria-controls="solutions-grid"><span class="btn__label">Mehr</span><span class="btn__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7"/></svg></span></button>
     </div>
   </div>
 </section>

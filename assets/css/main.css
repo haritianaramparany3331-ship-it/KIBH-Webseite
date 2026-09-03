@@ -251,6 +251,13 @@ button {
   cursor: pointer;
 }
 
+/*
+  The ring is --c-accent, which is also the primary button's own background --
+  so on that one button the pair measures 1.0:1 and the ring reads only as the
+  3px offset gap around it. A two-tone white-and-dark ring was tried and Hari
+  turned it down: he would rather the indicator stayed in the palette, and the
+  offset gap is enough to see where focus is. Noted, not re-litigated.
+*/
 :focus-visible {
   outline: 3px solid var(--c-accent);
   outline-offset: 3px;
@@ -1570,16 +1577,20 @@ img.case__shot,
 .page-home .member__name { color: #222831; }
 .page-home .step h3 { font-size: var(--fs-h4); color: #31363f; }
 
-/* Elementor sets these per card rather than from a scale: 24px by default,
-   with the two longest titles stepped down so they do not swamp the box. */
+/*
+  One size for all nine.
+
+  Elementor set these per card -- 24px by default with the two longest titles
+  stepped down to 20px and 18px so they would not swamp the box -- and the
+  result was six cards in two rows reading as six different components. The
+  long titles wrap instead now, which is what the line-height is for.
+*/
 .page-home .card h3 {
   font-size: var(--fs-h4);
   line-height: 1.2;
   margin-bottom: 15px;
   transition: color 0.4s ease;
 }
-.page-home .card--title-md h3 { font-size: 1.25rem; }
-.page-home .card--title-sm h3 { font-size: var(--fs-body-lg); }
 
 /* --- solution cards ------------------------------------------------------ */
 
@@ -1768,6 +1779,15 @@ img.case__shot,
 /* Square-ish buttons with a chevron, the way Elementor renders them here. */
 .page-home .btn { border-radius: 4px; }
 .page-home .btn--ghost::after { content: none; }
+/* The "Mehr" toggle carries the same chevron as every other link on the page
+   rather than a literal ">" character, turned to point down and flipped when
+   the extra cards are showing. */
+.solutions__toggle .btn__chev {
+  transform: rotate(90deg);
+  transition: transform var(--transition);
+}
+.solutions__toggle[aria-expanded="true"] .btn__chev { transform: rotate(-90deg); }
+
 .btn--sm { padding: 0.625rem 1.25rem; }
 .btn--block { position: relative; width: 100%; justify-content: center; }
 .btn__chev {

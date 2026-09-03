@@ -151,7 +151,10 @@
     btn.addEventListener("click", function () {
       var open = target.classList.toggle("is-expanded");
       btn.setAttribute("aria-expanded", open ? "true" : "false");
-      btn.textContent = btn.getAttribute(open ? "data-label-less" : "data-label-more");
+      // Write into the label span if there is one, so a chevron or icon beside
+      // it survives the swap. Falls back to the button itself.
+      var label = btn.querySelector(".btn__label") || btn;
+      label.textContent = btn.getAttribute(open ? "data-label-less" : "data-label-more");
 
       // The cards were display:none, so they never intersected the observer
       // and are still sitting at their animation start state.

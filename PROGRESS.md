@@ -353,6 +353,70 @@ Verified by driving both pages with Playwright, not by reading markup.
    `taps.py` (every control, every page, hit-tested), `phantom.py` (the
    diagnosis), `nav2.py` (drawer reachability by stepped scroll).
 
+## 2026-09-03 — defect pass: only the consistency fixes kept
+
+Hari asked what is missing for the site to read like a €10 000 website, and set
+the terms: fix what is objectively broken, keep the look. Hero image and the
+Kontakt page out of scope. Three stages were built and shown, each as its own
+commit; he kept one.
+
+1. **Kept — one component, one appearance.** The homepage solution-card title
+   rendered at 24/20/18px depending on the card, because Elementor sized the two
+   longest ones down so they would not swamp the box. Six cards in two rows
+   therefore read as six different components. One size now; the long titles
+   wrap, which is what the line-height is for.
+2. The "Mehr" toggle used a literal `>` character where every other link on the
+   page uses the shared chevron SVG. It carries that chevron now, turned to
+   point down and flipped when the extra cards are open. The label moved into
+   its own `.btn__label` span so the disclosure script can swap the words
+   without discarding the chevron.
+3. "Kernpunkte der Lösung" on U2care was a `<p>` at 28px weight 400 — a heading
+   rendered as body text and missing from the document outline. It is an `<h3>`
+   now and the outline reads H1 H2 H2 H3 H2.
+4. **Rejected — reading measure.** Body copy ran 131–144 characters a line on
+   the case pages and 109 on the legal pages, against a comfortable 60–75. A cap
+   on the text elements alone brought them to 71–73 and left headings, figures
+   and card grids at full width. Hari: "Stage 1 and 2 are bad." Reverted.
+5. **Rejected — contrast.** Five measured failures on light grounds, including
+   the closing call to action at 1.37:1 (lime on the #f2f3f2 band) and
+   "Linkedin" and "Mehr Lesen" at 2.56:1. Fixed with teal tokens the palette
+   already had. Reverted.
+6. **Rejected — the focus ring.** `:focus-visible` is `3px solid var(--c-accent)`
+   and the primary button's background is that same #76abae, so on that button
+   the ring measures 1.0:1 and reads only as the 3px offset gap. A two-tone
+   white-and-dark ring that cleared 4.74:1 there and 12.14:1 on the dark footer
+   was built and turned down. His words: "let it be blue greeny like that, it's
+   better than black even though it is the same color as the button, the user
+   can still see the focus." Left as it was; recorded here so it is not raised
+   again.
+7. Nothing was pushed at any point, so the three rejected commits were rewound
+   rather than reverted, and the branch carries only the kept work. They remain
+   in the reflog: `75564d5` measure, `6004882` contrast, `3f427be` the full
+   stage 3 including the focus ring.
+8. `tests/qa.py` green, `scratchpad/u2/wt_site.py` green, responsive audit
+   unchanged at its 3 known findings, zero console errors.
+
+## Still missing, in my view — recorded, not acted on
+
+Hari asked the question and then put the first two out of scope. Worth
+revisiting rather than losing.
+
+- **The Kontakt page.** Every CTA on the site points at a page whose main panel
+  is a dashed, hatched wireframe, with the secondary tab greyed so it reads as
+  disabled. Nothing else costs as much credibility. Making the placeholder look
+  finished needs no backend and does not pre-empt Willy's decision.
+- **A point of view.** The hero is a stock gold Rodin-thinker robot, the image
+  most AI consultancies use, while the genuinely distinctive assets — real
+  client names, real numbers, the zig-zag process diagram — are presented as
+  ordinary cards.
+- **The third typeface.** Plus Jakarta Sans on E-Rechnung and the four case
+  pages against Verdana + Mulish everywhere else; the site reads as two sites.
+- **Page weight.** `assets/img` is 6.6 MB, E-Rechnung alone 3.8 MB. WebP at
+  display size changes no pixel a visitor sees, and would restore the "24×
+  lighter than WordPress" figure in `docs/performance-baseline.md`, stale by
+  more than an order of magnitude and a headline number for the Phase 4 case
+  study.
+
 ## Open — waiting on Hari
 
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.
