@@ -312,6 +312,47 @@ Verified by driving both pages with Playwright, not by reading markup.
     word against its column at each width), `shot.py` (phone screenshots).
 19. Commit `709e5ed`. Pushed to `origin/main` on Hari's go-ahead.
 
+## 2026-09-03 — the closed nav drawer was stealing taps
+
+1. **Symptom Hari reported:** on a phone, tapping "Vertraulichkeit" in the
+   footer sometimes landed on the right page and sometimes on the wrong one.
+2. **Not the hrefs.** All 44 distinct links across the 12 pages were audited
+   label-against-target: every one points where its label promises and every
+   internal target returns 200. Intermittence was the clue — a wrong `href` is
+   wrong every time.
+3. **Cause.** `.nav` is the mobile drawer: `position: fixed`, and when closed
+   `opacity: 0` and `visibility: hidden`. The drawer's own rule for the
+   Ergebnisse submenu set `visibility: visible`, to undo the desktop rule that
+   hides it until its parent is hovered. But visibility is inherited, and a
+   child may override an ancestor's `hidden` with its own `visible` — so the
+   four sub-links stayed hit-testable while the drawer was shut. Invisible,
+   because opacity is not overridable that way, but occupying a fixed 326×192
+   band at y 338–530 on a 390px phone and swallowing every tap in it.
+4. That band is fixed to the viewport, so which control it stole depended on
+   the scroll position — hence "sometimes". It affected every page, not just
+   the footer, and sent the visitor to an Ergebnisse subpage.
+5. **Fix.** `visibility: inherit` on the drawer's submenu, so it is visible
+   exactly when the drawer is. Plus `pointer-events: none` on the closed
+   drawer and `auto` when open, which does not depend on inheritance reaching
+   every descendant — a fully transparent element still takes taps, so opacity
+   alone would never have been enough.
+6. **Verified.** Every link and button on all 12 pages, at 360, 414, 640×360
+   and 768 wide, scrolled the full page height in viewport-sized steps: 0
+   mis-hitting controls, from 4 distinct before. Drawer still opens, all 10
+   links reachable at every width, closes again.
+7. Two audit false positives found and corrected in the tooling while chasing
+   this: the bounding-box centre of an inline link that wraps falls in the
+   gutter beside its shorter second line, so the probe now tests each line
+   fragment; and `scrollIntoView` is animated here (`scroll-behavior: smooth`),
+   so measuring synchronously after it reads pre-scroll coordinates.
+8. Not a defect: at 360px, scrolled fully to the bottom, the footer wordmark's
+   upper half sits under the sticky header. Its lower half is tappable and
+   "Startseite" directly below it goes to the same place.
+9. `tests/qa.py` green, `scratchpad/u2/wt_site.py` green. Scripts:
+   `scratchpad/resp/links.py` (label vs target vs HTTP status),
+   `taps.py` (every control, every page, hit-tested), `phantom.py` (the
+   diagnosis), `nav2.py` (drawer reachability by stepped scroll).
+
 ## Open — waiting on Hari
 
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.

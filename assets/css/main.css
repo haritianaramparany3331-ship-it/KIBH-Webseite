@@ -3340,6 +3340,13 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
     display: block;
     max-height: calc(100dvh - var(--header-h));
     overflow-y: auto;
+    /*
+      A closed drawer must not be touchable. `visibility: hidden` below does
+      that on its own for anything that inherits it, but opacity alone would
+      not -- a fully transparent element still takes taps -- so this is the
+      guard that does not depend on inheritance reaching every descendant.
+    */
+    pointer-events: none;
     padding: var(--sp-5) var(--sp-5) var(--sp-7);
     background: var(--c-white);
     border-bottom: 1px solid var(--c-border);
@@ -3354,6 +3361,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    pointer-events: auto;
   }
 
   .nav__list {
@@ -3377,7 +3385,22 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
     border-radius: 0;
     box-shadow: none;
     opacity: 1;
-    visibility: visible;
+    /*
+      `inherit`, not `visible`.
+
+      The desktop rule hides this submenu until the parent item is hovered, so
+      the drawer has to undo that. Setting `visible` here undid rather more:
+      visibility is inherited, and a child may override an ancestor's `hidden`
+      with its own `visible` -- which is exactly what happened. The four
+      sub-links stayed hit-testable while the drawer was shut, invisible
+      because the drawer is `opacity: 0`, in a fixed 326x192 band near the top
+      of the viewport. Any link that scrolled under that band had its tap
+      stolen and sent the visitor to a Ergebnisse subpage instead. It looked
+      intermittent because it depended on the scroll position.
+
+      Inheriting means the submenu is visible exactly when the drawer is.
+    */
+    visibility: inherit;
     transform: none;
   }
 
