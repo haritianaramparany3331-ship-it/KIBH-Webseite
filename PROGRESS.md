@@ -419,6 +419,71 @@ revisiting rather than losing.
   more than an order of magnitude and a headline number for the Phase 4 case
   study.
 
+## 2026-09-03 — images to WebP, and the case-study number corrected
+
+Hari asked what "hero, third typeface and page weight" meant. Answering the
+third one turned up the serious item: `docs/performance-baseline.md` claimed the
+rebuild was **24.4x lighter than WordPress**, measured back when every image was
+a placeholder and the image row read 0 KB. With the real assets in, the homepage
+was 2 221 KB against WordPress's 2 464 KB — about **1.1x**. The headline number
+of the case study this whole project exists to produce was wrong by a factor of
+twenty.
+
+1. `assets/img` is **908 KB, from 6.6 MB**. 24 files re-encoded to WebP at the
+   size they are actually displayed: largest rendered size across 1440/768/390,
+   doubled for retina, never upscaled past the source.
+2. Two quality settings. Photographs at 0.82; flat graphics that carry lettering
+   — the certificate, the TÜV mark, the client logos and wordmarks — at 0.94,
+   because lossy WebP softens hard edges and small type first. Checked by eye at
+   display size before committing to it: indistinguishable.
+3. Per page, fully scrolled: `/` 2 221 → **740 KB**, `/e-rechnung/` 4 075 →
+   **459 KB**, `/ergebnisse/` 1 005 → **258 KB**, ARP 795 → **255 KB**.
+4. `tools/encode-webp.py` adds **no build dependency** — `package.json` still has
+   none, which is itself part of what the case study argues. There is no sharp,
+   no PIL and no ImageMagick on this machine; Chromium ships a WebP encoder and
+   Playwright is already here for the suites, so the script draws each source
+   into a canvas at the target size and calls `canvas.toDataURL('image/webp', q)`.
+   Alpha survives, so the cut-out logos and round avatars keep their transparency.
+5. It lives in `tools/` rather than the scratchpad on purpose: it is the evidence
+   for the Phase 3 write-up of how this was done without a toolchain.
+6. **`tests/compare.py` was measuring dishonestly** and now measures twice. It
+   only captured the load event, and both sites lazy-load their images, so the
+   comparison counted almost none of WordPress's. It now also scrolls to the
+   bottom on both sides.
+7. Honest figures, 2026-09-03: **5.1x lighter on load** (2 464 KB vs 481 KB) and
+   **3.7x fully read** (2 735 KB vs 740 KB). The stylesheet is where the
+   difference really sits — Elementor's single combined sheet is 1 363 KB against
+   126 KB here.
+8. **Images are the one line WordPress still wins**, 365 KB to our 531 KB. It
+   serves `srcset` variants sized to the viewport where we serve one file, and
+   `hero-robot.png` is 216 KB of our 531 — the only raster left in its original
+   format, untouched at Hari's request. Its WebP would be roughly 30–40 KB,
+   which would put us at ~560 KB fully read (**4.9x**) and below WordPress on
+   images too. Flagged, not done.
+9. `docs/performance-baseline.md` rewritten end to end: both measurements, the
+   resource breakdown, the per-page table, how the encoding was done, and a
+   caveats section saying plainly that the old 24.4x was never true of the
+   finished site and must not be reused. Timings are deliberately not quoted —
+   localhost against the public internet is not a fair comparison, and that has
+   to wait for the Vercel deploy.
+10. Proven to move nothing: full-page screenshots of all 12 pages at 1440 and 390
+    before and after are identical in height except **one pixel** on
+    `/e-rechnung/` at 390px. That came from correcting `width`/`height`
+    attributes that had never matched their files — `image-1` was declared
+    399×499 for a 640×800 image — so it removes a layout shift rather than
+    adding one. Pages with no images are pixel-identical.
+11. `tests/qa.py`, `scratchpad/u2/wt_site.py` and the responsive audit all green;
+    CLS unchanged; no console errors. The one page reading CLS 0.05 is
+    `/ergebnisse/automatische-rechnungspruefung/`, and the shift sources are the
+    nav and body text, not any image — it is the web font swapping in, which
+    predates this work.
+12. Commit `e766fea`. **Not** pushed.
+13. **Next, not yet started:** unify on Verdana + Mulish and drop Plus Jakarta
+    Sans, which Hari chose after I explained that the third typeface is not our
+    mistake — the live WordPress site uses it on E-Rechnung and the four case
+    pages, and our rebuild copied that faithfully. That stage changes how five
+    pages look and is committed separately so it can be dropped on its own.
+
 ## Open — waiting on Hari
 
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.
