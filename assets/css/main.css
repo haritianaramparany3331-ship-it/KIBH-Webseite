@@ -2624,7 +2624,23 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   color: var(--c-white);
   text-align: center;
 }
+/*
+  Opted out of the `text-wrap: balance` the base heading rule applies.
+
+  This heading carries an explicit <br>, so the author has already decided where
+  it breaks, and balancing works against that. Below 640px it produced an empty
+  trailing line fragment inside `.er-hero__mark` -- and that span's highlight is
+  an absolutely positioned ::after, whose containing block for a split inline
+  box runs from the first fragment's start to the last one's end. The stroke
+  collapsed from 170px to a 27px stub floating in the gap between the two
+  headline lines.
+
+  Letting the author's own break stand fixes it at every width. Making the span
+  inline-block also fixed the stub, but then the stroke's deliberate 0.35em
+  overshoot started registering as overflow inside the span.
+*/
 .er-hero h1 {
+  text-wrap: wrap;
   font-size: 4rem;
   line-height: 1;
   font-weight: 600;
