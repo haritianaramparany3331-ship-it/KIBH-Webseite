@@ -523,6 +523,43 @@ twenty.
     but that is a look change beyond what was asked, so it waits for Hari.
 22. **Not** pushed.
 
+## 2026-09-03 — E-Rechnung text size, and the live site's permalinks are broken
+
+23. **Hari was right that E-Rechnung read smaller.** Two blocks ran at 14px
+    where every other page runs at 16px, and between them they carry the
+    largest single run of text on that page: `.er-asks p` (the four questions
+    in the dark band, 1 701 characters) and `.er-features__title + p` (the
+    description under each feature title).
+24. **It was not something the rebuild introduced.** Measured against the live
+    original passage by passage: 14px there and 14px here, alongside the 18px
+    and 20px blocks which also matched exactly. The original sets those two at
+    caption size. So raising them is a deliberate departure from it, like the
+    typeface, taken on Hari's call after he saw the comparison.
+25. Both now 16px. The line-heights came with the 14px — 1.05 and 1.15 are set
+    for caption-sized type and are far too tight at body size — so they moved
+    to 1.4 with it. Commit `d97d9bd`.
+26. **The live site's permalinks are broken.** `kiberatunghessen.com/e-rechnung/`,
+    `/ergebnisse/`, `/kontakt/` and every other subpage now return **404**. They
+    only answer at `/index.php/<slug>/` — the classic WordPress symptom of
+    permalink settings reverting to Plain, or the rewrite rules in `.htaccess`
+    being lost. Only the homepage still works at its clean URL.
+27. That is Willy's live site, not ours, and it is live right now: every inbound
+    link and every search result for those pages is broken. **Tell Willy.** It is
+    also a point for the case study — a static build has no rewrite layer to
+    lose.
+28. Practical consequence for us: any future 1:1 comparison against the original
+    has to use `/index.php/<slug>/`. `tests/compare.py` still targets the
+    homepage, which is unaffected.
+29. **`scratchpad/u2/wt_site.py` is flaky under load** and should not be trusted
+    on a single run. It reported 0, 2, 5, 0, 0 problems across five consecutive
+    runs of the same build, always naming the two team portraits as "did not
+    load". They do load: checked directly three times out of three, both
+    `complete` with a real `naturalWidth` and no failed requests. Its fixed
+    1 500 ms tail after scrolling was not always enough for lazy images sitting
+    ~8 500px down a 12 000px page at 390px; it now waits on the condition
+    instead, which helps but does not fully settle it when several browsers are
+    running. `tests/qa.py` and the responsive audit stay deterministic.
+
 ## Open — waiting on Hari
 
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.
