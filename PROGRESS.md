@@ -517,11 +517,12 @@ twenty.
     which confirms the change landed only where it was meant to.
 20. Per page after both stages: `/` 614 KB, `/e-rechnung/` 426 KB,
     `/ergebnisse/` 252 KB, ARP 222 KB, U2care 198 KB, the rest ~192 KB.
-21. **My own note, not acted on:** Verdana at the case pages' 18px reads heavier
-    and more system-like than Plus Jakarta did at the same size — the bold runs
-    especially. Bringing `.case-body` to the site's own 16px would settle it,
-    but that is a look change beyond what was asked, so it waits for Hari.
-22. **Not** pushed.
+21. **My own note at the time:** Verdana at the case pages' 18px read heavier and
+    more system-like than Plus Jakarta did at the same size, and I noted that
+    bringing `.case-body` to the site's own 16px would settle it. That is what
+    happened the next day, for Hari's own reasons — see the 4 September entry.
+22. Commits `e766fea` WebP, `f8bc672` and `76528bd` notes, `1b0b3fd` the hero,
+    `036d6e4` the typeface.
 
 ## 2026-09-03 — E-Rechnung text size, and the live site's permalinks are broken
 
@@ -550,7 +551,23 @@ twenty.
 28. Practical consequence for us: any future 1:1 comparison against the original
     has to use `/index.php/<slug>/`. `tests/compare.py` still targets the
     homepage, which is unaffected.
-29. **`scratchpad/u2/wt_site.py` is flaky under load** and should not be trusted
+29. **The hero highlight collapsed on phones**, commit `d8ca946`. Below 640px the
+    lime stroke under "Pflicht!" rendered as a 27px stub floating between the two
+    headline lines instead of a 128px underline. The cause was mine: the
+    `text-wrap: balance` added to every heading in the responsive pass. That
+    heading carries an explicit `<br>`, so the author had already chosen where it
+    breaks, and balancing against that produced an empty trailing line fragment
+    inside `.er-hero__mark` — and the containing block for an absolutely
+    positioned `::after` on a split inline box runs from the first fragment's
+    start to the last one's end. With balance on the span reports 2 client rects;
+    with it off, 1.
+30. The heading opts out of balance. Making the span `inline-block` also fixed
+    the stub and was tried first, but the stroke's deliberate 0.35em overshoot
+    then registered as overflow inside the span at four breakpoints. Letting the
+    author's own break stand costs nothing: 1 fragment, correct stroke width and
+    zero overflow from 360 to 1440.
+31. Commit `d97d9bd` for the 16px change itself.
+32. **`scratchpad/u2/wt_site.py` is flaky under load** and should not be trusted
     on a single run. It reported 0, 2, 5, 0, 0 problems across five consecutive
     runs of the same build, always naming the two team portraits as "did not
     load". They do load: checked directly three times out of three, both
@@ -596,7 +613,8 @@ twenty.
     characters. Capping that column is the change he rejected on 3 September, so
     it was left alone rather than re-proposed. If the case pages ever read as
     too wide, that is the lever.
-38. Commit `0285257`. **Not** pushed.
+38. Commit `0285257`. Everything above pushed to `origin/main` on Hari's
+    go-ahead — ten commits, `e766fea` through `188f333`.
 
 ## Open — waiting on Hari
 
