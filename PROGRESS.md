@@ -579,41 +579,41 @@ twenty.
 
 ## 2026-09-04 — a 15px step on E-Rechnung and the case pages
 
-30. Hari, having asked the day before for E-Rechnung's 14px blocks to come up to
+33. Hari, having asked the day before for E-Rechnung's 14px blocks to come up to
     16px, looked at the result and said: *"with the only 16px for everything
     looks a little bit like every text is too big."* He asked for roughly 60 % of
     the running text on E-Rechnung and the four case pages to sit at 15px,
     pointing at the Deep Reading Engine page as the model, and said to use
     judgement and commit because he was going to sleep.
-31. DRE's mix is 15px 61 %, 18px 24 %, 20px 6 %. It gets there because it is
+34. DRE's mix is 15px 61 %, 18px 24 %, 20px 6 %. It gets there because it is
     card-heavy: `.dre-pillar p` and `.dre-case p` are `--fs-small`, with
     `.dre-lede` at 18px above them and the hero lead at 20px. The pattern is
     supporting copy a step below the leads, not everything on one value.
-32. Applied the same relationship. Supporting copy dropped to `--fs-small`:
+35. Applied the same relationship. Supporting copy dropped to `--fs-small`:
     `.er-asks p`, `.er-features__title + p`, `.er-card p`, `.case-card` and
     `.case-panel .ticks`, all 16px → 15px.
-33. The case-page narrative was inheriting **18px** from `.page-case main` — the
+36. The case-page narrative was inheriting **18px** from `.page-case main` — the
     size measured off the original — and a page of continuous prose at that size
     was most of what read as oversized. `.case-body > :is(p, ul, ol)` is now
     16px, the site's own body size, which also opens a real step above it for the
     hero pull quote at 18px.
-34. Resulting mixes: e-rechnung 15px 54 % / 18px 34 % / 20px 6 %;
+37. Resulting mixes: e-rechnung 15px 54 % / 18px 34 % / 20px 6 %;
     potenzial-analyse 15px 71 % / 18px 21 %; kommunikation 15px 47 % / 16px 45 %;
     u2care 16px 53 % / 15px 27 % / 18px 18 %; automatische-rechnungsprüfung
     16px 60 % / 18px 30 % / 15px 6 %.
-35. The last two stay 16px-dominant on purpose: they are almost entirely
+38. The last two stay 16px-dominant on purpose: they are almost entirely
     narrative and carry very little card content, so there is nothing else on
     them to set at 15px without shrinking the main story itself. Forcing 60 %
     there would have meant 15px prose in a 1140px column.
-36. Smallest running text is 15px on every one of the five pages, well clear of
+39. Smallest running text is 15px on every one of the five pages, well clear of
     the 13px floor. `tests/qa.py` green, responsive audit unchanged at its 3
     known findings, mobile checked at 390px.
-37. **Trade-off he should know about:** dropping the case narrative from 18px to
+40. **Trade-off he should know about:** dropping the case narrative from 18px to
     16px in the full-width 1140px column lengthens the lines to roughly 145
     characters. Capping that column is the change he rejected on 3 September, so
     it was left alone rather than re-proposed. If the case pages ever read as
     too wide, that is the lever.
-38. Commit `0285257`. Everything above pushed to `origin/main` on Hari's
+41. Commit `0285257`. Everything above pushed to `origin/main` on Hari's
     go-ahead — ten commits, `e766fea` through `188f333`.
 
 ## Open — waiting on Hari
