@@ -45,21 +45,24 @@
     </div>
     <!-- data-marquee: JS turns the grid below into a continuously scrolling
          strip that pauses on hover. Without JS it stays the static grid. -->
+    <!-- Each mark gets its own tile element: the logo files are opaque white
+         squares, so the grey has to be painted on something behind them and
+         blended through. See .logos__tile in the stylesheet. -->
     <div class="logos" data-marquee data-anim="up">
-      <img class="logos__item" src="/assets/img/startseite/logos/1-hinnerbaecker.webp"
-           width="288" height="288" loading="lazy" alt="Hinnerbäcker">
-      <img class="logos__item" src="/assets/img/startseite/logos/2-zrakic.webp"
-           width="288" height="288" loading="lazy" alt="Zrakic Glas- und Gebäudereinigung">
-      <img class="logos__item" src="/assets/img/startseite/logos/3-wonderland.webp"
-           width="288" height="288" loading="lazy" alt="Wonderland Academy">
-      <img class="logos__item" src="/assets/img/startseite/logos/4-u2care.webp"
-           width="288" height="288" loading="lazy" alt="U2care">
-      <img class="logos__item" src="/assets/img/startseite/logos/5-jj-real-estate.webp"
-           width="288" height="288" loading="lazy" alt="J&amp;J Real Estate">
-      <img class="logos__item" src="/assets/img/startseite/logos/6-newway.webp"
-           width="288" height="288" loading="lazy" alt="Newway">
-      <img class="logos__item" src="/assets/img/startseite/logos/7-ihk.webp"
-           width="288" height="288" loading="lazy" alt="IHK">
+      <span class="logos__tile"><img class="logos__item" src="/assets/img/startseite/logos/1-hinnerbaecker.webp"
+           width="288" height="288" loading="lazy" alt="Hinnerbäcker"></span>
+      <span class="logos__tile"><img class="logos__item" src="/assets/img/startseite/logos/2-zrakic.webp"
+           width="288" height="288" loading="lazy" alt="Zrakic Glas- und Gebäudereinigung"></span>
+      <span class="logos__tile"><img class="logos__item" src="/assets/img/startseite/logos/3-wonderland.webp"
+           width="288" height="288" loading="lazy" alt="Wonderland Academy"></span>
+      <span class="logos__tile"><img class="logos__item" src="/assets/img/startseite/logos/4-u2care.webp"
+           width="288" height="288" loading="lazy" alt="U2care"></span>
+      <span class="logos__tile"><img class="logos__item" src="/assets/img/startseite/logos/5-jj-real-estate.webp"
+           width="288" height="288" loading="lazy" alt="J&amp;J Real Estate"></span>
+      <span class="logos__tile"><img class="logos__item" src="/assets/img/startseite/logos/6-newway.webp"
+           width="288" height="288" loading="lazy" alt="Newway"></span>
+      <span class="logos__tile"><img class="logos__item" src="/assets/img/startseite/logos/7-ihk.webp"
+           width="288" height="288" loading="lazy" alt="IHK"></span>
     </div>
     <div class="btn-row btn-row--center" data-anim="up">
       <a class="btn btn--primary btn--sm" href="/kontakt/">Kostenloses Erstgespräch<span class="btn__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7"/></svg></span></a>
@@ -74,28 +77,29 @@
     </div>
 
     <div class="grid grid--3">
+      <!-- The description line under this heading is still with Willy; the
+           card is built without it rather than with invented copy. Drop a
+           <p class="case__result"> back in here when the wording arrives, and
+           in the matching card on /ergebnisse/. -->
       <div data-anim="up">
         <article class="case">
-          <h3>Potenzial Analyse</h3>
-          <p class="case__result">
-            Wir haben bei Hinnerbäcker die IT-Effizienz bewertet und das Potenzial
-            nach KI-Integration analysiert.
-          </p>
+          <h3>KI prüft diverse Dokumente</h3>
           <div class="case__box">
             <blockquote class="case__quote">
-              „Die Potenzialanalyse wurde strukturiert und gründlich durchgeführt,
-              ohne dabei unser Tagesgeschäft zu stören…“
+              „KIBH entwickelte für zeitaufwendige Angebotsvergleiche ein
+              praxisnahes KI-Tool, das meine Vergleiche strukturiert vorbereitet.
+              TipTop! Danke!“
             </blockquote>
             <footer class="case__person">
-              <img class="case__avatar" src="/assets/img/ergebnisse/til-steinhauer.webp"
-                   width="240" height="240" loading="lazy" alt="Til Steinhauer">
+              <img class="case__avatar" src="/assets/img/ergebnisse/volker-adelfinger.webp"
+                   width="240" height="222" loading="lazy" alt="Volker Adelfinger">
               <div>
-                <p class="case__author">Til Steinhauer | Geschäftsführer</p>
-                <p class="case__company">Hinnerbäcker GmbH + Co. KG</p>
+                <p class="case__author">Volker Adelfinger | Angebotsvergleich Bauwesen</p>
+                <p class="case__company">Entropia Consulting</p>
               </div>
             </footer>
           </div>
-          <p class="card__foot"><a class="btn btn--ghost" href="/ergebnisse/potenzial-analyse/">Mehr Lesen<span class="btn__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7"/></svg></span></a></p>
+          <p class="card__foot"><a class="btn btn--ghost" href="/ergebnisse/automatische-rechnungspruefung/">Mehr Lesen<span class="btn__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7"/></svg></span></a></p>
         </article>
       </div>
 

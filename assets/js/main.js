@@ -415,7 +415,8 @@
         the marquee brings them round -- worst at narrow viewports, where the
         last two never loaded at all. The seven files are 113 KB together.
       */
-      if (el.tagName === "IMG") el.loading = "eager";
+      var img = el.tagName === "IMG" ? el : el.querySelector("img");
+      if (img) img.loading = "eager";
       group.appendChild(el);
     });
     track.appendChild(group);

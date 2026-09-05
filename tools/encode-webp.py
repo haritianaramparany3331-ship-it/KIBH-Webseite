@@ -67,6 +67,7 @@ TARGETS = {
     "erechnung/bg-1.png": (1920, None),
     "ergebnisse/rechnungspruefung-bauwesen.png": None,
     "ergebnisse/til-steinhauer.jpg": (240, 240),
+    "ergebnisse/volker-adelfinger.png": (240, 240),
     "ergebnisse/torsten-krueger-square.jpg": (240, 240),
     "ergebnisse/torsten-krueger.jpg": (240, 240),
     "ergebnisse/logo-entropia.png": (86, 30),

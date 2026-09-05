@@ -87,7 +87,12 @@
   --container-wide: 1240px;
   --radius: 12px;
   --radius-lg: 20px;
-  --header-h: 76px;
+  /* The original runs a 109px bar. Ours sat at 76px, which Willy read as
+     cramped; 104px gives its contents the same breathing room without
+     touching the type inside, which stays at its measured sizes. Phones keep
+     the old value -- see the <=767px block -- because a tall sticky bar there
+     costs screen a visitor cannot spare. */
+  --header-h: 104px;
 
   --shadow-sm: 0 1px 3px rgba(34, 40, 49, 0.06),
     0 4px 12px rgba(34, 40, 49, 0.05);
@@ -291,6 +296,18 @@ button {
 .section--tight { padding-block: var(--sp-8); }
 .section--surface { background: var(--c-surface); }
 .section--alt { background: var(--c-surface-alt); }
+
+/*
+  A section that closes on a centred call-to-action needs less room after it
+  than one closing on a paragraph. The button already carries `.btn-row`'s own
+  top margin, then two section paddings stack under it and the next heading
+  adds its leading on top, so the join reads as a hole rather than as a break
+  -- 156px and 172px on the homepage before this. Willy flagged two of them;
+  matching on the shape catches every section built the same way instead of
+  hard-coding the two. E-Rechnung is untouched by design: it uses `.er-section`
+  and has to stay 1:1 with the original.
+*/
+.section:has(> .container > .btn-row:last-child) { padding-bottom: var(--sp-5); }
 .section--dark {
   background: var(--c-primary);
   color: var(--c-secondary);
@@ -469,6 +486,13 @@ button {
   justify-content: space-between;
   gap: var(--sp-5);
   min-height: var(--header-h);
+}
+
+/* The taller bar is for the desktop row of links Willy was looking at. A
+   phone shows a logo and a hamburger in the same space and cannot spare
+   28px of every screen to a sticky bar, so it keeps the old height. */
+@media (max-width: 767px) {
+  :root { --header-h: 76px; }
 }
 
 .brand {
@@ -685,12 +709,32 @@ button {
    card, no crop -- and it is a cut-out on transparent, so the rounded box and
    the shadow the placeholder wore would have framed empty air. */
 .page-home .hero__media {
+  position: relative;
   aspect-ratio: auto;
   border-radius: 0;
   overflow: visible;
   box-shadow: none;
 }
+/*
+  The teal panel the robot sits on. The original paints it on the section
+  behind the image rather than on the image itself, so the cut-out overhangs
+  it: on the live page the panel starts ~9% below the top of the picture and
+  stops ~4% above its foot, which is what lets the head and the pedestal
+  break out of the rectangle. Percentages rather than pixels so the overhang
+  holds as the column resizes. The gradient is the original's, verbatim.
+*/
+.page-home .hero__media::before {
+  content: "";
+  position: absolute;
+  inset: 9% 0 4% 0;
+  border-radius: 4px;
+  background: linear-gradient(210deg, rgb(65, 147, 143) 29%, rgb(87, 227, 220) 52%);
+}
+/* The panel is absolutely positioned and would otherwise paint over the
+   static image; this lifts the robot back on top of it. */
 .page-home .hero__media img {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: auto;
@@ -709,11 +753,34 @@ button {
   reported as overflowing their container even though nothing was visible
   there.
 */
+/*
+  Each mark sits on its own grey tile, the way the original lays the strip
+  out. All seven files are opaque squares -- none carries an alpha channel --
+  so a tile behind them would simply be covered up, and the ground has to be
+  blended away instead. `isolation` keeps that blend inside the tile rather
+  than letting it reach the page behind.
+
+  `darken` rather than `multiply`: two of the files (Zrakic and J&J) are not
+  white-on-white but carry a 247-grey border around a pure-white panel.
+  Multiply preserves that 8-level step and turned it into a visible lighter
+  rectangle inside the tile. Darken takes the channel minimum, so every tone
+  lighter than the tile collapses onto it and the border vanishes, while the
+  marks themselves -- all far darker than #edf0ef -- come through untouched.
+*/
+.logos__tile {
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  aspect-ratio: 1;
+  background: var(--c-surface-alt);
+  border-radius: 4px;
+}
 .logos__item {
   width: 100%;
-  height: 7rem;
+  height: 100%;
   object-fit: contain;
   object-position: center;
+  mix-blend-mode: darken;
 }
 
 /* Testimonial and case-study avatars. Portraits are not square (Torsten is
@@ -1342,24 +1409,59 @@ img.case__shot,
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(118, 171, 174, 0.55), transparent);
 }
+/*
+  The band was one full-width column of text and stood too tall for what it
+  says. Splitting it in two keeps the copy inside the left half -- the point
+  Willy made was that it must not cross the midline -- and gives the picture
+  the space that frees up.
+*/
+.dre-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--sp-8);
+  align-items: center;
+}
+.dre-hero__copy { max-width: 34rem; }
+
 .dre-hero h1 {
-  /* Wide enough that the sentence lands on three lines rather than five. */
-  max-width: 30ch;
-  font-size: clamp(2.25rem, 4.4vw, 3.5rem);
-  line-height: 1.1;
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
+  line-height: 1.12;
   color: var(--c-white);
 }
-/* The product name leads the sentence; giving it its own line and the accent
-   colour is typography, the wording is untouched. */
-.dre-hero__name {
-  display: block;
-  color: var(--c-accent);
-}
 .dre-hero__lead {
-  max-width: 44rem;
-  margin-top: var(--sp-6);
-  font-size: var(--fs-lead);
+  margin-top: var(--sp-5);
+  font-size: var(--fs-body-lg);
   color: rgba(255, 255, 255, 0.75);
+}
+
+/*
+  Placeholder for the image Willy is supplying. `.ph` is the site's standard
+  dashed slot but it is built for light grounds and would burn a bright block
+  into this ink band, so this is the same idea in the hero's own palette.
+*/
+.dre-hero__media {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  padding: var(--sp-5);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(118, 171, 174, 0.1);
+  border: 1px dashed rgba(118, 171, 174, 0.5);
+  border-radius: var(--radius-lg);
+}
+
+@media (max-width: 899px) {
+  .dre-hero__grid { grid-template-columns: minmax(0, 1fr); gap: var(--sp-6); }
+  .dre-hero__copy { max-width: none; }
+  /* Below the copy the slot no longer has a column to fill, and a 4:3 box the
+     full width of a phone is most of a screen for something with no content
+     in it yet. */
+  .dre-hero__media { aspect-ratio: 16 / 9; }
 }
 
 .dre-section { padding-block: var(--sp-9); }
@@ -1386,6 +1488,13 @@ img.case__shot,
 }
 .dre-section--cases .dre-h2 { color: var(--c-white); }
 .dre-section--cases .dre-lede { color: rgba(255, 255, 255, 0.75); }
+
+/* One heading Willy asked to sit centred. Text-align alone would only centre
+   it inside `.dre-intro`, which is a 52rem column pinned to the left of a
+   1140px container -- so the column has to be centred as well for the heading
+   to land on the page's midline. The lede under it keeps its reading width. */
+.dre-section--cases .dre-intro { margin-inline: auto; }
+.dre-h2--center { text-align: center; }
 
 /* --- the four architecture points ---------------------------------------- */
 
@@ -1543,8 +1652,12 @@ img.case__shot,
   text-transform: none;
   color: #0d1d20;
 }
-.page-home .hero h1 { color: #31363f; }
-.page-home .hero h2 { color: #0d1d20; }
+/* Both halves of the headline take one colour. The original sets the second
+   line to #0d1d20 against the first line's #31363f, which reads as two
+   different blacks rather than as emphasis; Willy asked for the h1's colour
+   to win. */
+.page-home .hero h1,
+.page-home .hero h2 { color: #31363f; }
 
 .page-home .hero__text,
 .page-home .hero__stat {
@@ -1975,9 +2088,16 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   border-radius: 0;
   box-shadow: none;
 }
+/*
+  The portrait is masked to a circle, so letting it take the full column width
+  produced a 548px head -- the original's is about 300px. Capping the block
+  brings it back to that scale; it stays left-aligned in the column, as the
+  original has it, rather than centring under the name.
+*/
 .page-home .member__photo {
   display: grid;
   place-items: center;
+  max-width: 20rem;
   aspect-ratio: 383 / 290;
   padding: var(--sp-4);
   background: var(--c-surface);
@@ -2055,11 +2175,17 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   background: linear-gradient(90deg, transparent, rgba(118, 171, 174, 0.55), transparent);
 }
 .page-ergebnisse .page-hero .eyebrow { color: var(--c-accent); }
+/* The "ERGEBNISSE" label above this heading is gone at Willy's request and the
+   heading centres in the band on its own. `margin-inline: auto` is what
+   actually centres it -- the max-width would otherwise hold it against the
+   left edge however the text inside is aligned. */
 .page-ergebnisse .page-hero h1 {
   /* Wide enough that the sentence lands on three lines rather than five. */
   max-width: 30ch;
+  margin-inline: auto;
   font-size: clamp(2.25rem, 4.4vw, 3.5rem);
   line-height: 1.1;
+  text-align: center;
   color: var(--c-white);
 }
 @media (max-width: 767px) {
@@ -3278,6 +3404,14 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   max-width: 20ch;
   margin-inline: auto;
 }
+/*
+  The Deep Reading Engine's closing question is 54 characters and broke over
+  three lines in the shared 20ch box. Widened here only, so it breaks after
+  "KI" and lands on two. In rem rather than ch because `ch` measures the width
+  of "0", which in these faces is far wider than the average letter -- 20ch
+  was holding barely 25 real characters.
+*/
+.page-dre .cta h2 { max-width: 39rem; }
 .cta p {
   margin-top: var(--sp-4);
   color: rgba(255, 255, 255, 0.75);
@@ -3748,7 +3882,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
      same rhythm as the rest of the strip. */
   padding-right: var(--sp-5);
 }
-.logos.is-marquee .logos__item {
+.logos.is-marquee .logos__tile {
   width: 9rem;
   flex: none;
 }

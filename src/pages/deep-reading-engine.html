@@ -33,15 +33,25 @@
 
 <section class="dre-hero">
   <div class="container container--wide">
-    <h1 data-anim="up">
-      <span class="dre-hero__name">Deep Reading Engine:</span>
-      Komplexe Dokumentenmengen automatisiert verstehen, prüfen &amp; entscheiden.
-    </h1>
-    <p class="dre-hero__lead" data-anim="up">
-      Wenn Standard-KI an 1.000-seitigen Ausschreibungen, verschachtelten
-      Excel-Tabellen oder komplexen Widerspruchsverfahren scheitert, liefert
-      unsere Deep Reading Engine belastbare, auditierbare Ergebnisse.
-    </p>
+    <!-- Two columns: the copy stays inside the left half and the picture takes
+         the room that frees up. The "Deep Reading Engine:" label that used to
+         lead the heading is gone at Willy's request -- the page title and the
+         nav already carry the name. -->
+    <div class="dre-hero__grid">
+      <div class="dre-hero__copy">
+        <h1 data-anim="up">
+          Komplexe Dokumentenmengen automatisiert verstehen, prüfen &amp; entscheiden.
+        </h1>
+        <p class="dre-hero__lead" data-anim="up">
+          Wenn Standard-KI an 1.000-seitigen Ausschreibungen, verschachtelten
+          Excel-Tabellen oder komplexen Widerspruchsverfahren scheitert, liefert
+          unsere Deep Reading Engine belastbare, auditierbare Ergebnisse.
+        </p>
+      </div>
+      <!-- Slot for the image Willy is supplying. Replace the whole <p> with an
+           <img> carrying width/height so the band does not jump on load. -->
+      <p class="dre-hero__media" data-anim="fade">Bild folgt</p>
+    </div>
   </div>
 </section>
 
@@ -113,7 +123,7 @@
 <section class="dre-section dre-section--cases">
   <div class="container container--wide">
     <div class="dre-intro">
-      <h2 class="dre-h2" data-anim="up">Reale Anwendungsbeispiele:</h2>
+      <h2 class="dre-h2 dre-h2--center" data-anim="up">Reale Anwendungsbeispiele</h2>
       <p class="dre-lede" data-anim="up">
         Die Deep Reading Engine wurde schon in einer Vielzahl unterschiedlicher
         Umgebungen auf die Probe gestellt:
