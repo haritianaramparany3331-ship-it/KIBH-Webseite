@@ -504,12 +504,15 @@ button {
 }
 .brand:hover { color: var(--c-primary); }
 
-/* Header wordmark. The original gives it 89px in a 109px header (82%); ours
-   is a 76px header, so 46px keeps the same proportion of breathing room. */
+/* Header wordmark, at the original's proportion: it runs 89px in a 109px bar,
+   which is 82%. Derived from `--header-h` rather than written as a number, so
+   it follows the bar at every breakpoint instead of needing an override per
+   height. (The footer and the landscape override set their own heights below
+   and still win, being later and more specific.) */
 .brand__logo {
   display: block;
   width: auto;
-  height: 46px;
+  height: calc(var(--header-h) * 0.82);
 }
 /* Footer: the wordmark sits above the tagline rather than beside it, and gets
    more room than in the header because no nav is competing for the space. */
@@ -771,6 +774,10 @@ button {
   display: grid;
   place-items: center;
   isolation: isolate;
+  width: 100%;
+  /* 128px. The tile and the mark inside it shrink together, which is what
+     Willy asked for -- the mark is `contain`ed, so it follows the box. */
+  max-width: 8rem;
   aspect-ratio: 1;
   background: var(--c-surface-alt);
   border-radius: 4px;
@@ -924,9 +931,10 @@ img.case__shot,
 
 .logos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
   gap: var(--sp-5);
   align-items: center;
+  justify-items: center;
 }
 .logos .ph { min-height: 4.5rem; }
 
@@ -1393,7 +1401,9 @@ img.case__shot,
 
 .dre-hero {
   position: relative;
-  padding-block: var(--sp-10) var(--sp-9);
+  /* Was 7rem/5rem. The band stood taller than its contents warranted, which
+     read as a hole above and below the copy rather than as breathing room. */
+  padding-block: var(--sp-8);
   background:
     radial-gradient(ellipse 75% 85% at 78% 108%, rgba(118, 171, 174, 0.42), transparent 62%),
     radial-gradient(ellipse 55% 70% at 6% -12%, rgba(214, 216, 79, 0.13), transparent 60%),
@@ -1442,6 +1452,11 @@ img.case__shot,
 .dre-hero__media {
   display: grid;
   place-items: center;
+  /* Capped rather than filling its column: at the full half-width the slot
+     was 564px across and drove the whole band's height on its own. */
+  justify-self: end;
+  width: 100%;
+  max-width: 26rem;
   aspect-ratio: 4 / 3;
   padding: var(--sp-5);
   text-align: center;
@@ -1461,7 +1476,7 @@ img.case__shot,
   /* Below the copy the slot no longer has a column to fill, and a 4:3 box the
      full width of a phone is most of a screen for something with no content
      in it yet. */
-  .dre-hero__media { aspect-ratio: 16 / 9; }
+  .dre-hero__media { aspect-ratio: 16 / 9; justify-self: stretch; max-width: none; }
 }
 
 .dre-section { padding-block: var(--sp-9); }
@@ -1611,7 +1626,7 @@ img.case__shot,
 }
 @media (max-width: 767px) {
   .dre-pillars { grid-template-columns: minmax(0, 1fr); }
-  .dre-hero { padding-block: var(--sp-9) var(--sp-8); }
+  .dre-hero { padding-block: var(--sp-7); }
 }
 
 
@@ -2089,19 +2104,46 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   box-shadow: none;
 }
 /*
-  The portrait is masked to a circle, so letting it take the full column width
-  produced a 548px head -- the original's is about 300px. Capping the block
-  brings it back to that scale; it stays left-aligned in the column, as the
-  original has it, rather than centring under the name.
+  Team block, laid out as the original lays it out: the two members are not
+  spread across the full container but sit as a centred pair, each one a 403px
+  column with 178px between them. Capping the group and centring it is what
+  does that; the columns stay flexible below it so the gap closes before the
+  cards have to.
+*/
+.page-home .team {
+  max-width: 61.5rem;   /* 403 + 178 + 403 */
+  margin-inline: auto;
+  /* 12.4vw reaches the original's 178px at a 1440 viewport, which puts the
+     two cards on its 403px; narrower than that the gap closes first and the
+     cards keep their width for as long as they can. */
+  column-gap: clamp(2rem, 12.4vw, 11.125rem);
+}
+
+/*
+  The grey plate is 403x300 on the original with a ~250px circle centred in
+  it, and the name and quote run left-aligned underneath at the plate's own
+  width.
+
+  The circle is sized off the plate's height rather than given `width: 100%;
+  height: 100%` like the shared rule does: the plate is wider than it is tall,
+  so filling it turns the border-radius into an ellipse. Height plus
+  `aspect-ratio: 1` keeps it round whatever the column does.
 */
 .page-home .member__photo {
   display: grid;
   place-items: center;
-  max-width: 20rem;
-  aspect-ratio: 383 / 290;
-  padding: var(--sp-4);
+  max-width: none;
+  aspect-ratio: 403 / 300;
+  padding: 0;
   background: var(--c-surface);
   border-radius: 4px;
+}
+.page-home .member__photo img {
+  width: auto;
+  height: 83%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 999px;
 }
 .page-home .member__photo .ph {
   width: auto;
@@ -3896,7 +3938,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   padding-right: var(--sp-5);
 }
 .logos.is-marquee .logos__tile {
-  width: 9rem;
+  width: 8rem;
   flex: none;
 }
 
