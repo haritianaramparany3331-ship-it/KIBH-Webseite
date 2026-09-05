@@ -1401,9 +1401,12 @@ img.case__shot,
 
 .dre-hero {
   position: relative;
-  /* Was 7rem/5rem. The band stood taller than its contents warranted, which
-     read as a hole above and below the copy rather than as breathing room. */
-  padding-block: var(--sp-8);
+  /* Was 7rem/5rem, which stood taller than its contents warranted and read
+     as a hole above and below the copy. There is no bottom padding at all
+     now: the robot is bottom-aligned and finishes on the band's own edge,
+     which is what stops a bigger picture from growing the band again. The
+     copy carries its own clearance instead -- see .dre-hero__copy. */
+  padding-block: var(--sp-7) 0;
   background:
     radial-gradient(ellipse 75% 85% at 78% 108%, rgba(118, 171, 174, 0.42), transparent 62%),
     radial-gradient(ellipse 55% 70% at 6% -12%, rgba(214, 216, 79, 0.13), transparent 60%),
@@ -1429,9 +1432,13 @@ img.case__shot,
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--sp-8);
-  align-items: center;
+  align-items: end;
 }
-.dre-hero__copy { max-width: 34rem; }
+/* The section has no bottom padding, so the copy holds itself off the edge. */
+.dre-hero__copy {
+  max-width: 34rem;
+  padding-bottom: var(--sp-8);
+}
 
 .dre-hero h1 {
   font-size: clamp(2rem, 3.4vw, 2.75rem);
@@ -1445,38 +1452,42 @@ img.case__shot,
 }
 
 /*
-  Placeholder for the image Willy is supplying. `.ph` is the site's standard
-  dashed slot but it is built for light grounds and would burn a bright block
-  into this ink band, so this is the same idea in the hero's own palette.
+  Willy's robot, cut out of its black ground. It carries no box of its own --
+  no card, no border, no radius -- so it reads as sitting in the band rather
+  than in a frame, the same way the homepage hero treats its robot.
+
+  Sized by height, not width: it is a portrait subject next to a block of
+  copy, and height is what has to stay in step with the text beside it.
+  Driving it off the width would let it grow the whole band on a wide screen.
 */
 .dre-hero__media {
-  display: grid;
-  place-items: center;
-  /* Capped rather than filling its column: at the full half-width the slot
-     was 564px across and drove the whole band's height on its own. */
   justify-self: end;
-  width: 100%;
-  max-width: 26rem;
-  aspect-ratio: 4 / 3;
-  padding: var(--sp-5);
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: var(--fs-caption);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(118, 171, 174, 0.1);
-  border: 1px dashed rgba(118, 171, 174, 0.5);
-  border-radius: var(--radius-lg);
+  display: block;
+  width: auto;
+  height: clamp(15rem, 32vw, 28.75rem);
+  max-width: 100%;
+  /*
+    The source is cropped at its own bottom edge, straight through the
+    forearm, and a hard horizontal cut across a lit band looks like a
+    mistake. Fading the last stretch lets it settle into the ground instead.
+    The book and both hands sit above the fade, so nothing that carries the
+    idea is lost to it.
+  */
+  -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
 }
 
 @media (max-width: 899px) {
-  .dre-hero__grid { grid-template-columns: minmax(0, 1fr); gap: var(--sp-6); }
-  .dre-hero__copy { max-width: none; }
-  /* Below the copy the slot no longer has a column to fill, and a 4:3 box the
-     full width of a phone is most of a screen for something with no content
-     in it yet. */
-  .dre-hero__media { aspect-ratio: 16 / 9; justify-self: stretch; max-width: none; }
+  /* One column, so there is nothing to bottom-align against and the band
+     takes its padding back on both sides. */
+  .dre-hero { padding-block: var(--sp-7); }
+  .dre-hero__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-6);
+    align-items: stretch;
+  }
+  .dre-hero__copy { max-width: none; padding-bottom: 0; }
+  .dre-hero__media { justify-self: center; height: 17rem; }
 }
 
 .dre-section { padding-block: var(--sp-9); }
@@ -1626,7 +1637,6 @@ img.case__shot,
 }
 @media (max-width: 767px) {
   .dre-pillars { grid-template-columns: minmax(0, 1fr); }
-  .dre-hero { padding-block: var(--sp-7); }
 }
 
 
