@@ -774,7 +774,14 @@ twenty.
     `JOBS` in `tools/cutout.py` says how to get it back.
 46. `tests/qa.py` green, responsive sweep unchanged at its two accepted
     findings, no horizontal overflow at 390 / 900 / 1024 / 1200 / 1440.
-47. Commits `06ecb68`, `8dd64a4`. **Not** pushed.
+47. Header bar settled at **92px**. 76 read as cramped to Willy, 104 as too
+    tall to Hari. The wordmark follows on its own (216×75) because it is
+    derived from `--header-h`, not set. Phones unaffected at 76px.
+48. **`scratchpad/resp/audit.py` is no longer reliably deterministic.** One
+    run reported 13 findings / 8 distinct where the three either side of it
+    all reported 7 / 2 against identical code. Same load-timing flake already
+    recorded for `wt_site.py` on 3 September. Re-run before believing a jump.
+49. Commits `06ecb68`, `8dd64a4`, `6e2a693`, `02d2e06`. **Not** pushed.
 
 
 ## Open — waiting on Hari
