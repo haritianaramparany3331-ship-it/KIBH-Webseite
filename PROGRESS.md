@@ -413,7 +413,7 @@ revisiting rather than losing.
   ordinary cards.
 - **The third typeface.** Plus Jakarta Sans on E-Rechnung and the four case
   pages against Verdana + Mulish everywhere else; the site reads as two sites.
-- **Page weight.** `assets/img` is 6.6 MB, E-Rechnung alone 3.8 MB. WebP at
+- **Page weight.** With the real images in, the homepage is 2 189 KB and E-Rechnung 4 044 KB, against the 101 KB measured in `docs/performance-baseline.md`. The comparison there no longer holds — the biggest single files are `zertifikat-ai-consultant.png` (1 184 KB) and the four E-Rechnung PNGs (3 053 KB together). Re-encoding to WebP at display size would win most of it back; not done unasked because it changes the uploaded assets.
   display size changes no pixel a visitor sees, and would restore the "24×
   lighter than WordPress" figure in `docs/performance-baseline.md`, stale by
   more than an order of magnitude and a headline number for the Phase 4 case
@@ -616,11 +616,97 @@ twenty.
 41. Commit `0285257`. Everything above pushed to `origin/main` on Hari's
     go-ahead — ten commits, `e766fea` through `188f333`.
 
+## 2026-09-05 — Willy's review: ten fixes
+
+1. Header bar 76px → 104px (`--header-h`); original is 109px. Type inside
+   unchanged. Phones stay 76px via a `max-width: 767px` override.
+2. Hero headline: `.page-home .hero h2` was #0d1d20 against the h1's #31363f.
+   Both now #31363f. Swept every heading on all 11 pages for the same
+   pattern — no other instance (`scratchpad/willy/measure.py`).
+3. Teal panel behind the robot, which we never had. Original paints it on the
+   section, not the image, so the cut-out overhangs: `.hero__media::before`,
+   `inset: 9% 0 4% 0`, gradient copied verbatim
+   (`linear-gradient(210deg, #41938f 29%, #57e3dc 52%)`).
+4. Client logos on grey tiles. New `<span class="logos__tile">` wrapper,
+   `--c-surface-alt`, `aspect-ratio: 1`.
+5. Gaps after a section's closing CTA: 156→116, 172→116, 216→159. Rule matches
+   on shape, `.section:has(> .container > .btn-row:last-child)`, not on the two
+   Willy named. E-Rechnung excluded by design — it uses `.er-section`.
+6. Potenzial Analyse card out, Volker Adelfinger in, on the Startseite and
+   again on `/ergebnisse/` where the quote-only reco card is upgraded to the
+   full format. Photo via `tools/encode-webp.py`: 305 KB → 6 KB.
+7. Team portraits 548px → 288px circles (`max-width: 20rem`); original ~300px.
+8. DRE: hero split into copy + image placeholder, "Deep Reading Engine:" label
+   dropped, type a step smaller, stacks below 900px. "Reale Anwendungsbeispiele"
+   loses its colon and centres. Closing question 3 lines → 2.
+9. E-Rechnung back to strict 1:1 — see below.
+10. `/ergebnisse/` loses the "ERGEBNISSE" label, heading centres.
+
+### Item 9 in detail — three of Hari's own decisions reversed
+
+11. Willy overrode the earlier allowance for interpretation on this page only.
+    Re-audited block by block against the live original with
+    `scratchpad/willy/er_diff.py` (64 blocks live, 57 matched).
+12. Before: 56 blocks differed in family, 17 in size, 4 in weight, 30 in
+    line-height. After: 0 in size, weight and colour, none in line-height by
+    more than 0.1px.
+13. Plus Jakarta Sans returns, **E-Rechnung only** — the four case pages keep
+    Verdana + Mulish, because item 9 named E-Rechnung alone. Costs the other
+    11 pages nothing: one Google stylesheet serves both families and a browser
+    fetches a binary only for text actually set in it.
+14. Ask/feature copy 15px → 14px, leading 1.45 → 1.0 and 1.143. Card copy
+    15px → 16px/22px. `<b>` 600 → 700. Small card's subhead 19px → 22px (the
+    original does not keep the two cards uniform).
+15. Two controls escape Plus Jakarta Sans on the original — "Mehr erfahren" is
+    Verdana, the closing "Termin buchen" is Avenir. Elementor defaults showing
+    through, but 1:1 means copying them.
+16. One family difference cannot be closed: "Termin buchen" is Avenir, the
+    licensed face we substitute with Mulish site-wide.
+17. The 11 remaining `text-align` differences are `left` vs `start` (identical
+    rendering) plus three single-line inline-flex buttons. Not defects.
+
+### Traps and decisions worth keeping
+
+18. **The live "Unsere Lösungen" band has lost its background.** Its heading is
+    white text on white and is invisible; the two cards sit on white. Our dark
+    bg-1 panel stays, on Hari's call — reproducing that would be copying a live
+    bug, not a design.
+19. **`darken`, not `multiply`, for the logo tiles.** The seven files are
+    opaque, so the tile must be blended through rather than placed behind.
+    Multiply looked right on five of them and put a visible lighter rectangle
+    inside Zrakic and J&J, which carry a 247-grey border around a pure-white
+    panel. `darken` takes the channel minimum, so every tone lighter than the
+    tile collapses onto it. Sampled with `scratchpad/willy/logo_px.py`.
+20. The marquee script matched `el.tagName === "IMG"` to eager-load; the new
+    tile wrapper broke that, which is the bug that used to leave the last
+    logos blank at narrow widths. It now reaches through the wrapper.
+21. Centring a heading inside `.dre-intro` or `.page-hero h1` needs
+    `margin-inline: auto` as well as `text-align` — both live in a max-width
+    column pinned left, so text-align alone only centres within that column.
+22. `ch` again: `.cta h2`'s shared `20ch` was holding barely 25 real
+    characters. The DRE override is in rem.
+23. Volker's photo lives at `assets/img/ergebnisse/volker-adelfinger.webp` and
+    is referenced from both pages, like the other avatars.
+
+### Verification
+
+24. `tests/qa.py` green, 11 pages × 5 viewports. `scratchpad/resp/audit.py`
+    reports only the two already-accepted findings (the 7px "BE Renovierung"
+    mark, one orphan word on `/ergebnisse/` at 414px). All six
+    micro-interactions pass, zero console errors.
+25. `scratchpad/u2/wt_site.py` again blamed the two team portraits at 390px.
+    Same flake as 3 September — they render fine in the 390px screenshot.
+26. Screenshots at 390, 768 and 1440 in `scratchpad/willy/`.
+27. Commits `30a70d2` (items 1-8, 10) and `11dc074` (item 9, deliberately
+    separate so it can be dropped on its own). **Not** pushed.
+
+
 ## Open — waiting on Hari
 
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.
 - **The logo marquee's only touch pause is press-and-hold.** Added 2026-09-03 alongside the hover pause. `prefers-reduced-motion` still turns it off entirely. WCAG 2.2.2 wants a mechanism a visitor can find, and a hold gesture is not discoverable — a visible pause button would be, but it is new UI the original does not have, so it was not added unasked.
-- **Page weight.** With the real images in, the homepage is 2 189 KB and E-Rechnung 4 044 KB, against the 101 KB measured in `docs/performance-baseline.md`. The comparison there no longer holds — the biggest single files are `zertifikat-ai-consultant.png` (1 184 KB) and the four E-Rechnung PNGs (3 053 KB together). Re-encoding to WebP at display size would win most of it back; not done unasked because it changes the uploaded assets.
+- **Page weight** — done 2026-09-03, see that entry. `docs/performance-baseline.md` now carries the re-measured figures (6.8× lighter on load, 4.4× fully read).
+- `ergebnisse/logo-entropia.webp` is now unused — the Volker card carries his photo instead of the wordmark. Kept in case it is wanted elsewhere.
 - `ergebnisse/torsten-krueger.jpg` (the wide crop) is now unused — the square one reads better at avatar size. Kept in case it is wanted somewhere.
 - The logo's "HESSEN" line is drawn in a light grey meant for a white ground, so it goes faint on the dark footer. A light-on-dark variant of the file would fix it; not filtered in CSS because that shifts the brand colour.
 - The 🙂 inside Martin Kraus's quoted testimonial on `/ergebnisse/`. Left in — it is a customer's own words.
@@ -638,6 +724,13 @@ twenty.
 ## Open — waiting on Willy
 
 - Booking backend for "Kostenloses Erstgespräch": Calendly embed vs. serverless form.
+- **The description line for the Volker Adelfinger card** — the sentence under
+  "KI prüft diverse Dokumente", between the heading and the quote box. Both
+  copies are built without one; there is a comment at each site saying where
+  it goes (`src/pages/index.html`, `src/pages/ergebnisse.html`).
+- **The Deep Reading Engine hero image.** The slot is built and sized;
+  replace the `<p class="dre-hero__media">` with an `<img>` carrying
+  width/height so the band does not jump on load.
 
 ## Deferred
 
