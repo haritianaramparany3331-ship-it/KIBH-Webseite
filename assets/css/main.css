@@ -88,11 +88,13 @@
   --radius: 12px;
   --radius-lg: 20px;
   /* The original runs a 109px bar. Ours sat at 76px, which Willy read as
-     cramped; 104px gives its contents the same breathing room without
-     touching the type inside, which stays at its measured sizes. Phones keep
-     the old value -- see the <=767px block -- because a tall sticky bar there
-     costs screen a visitor cannot spare. */
-  --header-h: 104px;
+     cramped, so it went to 104px -- and Hari then read that as too tall.
+     92px is where it settled: clearly roomier than the 76 it came from,
+     lighter than a full-height copy of the original. The type inside is
+     untouched at its measured sizes throughout. Phones keep 76px -- see the
+     <=767px block -- because a tall sticky bar there costs screen a visitor
+     cannot spare. */
+  --header-h: 92px;
 
   --shadow-sm: 0 1px 3px rgba(34, 40, 49, 0.06),
     0 4px 12px rgba(34, 40, 49, 0.05);
