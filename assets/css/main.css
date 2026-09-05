@@ -2369,23 +2369,26 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
    Values here come from measuring the rendered original, not from the tokens. */
 
 /*
-  These pages were set in Plus Jakarta Sans, because the live site sets them
-  that way -- E-Rechnung and the case studies were evidently built later than
-  the rest of it, with a different face. The rebuild copied that faithfully, so
-  the site read as two sites, which the original does too.
+  The live site sets this page in Plus Jakarta Sans -- E-Rechnung and the case
+  studies were evidently built later than the rest of it, with a different
+  face. The rebuild copied that, then Hari unified the whole site on Verdana +
+  Mulish to stop it reading as two sites.
 
-  Hari's call is to stop copying that particular inconsistency: one pair,
-  Verdana for running text and Mulish for headings, everywhere. These five
-  pages therefore no longer match their live counterparts letter for letter.
-  Only the family changed; the sizes and weights measured off the original are
-  untouched.
+  Willy has since asked for this one page to go back to being strictly 1:1
+  with the original, typeface included, so Plus Jakarta Sans returns here and
+  only here. The four case-study pages under /ergebnisse/ keep the unified
+  pair -- Willy's instruction named E-Rechnung alone.
+
+  The webfont costs nothing on the other eleven pages: Google serves one
+  stylesheet for both families, and a browser downloads a font binary only
+  when something on the page is actually set in it.
 */
 .page-erechnung main :is(h1, h2, h3, h4, h5, h6),
 .page-erechnung main .eyebrow,
 .page-erechnung main .btn,
 .page-erechnung main .case__quote,
 .page-erechnung main .quote p {
-  font-family: var(--font-display);
+  font-family: "Plus Jakarta Sans", var(--font-display);
 }
 
 /* ==========================================================================
@@ -2745,7 +2748,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 }
 
 .page-erechnung main {
-  font-family: var(--font-sans);
+  font-family: "Plus Jakarta Sans", var(--font-display);
   color: var(--c-text);
   /* the slide-in animations start off-canvas */
   overflow-x: clip;
@@ -2803,7 +2806,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   line-height: 1.75rem;
   color: rgba(255, 255, 255, 0.75);
 }
-.er-hero__lead b { color: var(--c-white); font-weight: 600; }
+.er-hero__lead b { color: var(--c-white); font-weight: 700; }
 .er-hero__note {
   margin-top: 6rem;
   font-size: 1rem;
@@ -2832,6 +2835,8 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .er-section--risk { padding-block: 5rem 6rem; }
 .er-section--detail { padding-block: 0 5rem; }
 .er-section--cta { padding-block: 7.5rem; text-align: center; }
+/* See the note on .er-card__more: this one button is Avenir on the original. */
+.er-section--cta .er-btn { font-family: var(--font-display); }
 
 .er-h2 {
   font-size: 2.75rem;
@@ -2849,7 +2854,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   line-height: 1.5rem;
   color: var(--c-text);
 }
-.er-body b { font-weight: 600; }
+.er-body b { font-weight: 700; }
 .er-accent { color: var(--c-lime); }
 
 .er-btn-row { display: flex; justify-content: center; margin-top: 2.5rem; }
@@ -2941,22 +2946,19 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 }
 .er-asks .ico { color: rgba(255, 255, 255, 0.75); }
 /*
-  15px, against the original's 14px.
+  14px on 14px leading, which is what the live page sets here and in the
+  feature copy below.
 
-  Two passes got here. The live page runs this and the feature copy below at
-  14px while the rest of the site reads at 16px; the rebuild copied that
-  faithfully, Hari spotted the difference and asked for 16px, then looked at the
-  result and found the page read as though every line were the same oversized
-  block. So these settle a step down at --fs-small, the size the Deep Reading
-  Engine page uses for the same job: supporting copy under a heading, with the
-  leads and section intros left at 18px above it.
-
-  The line-heights do not come from the original either -- its 1.05 and 1.15 are
-  set for caption-sized type and collide once the text is any larger.
+  This value has moved three times. The rebuild copied the original's 14px;
+  Hari found it small next to the rest of the site and asked for 16px; he then
+  read the result as uniformly oversized and asked for a step down to 15px.
+  Willy has now put the page back to strict 1:1, so it returns to the
+  original's own figures. The leading really is 1.0 there -- these blocks are
+  set as captions, and they wrap to three tight lines on the live page too.
 */
 .er-asks p {
-  font-size: var(--fs-small);
-  line-height: 1.45;
+  font-size: 0.875rem;
+  line-height: 1;
   color: rgba(255, 255, 255, 0.75);
 }
 .er-asks__close {
@@ -2964,7 +2966,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   margin: 3rem auto 0;
   font-size: 1.125rem;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.333;
   text-align: center;
   color: var(--c-white);
 }
@@ -3004,14 +3006,16 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 .er-features__title {
   font-size: 1.125rem;
   font-weight: 600;
-  line-height: 1.05;
+  /* 18px on 18px, as the original sets it. */
+  line-height: 1;
   color: var(--c-text);
 }
 .er-features__title + p {
   margin-top: 0.5rem;
-  /* Sized with `.er-asks p` above -- see the note there. */
-  font-size: var(--fs-small);
-  line-height: 1.45;
+  /* Sized with `.er-asks p` above -- see the note there. 16/14 leading here,
+     not the 1.0 the ask block uses. */
+  font-size: 0.875rem;
+  line-height: 1.143;
   color: rgba(0, 0, 0, 0.75);
 }
 
@@ -3041,9 +3045,12 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   font-weight: 600;
 }
 .er-card h4 { font-size: 1.1875rem; line-height: 1.3; font-weight: 600; }
-/* Card copy sits a step under the section leads, as it does on the Deep
-   Reading Engine page. */
-.er-card p { margin-top: 1rem; font-size: var(--fs-small); font-weight: 500; line-height: 1.45; }
+/* The original does not give the two cards the same subhead size: the big
+   card's runs at 19px and the small card's at 22px. */
+.er-card--small h4 { font-size: 1.375rem; }
+/* 16px on 22px leading, the original's figures. This block briefly sat at
+   --fs-small during the 15px pass; item 9 puts it back. */
+.er-card p { margin-top: 1rem; font-size: 1rem; font-weight: 500; line-height: 1.375; }
 .er-card__more {
   display: inline-flex;
   align-items: center;
@@ -3054,7 +3061,13 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   background: none;
   border: 0;
   font: inherit;
+  /* Two controls on this page escape Plus Jakarta Sans on the original --
+     Elementor defaults showing through rather than a decision. 1:1 means
+     copying that: this toggle renders in Verdana there, and the closing
+     "Termin buchen" in Avenir, for which Mulish is our stand-in. */
+  font-family: var(--font-sans);
   font-size: 1rem;
+  line-height: 1;
   cursor: pointer;
   transition: color 0.3s;
 }

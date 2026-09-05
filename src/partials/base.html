@@ -17,7 +17,10 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap">
+<!-- Two families in one request. Plus Jakarta Sans is used by /e-rechnung/
+     alone, which is held 1:1 with the original; the other pages fetch these
+     @font-face rules but no binary, because nothing on them is set in it. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="{{cssHref}}">
 <!-- The site icon from the original, in the same three sizes WordPress
      serves it at: 32 for the browser tab, 192 for Android, 180 for iOS. -->
