@@ -732,6 +732,51 @@ twenty.
     `e929dd4` are all still local.
 
 
+## 2026-09-06 — Willy's reading robot in the DRE hero
+
+36. Image arrived as a robot on flat black. Dropped in as-is it would have
+    been a black rectangle over a band with a teal bloom moving behind it, so
+    it is cut out first.
+37. New `tools/cutout.py`, same constraint as `encode-webp.py`: no PIL, no
+    sharp, no ImageMagick, `package.json` still dependency-free, so it drives
+    Chromium's canvas through Playwright.
+38. **Flood fill from the border, not a threshold.** The robot is white but
+    its chest cavity and seams are genuinely black; a global threshold punched
+    holes straight through it.
+39. **Then an opening on the background mask.** Sampled with
+    `scratchpad/willy/sample.py`: the ground runs 1–23, the shadowed side of
+    the book has a median of **6**. They are the same black — no threshold can
+    separate them — and the fill threads into the subject through channels a
+    few pixels wide. Erode-then-dilate at 3px deletes anything thinner and
+    leaves the real outer region alone. Before this the fingers were speckled
+    with holes.
+40. **Un-premultiply the feathered edge.** A pixel the robot half covers was
+    photographed as a blend with black; without dividing the colour back out
+    by coverage the whole cut-out carries a dark outline.
+41. Residual, and accepted: the book's shadowed underside stays transparent,
+    because it is literally black in the source. Invisible on this band, which
+    is `--c-ink`; it would show on a light ground.
+42. Placement: bottom-aligned on the band's floor, so a bigger picture does
+    not grow the band — 508px against 464px, and 615px before the 5 Sept trim.
+    Section has no bottom padding now; `.dre-hero__copy` carries its own.
+    A mask fades the last 14% because the source is cropped through the
+    forearm and a hard horizontal cut across a lit band reads as a mistake.
+43. Quality swept 0.70–0.90 against a 2× crop of the head — all five
+    indistinguishable, so it takes `encode-webp.py`'s 0.82 photograph default.
+    92 KB not 123 KB; `/deep-reading-engine/` lands at **304 KB**.
+44. **Trap:** the folder must be `dre`, lowercase, like every other one.
+    Windows folded the new lowercase directory into the `DRE` git had
+    recorded, and the HTML referenced lowercase — that would have 404'd on
+    Vercel, which is case-sensitive. Git now has the lowercase path.
+45. Source deleted after encoding, as `encode-webp.py` does with its inputs,
+    so the `assets/` tree build.js copies verbatim into `dist/` does not ship
+    a 90 KB master nobody requests. It is at commit `7ea3dbd`; the note above
+    `JOBS` in `tools/cutout.py` says how to get it back.
+46. `tests/qa.py` green, responsive sweep unchanged at its two accepted
+    findings, no horizontal overflow at 390 / 900 / 1024 / 1200 / 1440.
+47. Commits `06ecb68`, `8dd64a4`. **Not** pushed.
+
+
 ## Open — waiting on Hari
 
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.
@@ -759,9 +804,6 @@ twenty.
   "KI prüft diverse Dokumente", between the heading and the quote box. Both
   copies are built without one; there is a comment at each site saying where
   it goes (`src/pages/index.html`, `src/pages/ergebnisse.html`).
-- **The Deep Reading Engine hero image.** The slot is built and sized;
-  replace the `<p class="dre-hero__media">` with an `<img>` carrying
-  width/height so the band does not jump on load.
 
 ## Deferred
 
