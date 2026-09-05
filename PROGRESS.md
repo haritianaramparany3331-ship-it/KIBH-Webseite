@@ -701,6 +701,37 @@ twenty.
     separate so it can be dropped on its own). **Not** pushed.
 
 
+## 2026-09-05 — five follow-ups after Hari looked at the review pass
+
+28. Header wordmark 46px → 85px, written as `calc(var(--header-h) * 0.82)`.
+    82% is the original's proportion (89px in a 109px bar); deriving it means
+    the logo follows the bar at every breakpoint instead of needing an
+    override per height. Phones land at 62px in their 76px bar. The footer
+    (`60px`) and the landscape override (`34px`) still set their own.
+29. Client-logo tiles 144px → 128px, tile and mark together (`contain`).
+30. Team block rebuilt against the original: a **centred pair**, not a
+    full-width row. 403px cards, 178px gap, grey plate 403×300, circle 249px,
+    name and quote left-aligned under the plate at its own width. Group caps
+    at 61.5rem and centres; `column-gap: clamp(2rem, 12.4vw, 11.125rem)` so
+    the gap closes before the cards lose width. Measured live: 403/178/403.
+31. **Trap:** the circle had to be sized off the plate's *height* plus
+    `aspect-ratio: 1`. The shared `.member__photo img` rule uses
+    `width: 100%; height: 100%`, and the plate is wider than it is tall, so
+    that turned `border-radius: 999px` into an ellipse.
+32. DRE hero band 615px → 464px. Padding 7rem/5rem → 4rem; the ≤767px
+    override was 5rem/4rem, i.e. **taller than desktop** after the trim, now
+    3rem. Image slot capped at 26rem (564×423 → 416×312) so it stops driving
+    the band height. No text size changed.
+33. `/ergebnisse/`: Potenzial Analyse ↔ Volker Adelfinger. Volker moves up
+    into the row of full cards, Potenzial Analyse down among the
+    recommendations, where it renders fine as the one full card in that row.
+34. `tests/qa.py` green, responsive sweep unchanged at its two accepted
+    findings, all six micro-interactions pass, zero console errors, no
+    horizontal overflow at 390 / 900 / 1100 / 1440.
+35. Commit `e929dd4`. **Not** pushed — `30a70d2`, `11dc074`, `291c5d3` and
+    `e929dd4` are all still local.
+
+
 ## Open — waiting on Hari
 
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.
