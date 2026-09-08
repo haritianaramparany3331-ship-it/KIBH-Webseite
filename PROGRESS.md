@@ -784,8 +784,48 @@ twenty.
 49. Commits `06ecb68`, `8dd64a4`, `6e2a693`, `02d2e06`. **Not** pushed.
 
 
+## 2026-09-08 — one button shape, and the Phase 3 report
+
+50. **Button radius unified at 6px.** The base `.btn` was a 999px pill and
+    `.page-home .btn` overrode it to 4px. Since the header comes from
+    `src/partials/header.html`, the same "Kostenloses Erstgespräch" button was
+    a rectangle on the Startseite and a pill on the other 11 pages. The
+    homepage shape moved onto the base rule at 6px on Hari's call ("a tiny
+    little more border-radius") and the page override was deleted. Commit
+    `ede6c0c`. Verified: computed radius 6px on the header button on five
+    pages, `tests/qa.py` green.
+51. `.er-btn` on `/e-rechnung/` deliberately **not** changed — those pills are
+    that page's own original and it is under Willy's strict-1:1 mandate. Named
+    to Hari, still open below.
+52. **`main_prompt.md` and `CLAUDE_TEMPLATE.md` are gone from this repo.** They
+    were written 5–6 Sept and committed locally. Before pushing, the remote
+    turned out to be a **public** GitHub repository, and both files are the
+    reusable method rather than anything the client bought. Hari moved them to
+    his own folder. Deleting them in a new commit would have left the blobs
+    retrievable in the pushed history, so the three commits that introduced
+    them (`924bab4`, `da672cb`, `051fba3`) were dropped from the branch
+    instead. Nothing had been pushed, so the push stayed a fast-forward.
+53. **`docs/phase3-arbeitsbericht.md` written** — the Phase 3 documentation the
+    assignment grades, in German, as source material for Hari's Bericht. Six
+    parts: starting setup, the 13 work steps, the recurring work cycle,
+    stumbling blocks, time per step, and a Claude-Code-vs-WordPress assessment
+    for Phase 4.
+54. Reconstructed from the two session transcripts (275 entries), `git log`
+    (82 commits) and this file. Measured, not estimated: 26 long task prompts
+    against 81 short corrections, 33 screenshots from Hari, 27 operational
+    messages, 11 compactions. Active time **27 h 24** counting gaps up to
+    20 min as work, **33 h 24** at a 45-min threshold, over 15 calendar days.
+55. Transcript timestamps are **UTC**, `git log` is local (UTC+2). The report
+    converts to local so its dates line up with the commits — without that,
+    four sessions land on the wrong day.
+56. The report says plainly that the old "24× lighter" figure was never true
+    of the finished site, and quotes the corrected 6.8× / 4.4× from
+    `docs/performance-baseline.md`.
+
 ## Open — waiting on Hari
 
+- The `.er-btn` pills on `/e-rechnung/` still differ in shape from every other button on the site; left that way because the page is under a strict 1:1 mandate. Say if consistency should win.
+- `.page-home .btn` also sets `font-weight: 700` and is not scoped to `main`, so the header button is slightly bolder on the Startseite than on the other 11 pages (239px wide against 236px). Scoping it to `main` would fix it without touching the homepage body.
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.
 - **The logo marquee's only touch pause is press-and-hold.** Added 2026-09-03 alongside the hover pause. `prefers-reduced-motion` still turns it off entirely. WCAG 2.2.2 wants a mechanism a visitor can find, and a hold gesture is not discoverable — a visible pause button would be, but it is new UI the original does not have, so it was not added unasked.
 - **Page weight** — done 2026-09-03, see that entry. `docs/performance-baseline.md` now carries the re-measured figures (6.8× lighter on load, 4.4× fully read).
@@ -815,5 +855,5 @@ twenty.
 ## Deferred
 
 - Full copy-polish pass over every text.
-- Phase 3 workflow documentation.
 - Phase 4 B2B case study: PDF handout + embeddable HTML.
+  Phase 3 workflow documentation is done — `docs/phase3-arbeitsbericht.md`.
