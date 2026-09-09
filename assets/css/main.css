@@ -198,6 +198,15 @@ h1, h2, h3, h4, h5, h6 {
   this size and beats break-word chopping the word with no hyphen at all. It
   stays off for display headings, where it broke "maß-geschneiderte".
 */
+/*
+  `.case h3` stays in this list on purpose. Willy asked for whole words in the
+  testimonial cards, and that is done for the attributions below -- they now
+  have room to fit. These headings cannot: "Dokumentenverarbeitung" wants
+  317px in a 275px column at laptop width. Without hyphenation the browser
+  chops it with no hyphen at all ("Dokumentenverarbeitun / g"), which is worse
+  than the syllable break. tests/qa.py takes the same view and only reports a
+  word as broken when the element is *not* hyphenating.
+*/
 .card h3,
 .case h3,
 .step h3,
@@ -572,59 +581,6 @@ button {
   color: var(--c-teal-dark);
 }
 
-/* Dropdown */
-.nav__item--has-sub { position: relative; }
-
-.nav__caret {
-  width: 0.6em;
-  height: 0.6em;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: rotate(45deg) translate(-2px, -2px);
-  transition: transform var(--transition);
-}
-
-.nav__sub {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  min-width: 17rem;
-  padding: var(--sp-2);
-  list-style: none;
-  background: var(--c-white);
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-6px);
-  transition: opacity var(--transition), transform var(--transition),
-    visibility var(--transition);
-}
-
-.nav__item--has-sub:hover .nav__sub,
-.nav__item--has-sub:focus-within .nav__sub {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.nav__sub a {
-  font-family: var(--font-display);
-  display: block;
-  padding: var(--sp-3) var(--sp-4);
-  font-size: var(--fs-small);
-  /* One step below the top level, so the dropdown still reads as subordinate. */
-  font-weight: 600;
-  color: var(--c-text);
-  border-radius: 8px;
-}
-.nav__sub a:hover,
-.nav__sub a.is-active {
-  background: var(--c-accent-soft);
-  color: var(--c-teal-dark);
-}
-
 /* Mobile toggle */
 .nav-toggle {
   display: none;
@@ -798,6 +754,15 @@ button {
   object-position: center;
   mix-blend-mode: darken;
 }
+/*
+  The marks are `contain`ed, so a file with 30% empty margin baked into it
+  rendered its mark at 70% of the tile -- which is why U2care and Wonderland
+  were unreadable. Scaling the <img> was tried and rejected: it pushes the
+  image box past the tile, so the mark is either clipped or spills outside the
+  grey square. The whitespace is trimmed out of the files themselves instead,
+  all seven now filling 92% of their square, so every mark is bigger at the
+  same tile size and nothing overflows.
+*/
 
 /* Testimonial and case-study avatars. Portraits are not square (Torsten is
    1024x984), so `cover` keeps the face centred instead of squashing it. */
@@ -872,17 +837,6 @@ img.case__shot,
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-}
-/* 7px is what fits "Renovierung" across a 57px circle without the word being
-   broken. Tiny on purpose -- the company name is spelled out in full beside
-   the circle, so this only has to hold the place a logo would. */
-.case__mark--text {
-  font-family: var(--font-display);
-  font-size: 7px;
-  font-weight: 700;
-  line-height: 1.2;
-  text-align: center;
-  color: var(--c-primary);
 }
 
 /* The wordmark closing the E-Rechnung page, on the black band. */
@@ -1850,6 +1804,18 @@ img.case__shot,
 /* --- the "Mehr" disclosure over the last three solution cards ------------ */
 
 /* With JS off the toggle is pointless, so it hides and every card shows. */
+/*
+  The solutions band read as oversized next to the rest of the page, so Willy
+  asked for it to sit a little tighter. Space only -- 80px of section padding
+  down to 64, the gap under the heading from 48 to 36, the gutter between cards
+  from 24 to 20 and card padding from 25 to 22. No type is resized, so the
+  measured scale from the original stays as it is.
+*/
+.page-home .section:has(#solutions-grid) { padding-block: var(--sp-8); }
+.page-home .section:has(#solutions-grid) .section-head { margin-bottom: 36px; }
+.page-home .solutions { gap: 20px; }
+.page-home .solutions .card { padding: 22px; }
+
 .solutions__more { display: none; }
 .js-anim .solutions__more { display: flex; }
 .js-anim .solutions > [data-more] { display: none; }
@@ -2029,7 +1995,6 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   gap: var(--sp-3);
 }
 .page-home .case__avatar { width: 56px; height: 56px; }
-.page-home .case__author { hyphens: auto; }
 .page-home .case__author {
   font-size: var(--fs-body);
   line-height: 1.25;
@@ -2366,16 +2331,13 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   line-height: 1.25;
   color: var(--c-text);
   /*
-    Between 912px and ~1100px the attribution column is only ~160px wide, and
-    a few of these titles ("Angebotsvergleich", "Softwareentwickler") are
-    wider than that on their own. Hyphenate, but require a long word and a
-    real fragment on each side so it breaks as "Angebots-vergleich" rather
-    than at the first opportunity ("An-gebotsvergleich").
+    Never split a word. Hyphenation used to run here to squeeze
+    "Angebotsvergleich" into the ~160px attribution column between 912 and
+    ~1100px, but it rendered "Ge-schäftsführer" on some widths and Willy asked
+    for whole words everywhere. The column is `minmax(0, 1fr)`, so a long word
+    takes its own line instead.
   */
-  hyphens: auto;
-  -webkit-hyphenate-limit-before: 5;
-  -webkit-hyphenate-limit-after: 4;
-  hyphenate-limit-chars: 10 5 4;
+  hyphens: manual;
 }
 .page-ergebnisse .case__company {
   font-size: var(--fs-body);
@@ -3657,35 +3619,6 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
     font-size: var(--fs-body);
   }
 
-  .nav__sub {
-    position: static;
-    min-width: 0;
-    margin: var(--sp-1) 0 var(--sp-3) var(--sp-4);
-    padding: 0 0 0 var(--sp-4);
-    border: none;
-    border-left: 2px solid var(--c-border);
-    border-radius: 0;
-    box-shadow: none;
-    opacity: 1;
-    /*
-      `inherit`, not `visible`.
-
-      The desktop rule hides this submenu until the parent item is hovered, so
-      the drawer has to undo that. Setting `visible` here undid rather more:
-      visibility is inherited, and a child may override an ancestor's `hidden`
-      with its own `visible` -- which is exactly what happened. The four
-      sub-links stayed hit-testable while the drawer was shut, invisible
-      because the drawer is `opacity: 0`, in a fixed 326x192 band near the top
-      of the viewport. Any link that scrolled under that band had its tap
-      stolen and sent the visitor to a Ergebnisse subpage instead. It looked
-      intermittent because it depended on the scroll position.
-
-      Inheriting means the submenu is visible exactly when the drawer is.
-    */
-    visibility: inherit;
-    transform: none;
-  }
-
   .nav > .btn { width: 100%; margin-top: var(--sp-4); }
 }
 
@@ -4030,4 +3963,37 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .cursor-glow { display: none; }
+}
+
+/* --- whole words in the attribution line -------------------------------- */
+/*
+  Willy asked for whole words in the testimonial and recommendation cards. The
+  roles are long German compounds and the attribution column is the narrowest
+  box on the page once the card grid reaches its three-column state at ~1040px.
+  Measured there: the column holds 141px on the Startseite and 158px on
+  /ergebnisse/, while "Geschäftsführer" wants 144, "Geschäftsführerin" 161 and
+  "Angebotsvergleich" 167.
+
+  Narrowing the gutter beside the avatar is the cheapest room available -- the
+  avatar itself keeps the size Willy set, and nothing moves above 1100px, where
+  the columns are already wide enough.
+*/
+@media (max-width: 1099px) {
+  .page-home .case__person { gap: 8px; }
+  .page-ergebnisse .case__person { gap: 10px; }
+  /*
+    "Angebotsvergleich" wants 167px and the Startseite card was down to 145 --
+    it has 32px of padding where the identical card on /ergebnisse/ has 20.
+    Matching that here buys the 24px, and it brings the two copies of Volker's
+    card closer together, which is what they are supposed to be.
+  */
+  .page-home .case { padding: 20px; }
+  /*
+    Exactly 1024px is the tightest the three-column grid ever gets, and
+    "Angebotsvergleich" was still 4px over there. Taking 6px off each side of
+    the quote box clears it with room to spare on both pages; the vertical
+    padding stays at 20px, so the box keeps its shape.
+  */
+  .page-home .case__box,
+  .page-ergebnisse .case__box { padding: 20px 14px; }
 }

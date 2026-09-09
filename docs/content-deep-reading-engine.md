@@ -31,7 +31,7 @@ Ergebnisse inklusive Quellennachweis:
   halluzinieren.
 
 Reale Anwendungsbeispiele:
-Die Deep Reading Engine wurde schon in einer Vielzahl unterschiedlicher
+Unsere Deep Reading Engine wurde schon in einer Vielzahl unterschiedlicher
 Umgebungen auf die Probe gestellt:
 
 1. Ausschreibungen im Speditionswesen
@@ -41,7 +41,7 @@ bewerten. Daraus wird innerhalb weniger Minuten eine
 Go-/No-Go-Entscheidung abgeleitet – statt einer manuellen Prüfung über
 mehrere Wochen.
 
-2. Widerspruchsschreiben für Krankenkassen
+2. Widerspruchsschreiben im Versicherungswesen
 Tausende rechtliche Dokumente und Vorgaben werden automatisiert
 analysiert, um den individuellen Fall rechtlich einzuordnen. Auf
 dieser Grundlage werden die relevanten Argumente und Belege

@@ -844,13 +844,103 @@ twenty.
 18. Browser-tab icon, same as the original: the teal robot-head-over-KI mark. Was a hand-drawn stand-in SVG. The three PNGs WordPress serves (32, 192, 180) are copied in byte-identical and linked the same way the live head links them; `favicon.svg` deleted. The 270×270 `msapplication-TileImage` was skipped — Windows 8/10 start-tile pinning, dead tech, 22 KB.
 19. Verification trap: headless Chromium never requests a favicon at all — no tab UI to draw it in. The first check reported all 12 pages broken. Confirmed against the live WordPress site, which behaves identically headless. `scratchpad/u2/favcheck.py` runs headed for that reason; 12/12 pages fetch `favicon-32.png`, no `/favicon.ico` fallback, no failed requests.
 
+## 2026-09-09 — Willy's batch: content, the word-break bug, the nav dropdown
+
+57. **DRE text, two corrections.** "Die Deep Reading Engine" → "**Unsere** Deep
+    Reading Engine" in the "Reale Anwendungsbeispiele" lede, and the second
+    example's heading from "Widerspruchsschreiben für Krankenkassen" to
+    "**im Versicherungswesen**". The paragraph under it still says
+    "Krankenkasse" — Willy knows and is checking it separately, so it was left
+    exactly as it stands. `docs/content-deep-reading-engine.md` updated to match.
+58. **Mihaela Geiger**: role "Berater und Softwareentwickler" → "Geschäftsführerin",
+    and the "BE Renovierung" text mark replaced by her photo, on the same
+    `.case__avatar` treatment as every other portrait on the page. That was the
+    last user of `.case__mark--text`, so the rule was deleted rather than left
+    dead. **Daniel Markus**: "Product Owner / Lead Developer" → "Geschäftsführer".
+    `docs/content-recommendations.md` updated.
+59. **Volker Adelfinger card, finished.** Heading "KI prüft diverse Dokumente" →
+    "Dokumentenverarbeitung", and the description line Willy owed us since
+    5 September is in: "95 % Zeitersparnis durch automatisiertes Auslesen,
+    Verstehen und Abgleichen unstrukturierter Dokumente." Both copies — the
+    Startseite and `/ergebnisse/` — carry it identically, and the two
+    placeholder comments marking the spot are gone. Quote, name, role, company
+    and "Mehr Lesen" untouched.
+
+### The word-break bug, and what it actually was
+
+60. Willy reported "Geschäftsführer" rendering as "Ge-schäftsführer". Cause:
+    `.page-home .case__author { hyphens: auto; }` with **no limits at all**, so
+    German hyphenation broke after two characters. `/ergebnisse/` had the same
+    property but with `hyphenate-limit-chars: 10 5 4`, which is why the bug
+    showed on the Startseite first.
+61. Both are `hyphens: manual` now. **`.case h3` was briefly taken out of the
+    shared heading rule too, and that was wrong** — without hyphenation the
+    browser chops a heading with no hyphen at all ("Dokumentenverarbeitun / g"),
+    which is worse. It is back in. `tests/qa.py` takes the same view: its
+    word-fit check skips elements that hyphenate, because a syllable break is
+    the correct answer for a word that genuinely cannot fit.
+62. Turning hyphenation off exposed the real problem underneath: **the
+    attribution column is simply too narrow.** At the tightest three-column
+    state it holds 145px on the Startseite and 158 on `/ergebnisse/`, while
+    "Geschäftsführer" wants 144, "Geschäftsführerin" 161 and
+    "Angebotsvergleich" 167.
+63. Room bought below 1100px, in the order of least visible first: the gutter
+    beside the avatar (12→8 on the Startseite, 20→10 on `/ergebnisse/`), the
+    Startseite card padding 32→20 — the value `/ergebnisse/` already used, so
+    the two copies of Volker's card are now more alike — and 6px off each side
+    of the quote box. The avatars keep the sizes Willy set and no type was
+    resized.
+64. **1024px exactly is the worst case**, not 1040: the grid column is 4px
+    narrower there and `tests/qa.py` does not test that width. Verified
+    separately at Willy's four — 360, 414, 768, 1024 — across all six pages
+    that carry an attribution, using qa.py's own `audit_wordfit`. No word is
+    split anywhere.
+
+### Logo strip
+
+65. Willy wanted the marks slightly bigger, and U2care and Wonderland much
+    bigger — their small type was unreadable — with the grey tiles staying
+    identical.
+66. **`transform: scale()` on the `<img>` was tried and abandoned.** It grows
+    the image box past the 128px tile, so the mark is either clipped or spills
+    outside the grey square; `tests/qa.py` caught both. Hinnerbäcker clipped
+    immediately because its wordmark runs the full width of its own file.
+67. Fixed in the files instead: the whitespace baked into each PNG is cropped
+    out and the file re-encoded at 288px, so `object-fit: contain` renders a
+    bigger mark at the same tile size, with no CSS trickery. Targets keep the
+    row's relative proportions and add about 15%, except U2care and Wonderland
+    which go to the 92% ceiling. Hinnerbäcker already filled its file and is
+    held where it was.
+68. Sources recovered from commit `b395903` — `encode-webp.py` deletes its
+    inputs. Reproduce with
+    `git show b395903:assets/img/startseite/logos/<name>.png`.
+
+### Rest
+
+69. **Ergebnisse dropdown removed.** Plain nav link now. All four subpages stay
+    reachable: every one has a "Mehr Lesen" button on `/ergebnisse/`, and
+    U2care, Kommunikation and Automatische Rechnungsprüfung also have one on
+    the Startseite. Their `nav` front-matter now points at `ergebnisse`, so the
+    parent entry still highlights while you are on a subpage — without that a
+    subpage showed no active nav at all. `.nav__sub`, `.nav__caret` and
+    `.nav__item--has-sub` deleted, desktop and drawer, along with the
+    visibility-inheritance note that went with the drawer rule.
+70. **"KI-Lösungen für Ihr Unternehmen" tightened**, space only: section padding
+    80→64, the gap under the heading 48→36, the card gutter 24→20 and card
+    padding 25→22. Scoped with `:has(#solutions-grid)` so no other band moves.
+    No type resized. The band is 1069→1010px tall.
+71. Mihaela's photo was committed as the raw upload **before** encoding
+    (`3d86bbb`) — `encode-webp.py` deletes its sources and an untracked file
+    deleted that way is gone. Renamed lowercase on the way in.
+72. **`span.rotator` clipped is a flake.** One run reported it on `/` at mobile
+    and desktop, the next was clean. It is the hero's rotating word, whose box
+    changes width mid-animation. Same class as the `audit.py` flake recorded on
+    3 and 6 September. Re-run before believing it.
+73. `tests/qa.py` green, 11 pages × 5 viewports, 12 links.
+
 ## Open — waiting on Willy
 
 - Booking backend for "Kostenloses Erstgespräch": Calendly embed vs. serverless form.
-- **The description line for the Volker Adelfinger card** — the sentence under
-  "KI prüft diverse Dokumente", between the heading and the quote box. Both
-  copies are built without one; there is a comment at each site saying where
-  it goes (`src/pages/index.html`, `src/pages/ergebnisse.html`).
 
 ## Deferred
 
