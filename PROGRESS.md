@@ -931,8 +931,51 @@ twenty.
     öffnendes und schließendes `**` in verschiedenen Stücken und werden nie
     ersetzt. Code-Spans hinter einem Platzhalter parken, am Ende zurücksetzen.
 
+## 2026-09-11 — Prozessdokumentation überarbeitet, Baseline neu aufgenommen
+
+97. Hari hat die Markdown-Datei selbst durchgearbeitet und Anweisungen im Text
+    hinterlassen. Alle umgesetzt: Antwort auf die offene Tech-Stack-Frage
+    geschrieben, den zweiten „Noch offen"-Block ersatzlos gestrichen, die
+    Bug-Liste in Abschnitt 4 auf drei Fehlerklassen verdichtet statt jeden
+    Einzelfall zu erzählen, und die Vergleichstabelle umgebaut: ein
+    einzeiliges Kriterium je Zeile, Handy und Desktop in derselben Zeile.
+98. Formatschäden aus seiner Bearbeitung repariert: eine Tabellen-Trennzeile mit
+    vier Spalten für eine dreispaltige Tabelle, aus Listen herausgerutschte
+    Absätze, doppelte Leerzeilen, zwei abgebrochene Sätze, „Alter COde".
+99. Aufräumpass wie gewünscht: **Fettschrift von 266 auf 91 Stellen**, alle 96
+    Geviertstriche entfernt, Dopplungen zwischen den Abschnitten gestrichen
+    (Push-Regel, Kontingent, Prompt-Qualität standen je zweimal drin).
+100. **Konverter-Trap, teuer zu finden:** eine Fließtextzeile, die mit „390. "
+     beginnt, wird als nummerierte Liste geparst und bricht den Absatz auf.
+     Betrifft jeden Markdown-Parser, nicht nur unseren. Zeile umgebrochen.
+101. **Baseline komplett neu aufgenommen.** Die alten Aufnahmen zeigten Kopf-
+     und Fußzeile und dazwischen weiße Fläche.
+102. Ursache: Elementor parkt jedes animierte Widget auf `opacity: 0` hinter
+     `.elementor-invisible` und blendet es erst über einen Scroll-Observer ein.
+     Ein Vollseiten-Screenshot ändert die Viewport-Höhe, dadurch läuft das
+     Layout neu und alles, dessen Observer nie ausgelöst hat, bleibt unsichtbar.
+     Schnelles programmatisches Scrollen löst ihn nicht zuverlässig aus.
+103. **Lösung: Animationen nicht auslösen, sondern abschalten.** Stylesheet mit
+     `animation-duration: 0s`, `transition: none`, `.elementor-invisible`
+     sichtbar, `opacity`/`transform` auf allem zurückgesetzt, was noch auf null
+     stand, und alle Bilder auf `loading="eager"`. Danach erst schießen.
+104. **Und prüfen, dass die Aufnahme nicht leer ist** — die Anzahl sichtbarer
+     Textelemente je Seite zählen. Vorher/nachher: `ergebnisse` mobil von 32 KB
+     und leer auf 276 KB mit 138 Textelementen. Alle 40 Aufnahmen liegen jetzt
+     zwischen 39 und 274 Elementen. `docs/baseline/` ist dadurch 14 MB groß.
+105. **Der Befund „4 von 10 Seiten scrollen seitlich" wurde nachgemessen**, weil
+     die erste Messung auf den halbleeren Aufnahmen beruhte. Er hält exakt:
+     dieselben vier Seiten, dieselben Breiten (476 / 421 / 411 / 400 px).
+106. `main_prompt.md` und `CLAUDE_TEMPLATE.md` liegen wieder im Projektordner und
+     wurden ergänzt: die Baseline gehört in Stage 0, **vor die erste Codezeile**,
+     und **Claude nimmt sie selbst auf** — der Kunde wird nicht nach Screenshots
+     gefragt. Trap 39 nennt jetzt die konkrete Technik statt nur des Symptoms.
+     **Beide Dateien sind bewusst nicht committet**, das Repository ist öffentlich.
+
 ## Open — waiting on Hari
 
+- `main_prompt.md` und `CLAUDE_TEMPLATE.md` liegen wieder im Projektordner, sind aber weiterhin **nicht** unter Versionskontrolle, weil das GitHub-Repository öffentlich ist. Sagen, falls sie doch hinein sollen — dann sollte das Repo vorher privat werden.
+- `docs/baseline/` ist nach der Neuaufnahme **14 MB** groß (vorher 7 MB, aber leere Seiten). Sagen, falls das zu viel für ein öffentliches Repo ist; die Qualität ließe sich senken, kostet aber Lesbarkeit der kleinen Schrift.
 - **Zwei offene Fragen aus Willys Doku-Briefing**, im Bericht als „Noch offen" markiert: (a) warum der gewählte Tech-Stack zum Prompting-Workflow passt, (b) eine eigene Prompt-Kategorisierung anstelle von Willys Vorschlag „Struktur / Design / Inhalte", der auf unseren Ablauf nicht passt.
 - **Two touch targets under 40px**: `.member__link` ("Linkedin", 97x24) on the Startseite and `.case__more` ("Mehr Lesen", 137x32) on `/ergebnisse/`. WCAG 2.5.8 wants 24px minimum and both clear that; 44px is the comfort target. Enlarging them means more padding, so it is a look change.
 - The `.er-btn` pills on `/e-rechnung/` still differ in shape from every other button on the site; left that way because the page is under a strict 1:1 mandate. Say if consistency should win.
