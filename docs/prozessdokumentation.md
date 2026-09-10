@@ -325,14 +325,8 @@ Ungeschminkt. Das ist der Teil, der die Fallstudie belastbar macht.
 
 ### Bugs, Sackgassen, manuelle Eingriffe
 
-Die Fehler fielen in drei Klassen, und keine davon war ein Kreisen der KI:
+Die Fehler fielen in zwei Klassen, und keine davon war ein Kreisen der KI:
 
-- **Konfiguration außerhalb des Codes.** Der teuerste Einzelfall war das erste
-  Vercel-Deployment: es scheiterte, obwohl das Build-Log fehlerfrei aussah und
-  alle Seiten nachweislich gebaut wurden. Die Ursache lag in den
-  Projekteinstellungen des Hosters, nicht im Repository. Lehre: Konfiguration an
-  zwei Orten ist eine Fehlerquelle, und ein grünes Build-Log ist kein Beweis für
-  ein funktionierendes Deployment.
 - **Methodische Fehlannahmen.** Der größte Zeitverlust entstand, weil die Vorlage
   aus dem Quelltext statt aus dem gerenderten Bild rekonstruiert wurde.
   Animationen und Hintergründe gingen dabei verloren. Das kostete den kompletten
@@ -342,14 +336,13 @@ Die Fehler fielen in drei Klassen, und keine davon war ein Kreisen der KI:
   Kleinschreibung in Dateinamen, Python nicht im Standardpfad. Jede dieser Fallen
   kostete einmal Zeit und ist danach dokumentiert, damit sie nicht wiederkehrt.
 
-Zwei Beobachtungen dazu:
+Dazu zwei Beobachtungen:
 
 - **Endlosschleifen gab es nicht.** Wo Claude nicht weiterkam, hat er gefragt
   statt zu raten. Bei allem, was das Aussehen oder die Außenwirkung veränderte,
   wurde grundsätzlich gefragt.
-- **Manuell eingreifen musste ich bei drei Dingen:** Einstellungen außerhalb des
-  Repositories, Geschmacksentscheidungen, und Fehlern, die nur auf einem echten
-  Gerät auftraten.
+- **Manuell eingreifen musste ich bei zwei Dingen:** Geschmacksentscheidungen
+  und Fehlern, die nur auf einem echten Gerät auftraten.
 
 ### Token- und Kostenaufwand
 
@@ -480,7 +473,7 @@ noch CMS gibt.
 - **Prüfbarkeit als Liefergegenstand.** Das Testskript kann bei jeder späteren
   Änderung erneut laufen. Bei WordPress gibt es diese Zusicherung nicht.
 
-**Weitere Nachteile, ehrlich**
+**Weitere Nachteile**
 
 - **Der Kunde kann Inhalte nicht selbst pflegen.** Kein Backend, keine GUI. Jede
   Textänderung braucht jemanden mit Claude Code. Das ist der größte Nachteil
