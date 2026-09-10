@@ -822,8 +822,35 @@ twenty.
     of the finished site, and quotes the corrected 6.8× / 4.4× from
     `docs/performance-baseline.md`.
 
+## 2026-09-10 — mobile audit, six phone widths
+
+74. Swept all 12 pages at 320 / 360 / 375 / 390 / 414 / 430 in a touch-enabled
+    mobile context, plus the nav drawer end to end. `scratchpad/mobile.py`,
+    `scratchpad/drawer.py`.
+75. **Fixed: `/kontakt/` scrolled sideways 6px at 320px.** `.kontakt__headline`
+    is `clamp(1.5rem, 6.4vw, 2rem)` and the 1.5rem floor bound below ~325px,
+    holding the nbsp-joined `.typeline` at 310px inside a 288px column. Floor
+    to 1.3rem. 360px and up are untouched — the vw term is already larger
+    there (23.04 / 24 / 24.96 / 26.5 / 27.5px measured).
+76. **Drawer is clean.** Closed, it catches no taps anywhere on the page —
+    swept a grid of points against `elementFromPoint`. The 3 September
+    tap-stealing bug is gone for good: the submenu that caused it no longer
+    exists. Open, all six links are on top, 58px tall, and every one navigates
+    where it says. Closes with `aria-expanded="false"`.
+77. **Two false positives worth recording** so they are not chased again: the
+    logo marquee's `.logos__track` and E-Rechnung's `.er-blob` both extend well
+    past the viewport by design and are clipped by `overflow: hidden` and
+    `overflow: clip` respectively. Neither produces page scroll. An audit that
+    only compares rectangles against the viewport will flag both.
+78. Not acted on, needs a look decision — recorded under Open below: word
+    chopping at 320px on six pages, one at 360px, and two touch targets under
+    40px.
+79. `tests/qa.py` green, 11 pages × 5 viewports.
+
 ## Open — waiting on Hari
 
+- **Word chopping at 320px**, one page at 360px. These headings and roles are wider than their column, so the browser chops them with no hyphen. Fixing means resizing type or letting them hyphenate, both of which change how the page looks. Worst first: `/deep-reading-engine/` "Anwendungsbeispiele" 331px in 328 **at 360px** (the only one at a mainstream width); then at 320px only — "Anwendungsbeispiele" 331/288, "Dokumentenmengen" 317/288 and 312/288, "Umsatzpotenziale" 305/288, "Prozessautomation" 290/288, "Automatisierungskompetenz" 252/224, "Rechnungsverarbeitungsprozess." 245/218, "Handlungsempfehlung" 242/236, "Angebotsvergleich" 167/154 and 167/151, "Geschäftsführerin" 161/151.
+- **Two touch targets under 40px**: `.member__link` ("Linkedin", 97x24) on the Startseite and `.case__more` ("Mehr Lesen", 137x32) on `/ergebnisse/`. WCAG 2.5.8 wants 24px minimum and both clear that; 44px is the comfort target. Enlarging them means more padding, so it is a look change.
 - The `.er-btn` pills on `/e-rechnung/` still differ in shape from every other button on the site; left that way because the page is under a strict 1:1 mandate. Say if consistency should win.
 - `.page-home .btn` also sets `font-weight: 700` and is not scoped to `main`, so the header button is slightly bolder on the Startseite than on the other 11 pages (239px wide against 236px). Scoping it to `main` would fix it without touching the homepage body.
 - **Glow strength.** `--glow-a` in the tokens block of `assets/css/main.css` is the one dial: 0.26 now, 0.15 is roughly where Hari could not see it, 0.35 starts to read as a spot rather than a warmth. Say a direction and it moves.

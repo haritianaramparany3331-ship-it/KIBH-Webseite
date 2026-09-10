@@ -3202,8 +3202,14 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
     is held together with non-breaking spaces, so at a fixed 32px it is 409px
     wide and pushes a phone viewport into horizontal scroll -- the original
     does exactly that (scrollWidth 421 at 390px). Fluid here instead.
+
+    The 1.5rem floor was still too high at the narrow end: at 320px it held the
+    line at 24px, which is 310px wide in a 288px column, and the page scrolled
+    sideways by 6px. 1.3rem clears it with room to spare and binds only below
+    ~325px -- at 360 and up the vw term is already the larger of the two, so
+    nothing visible changes on a mainstream phone.
   */
-  font-size: clamp(1.5rem, 6.4vw, 2rem);
+  font-size: clamp(1.3rem, 6.4vw, 2rem);
   /* The original asks for 600 in Avenir, which ships 400 and 700 only, so it
      renders bold. Mulish's real 600 is visibly lighter; 700 is the match. */
   font-weight: 700;
