@@ -884,8 +884,56 @@ twenty.
     430): no split word and no horizontal page scroll anywhere. `tests/qa.py`
     green.
 
+## 2026-09-10 — Prozessdokumentation für die Fallstudie
+
+88. `docs/prozessdokumentation.md` geschrieben — Haris eigene Notizen zu Willys
+    Abschnitten 1–3 sprachlich überarbeitet und sachlich korrigiert, Abschnitte
+    4 und 5 neu. Raw-Notes-Format, wie Willy es vorgibt: Bullet Points, keine
+    Fließtext-Kapitel.
+89. **Korrekturen sind sichtbar markiert, nicht still eingearbeitet** — Haris
+    ausdrückliche Vorgabe, weil der Bericht sein authentischer Bericht bleiben
+    soll. Vier sachliche Fehler gefunden und mit Begründung markiert:
+    - der notierte Skill-Installationsbefehl `npx skills add …` existiert nicht;
+      tatsächlich `/plugin install frontend-design@claude-plugins-official` für
+      das eine und ein manueller Kopiervorgang nach `~/.claude/skills/` für
+      `webapp-testing`
+    - „Claude macht /compact vor jeder Session" — falsch; `/compact` läuft
+      manuell oder automatisch **während** einer Session
+    - die Token-Multiplikatoren (Opus „2×", Max Effort „3,5×") sind Beobachtung,
+      nicht belegt — als solche gekennzeichnet statt als Fakt stehen gelassen
+    - der Seite-für-Seite-Vergleich war mit 7 h angesetzt, gemessen sind ~10 h
+90. **Lücken sind als „Noch offen" markiert statt erfunden.** Zwei Fragen aus
+    Willys Briefing bleiben unbeantwortet: warum der Tech-Stack zum
+    Prompting-Workflow passt, und eine eigene Prompt-Kategorisierung.
+91. **Visuelle Baseline nachgeholt** — `docs/baseline/`, 40 Vollseiten-JPEGs:
+    alle 10 Seiten alt und neu, je Desktop 1440 und Handy 390. Rund 7 MB.
+    Die alten URLs brauchen den `/index.php/`-Präfix, siehe `docs/url-map.md`.
+92. **Befund aus der Baseline:** vier von zehn Seiten des Originals lassen sich
+    am Handy seitlich schieben — Kommunikation 476 px, Kontakt 421,
+    Automatische Rechnungsprüfung 411, Startseite 400, bei 390 px Viewport.
+    Alle zehn Seiten des Neubaus liegen exakt bei 390.
+93. **Lighthouse 13.4.1, beide Seiten, zwei Presets.** Handy: **62 → 91**,
+    LCP **6,9 s → 2,8 s**. Desktop: 90 → 97, CLS 0,142 → 0,001, Main-Thread
+    3,5 s → 0,4 s, Seitengewicht 875 → 256 KiB. Ehrlich mit im Bericht: am
+    Desktop ist WordPress mit 90 solide, und der Speed Index ist dort mit 1,2 s
+    minimal schlechter als die 1,1 s des Originals.
+94. **IONOS-Preise direkt geprüft**, beide Seiten des Vergleichs:
+    WordPress Hosting Start 5 €/Monat regulär gegen Webhosting Standard
+    6 €/Monat. **Beim reinen Hosting-Preis gibt es also keinen Vorteil** — das
+    steht so im Bericht, statt eine günstigere Zahl zu konstruieren. Der Vorteil
+    liegt bei Setup-Zeit, wegfallenden Premium-Plugins und Wartung.
+95. `tools/make-pdf.py` — erzeugt `docs/Prozessdokumentation-KIBH.pdf` (11 Seiten
+    A4) aus der Markdown-Datei. Wie alle Werkzeuge hier ohne neue Abhängigkeit:
+    eigener Markdown-Teilkonverter, Chromium über Playwright setzt und druckt.
+96. Trap im Konverter, festgehalten: Code-Spans **nicht** vor der Inline-Formatierung
+    heraussplitten. Fettschrift umschließt hier oft einen Code-Span
+    (`**`CLAUDE.md` anlegen**`); trennt man zuerst an den Backticks, landen
+    öffnendes und schließendes `**` in verschiedenen Stücken und werden nie
+    ersetzt. Code-Spans hinter einem Platzhalter parken, am Ende zurücksetzen.
+
 ## Open — waiting on Hari
 
+- **Zwei offene Fragen aus Willys Doku-Briefing**, im Bericht als „Noch offen" markiert: (a) warum der gewählte Tech-Stack zum Prompting-Workflow passt, (b) eine eigene Prompt-Kategorisierung anstelle von Willys Vorschlag „Struktur / Design / Inhalte", der auf unseren Ablauf nicht passt.
 - **Two touch targets under 40px**: `.member__link` ("Linkedin", 97x24) on the Startseite and `.case__more` ("Mehr Lesen", 137x32) on `/ergebnisse/`. WCAG 2.5.8 wants 24px minimum and both clear that; 44px is the comfort target. Enlarging them means more padding, so it is a look change.
 - The `.er-btn` pills on `/e-rechnung/` still differ in shape from every other button on the site; left that way because the page is under a strict 1:1 mandate. Say if consistency should win.
 - `.page-home .btn` also sets `font-weight: 700` and is not scoped to `main`, so the header button is slightly bolder on the Startseite than on the other 11 pages (239px wide against 236px). Scoping it to `main` would fix it without touching the homepage body.
