@@ -1466,7 +1466,14 @@ img.case__shot,
 
 .dre-intro { max-width: 52rem; }
 .dre-h2 {
-  font-size: var(--fs-h2);
+  /*
+    Fluid below ~372px. "Anwendungsbeispiele" is 331px at the flat 32px and the
+    column is 328 at 360px and 288 at 320, so the browser chopped it and left a
+    lone "e" centred on its own line. Hyphenation was the alternative and reads
+    worse in a centred display heading -- "Anwendungs-" hanging at the end of a
+    line. Shrinking a little on small phones keeps the word whole.
+  */
+  font-size: clamp(1.55rem, 8.6vw, var(--fs-h2));
   line-height: 1.15;
   color: var(--c-primary);
 }
@@ -4002,4 +4009,67 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   */
   .page-home .case__box,
   .page-ergebnisse .case__box { padding: 20px 14px; }
+}
+
+/* --- display headings on a small phone ----------------------------------- */
+/*
+  Long German compounds in the big headings are wider than the column on a
+  320-360px phone, and with `hyphens: manual` the browser chops them with no
+  hyphen at all -- "Anwendungsbeispiel" then a lone "e" centred on its own
+  line. Hyphenation is the other way out and reads worse in a centred display
+  heading, so these shrink instead.
+
+  Measured at 320px, needed against available: "Dokumentenmengen" 317/288 and
+  312/288, "Umsatzpotenziale" 305/288, "Prozessautomation" 290/288.
+
+  The vw values are picked so each heading meets its flat size exactly at the
+  372px breakpoint -- 8.6vw = 32px and 9.7vw = 36px there -- so nothing steps
+  as the viewport crosses it. `.dre-h2` carries its own clamp higher up,
+  because it also had to cover 360px.
+*/
+@media (max-width: 372px) {
+  .case-hero h1,
+  .dre-hero h1,
+  .teaser h2 { font-size: 8.6vw; }
+  .page-ergebnisse .page-hero h1 { font-size: 9.7vw; }
+}
+
+/*
+  Below ~340px even the trimmed attribution column cannot hold the longest
+  roles: "Angebotsvergleich" wants 167px against 154 and 151, "Geschäftsführerin"
+  161 against 151. One step down on the name line closes all three and is the
+  smallest change available -- the avatar, the layout and every other size stay
+  as they are. Whole words are what Willy asked for.
+*/
+@media (max-width: 340px) {
+  .page-home .case__author,
+  .page-ergebnisse .case__author { font-size: var(--fs-caption); }
+}
+
+/*
+  Three compounds of 19-30 characters are wider than any column a sub-360px
+  phone can give them: "Rechnungsverarbeitungsprozess." wants 245px against
+  218, "Automatisierungskompetenz" 252 against 224, "Handlungsempfehlung" 242
+  against 236. No reasonable type size fits them, so here -- and only here --
+  hyphenation is the right answer: this is running prose, where a hyphen is
+  ordinary German typesetting, not a centred display heading where it reads as
+  a mistake.
+
+  The limits are the conservative ones used elsewhere on the site, so a word
+  breaks as "Rechnungsverarbeitungs-prozess" and never as "Ge-schäftsführer",
+  which is the break Willy reported.
+
+  Nothing changes at 360px and up, so the strict 1:1 on /e-rechnung/ stands --
+  that comparison was made at desktop width, and the live original chops these
+  same words on a narrow phone anyway.
+*/
+@media (max-width: 359px) {
+  .case__quote,
+  .er-features__title,
+  .page-erechnung main h4 {
+    hyphens: auto;
+    -webkit-hyphenate-limit-before: 5;
+    -webkit-hyphenate-limit-after: 4;
+    hyphenate-limit-chars: 12 5 4;
+  }
 }

@@ -847,9 +847,45 @@ twenty.
     40px.
 79. `tests/qa.py` green, 11 pages × 5 viewports.
 
+## 2026-09-10 — the narrow-phone word chopping, closed
+
+80. Hari's call on the open item from the audit above was "do what looks
+    better", so all of it is fixed rather than only the 360px case.
+81. **Display headings: shrink, do not hyphenate.** `.dre-h2` gets
+    `clamp(1.55rem, 8.6vw, var(--fs-h2))`; `.case-hero h1`, `.dre-hero h1`,
+    `.teaser h2` take `8.6vw` and `.page-ergebnisse .page-hero h1` `9.7vw`
+    below 372px. The vw values are chosen so each meets its flat size exactly
+    at 372px — 8.6vw = 32px, 9.7vw = 36px — so nothing steps across the
+    breakpoint. Verified at 372 and 373.
+82. The one that made the decision: "Reale Anwendungsbeispiele" at 360px was
+    breaking after "Anwendungsbeispiel" and leaving a lone **"e"** centred on
+    its own line. Hyphenation would have hung "Anwendungs-" off the end of a
+    centred display line, which reads worse. Shrinking to 31px at 360 and
+    27.5 at 320 keeps the word whole and is imperceptible.
+83. **Attributions: one step down below 340px.** `.case__author` to
+    `--fs-caption`, which closes "Angebotsvergleich" (167 against 154 and 151)
+    and "Geschäftsführerin" (161 against 151). Layout, avatars and every other
+    size unchanged.
+84. **Running prose: hyphenate below 360px.** Three compounds of 19–30
+    characters fit no sane type size at that width —
+    "Rechnungsverarbeitungsprozess." 245 against 218,
+    "Automatisierungskompetenz" 252 against 224, "Handlungsempfehlung" 242
+    against 236. `.case__quote`, `.er-features__title` and
+    `.page-erechnung main h4` hyphenate there, with the usual conservative
+    limits so a word breaks as "Rechnungsverarbeitungs-prozess" and never as
+    "Ge-schäftsführer".
+85. **The rule that came out of this**, worth keeping: a hyphen in running
+    prose is ordinary German typesetting; a hyphen in a centred display heading
+    reads as a mistake. So headings shrink and prose hyphenates.
+86. `/e-rechnung/`'s strict 1:1 is untouched — nothing above 359px changes, and
+    that comparison was made block by block at desktop width. The live original
+    chops the same words on a narrow phone.
+87. Swept 11 pages × 10 widths (320, 340, 341, 359, 360, 372, 373, 390, 414,
+    430): no split word and no horizontal page scroll anywhere. `tests/qa.py`
+    green.
+
 ## Open — waiting on Hari
 
-- **Word chopping at 320px**, one page at 360px. These headings and roles are wider than their column, so the browser chops them with no hyphen. Fixing means resizing type or letting them hyphenate, both of which change how the page looks. Worst first: `/deep-reading-engine/` "Anwendungsbeispiele" 331px in 328 **at 360px** (the only one at a mainstream width); then at 320px only — "Anwendungsbeispiele" 331/288, "Dokumentenmengen" 317/288 and 312/288, "Umsatzpotenziale" 305/288, "Prozessautomation" 290/288, "Automatisierungskompetenz" 252/224, "Rechnungsverarbeitungsprozess." 245/218, "Handlungsempfehlung" 242/236, "Angebotsvergleich" 167/154 and 167/151, "Geschäftsführerin" 161/151.
 - **Two touch targets under 40px**: `.member__link` ("Linkedin", 97x24) on the Startseite and `.case__more` ("Mehr Lesen", 137x32) on `/ergebnisse/`. WCAG 2.5.8 wants 24px minimum and both clear that; 44px is the comfort target. Enlarging them means more padding, so it is a look change.
 - The `.er-btn` pills on `/e-rechnung/` still differ in shape from every other button on the site; left that way because the page is under a strict 1:1 mandate. Say if consistency should win.
 - `.page-home .btn` also sets `font-weight: 700` and is not scoped to `main`, so the header button is slightly bolder on the Startseite than on the other 11 pages (239px wide against 236px). Scoping it to `main` would fix it without touching the homepage body.
