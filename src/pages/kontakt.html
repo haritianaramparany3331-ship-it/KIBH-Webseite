@@ -36,27 +36,19 @@
       <div class="kontakt__panel" id="panel-termin" role="tabpanel"
            aria-labelledby="tab-termin" data-panel="termin">
         <!--
-          Booking placeholder.
+          KIBH's existing Calendly setup, the same one the live WordPress site
+          embeds -- bookings land in their inbox as before. The snippet is
+          Calendly's own, unchanged; only the wrapper is ours, so the widget
+          sits in the panel the way the original shows it: bare, no card.
 
-          The live WordPress site embeds Calendly here:
-            https://calendly.com/ilya-den-volkov/kostenlose_strategieanalyse
-
-          Deliberately not wired up yet — the booking backend is still an open
-          decision (Calendly embed vs. an EU-hosted alternative vs. a form), and
-          it carries a DSGVO question because an embedded US-hosted widget loads
-          before the visitor consents. Swapping this block for the real embed is
-          a contained change once that is decided.
+          Not wired up yet: the "Erstmal Kontakt aufnehmen" form below, which
+          still waits for its backend.
         -->
-        <div class="booking">
-          <h3>Terminbuchung</h3>
-          <p>
-            Hier erscheint der Buchungskalender für Ihr kostenloses Erstgespräch.
-            Die Anbindung wird derzeit eingerichtet.
-          </p>
-          <p class="booking__mail">
-            Bis dahin erreichen Sie uns direkt unter
-            <a href="mailto:kontakt@kiberatunghessen.com">kontakt@kiberatunghessen.com</a>
-          </p>
+        <div class="calendly">
+          <!-- Calendly inline widget begin -->
+          <div class="calendly-inline-widget" data-url="https://calendly.com/ilya-den-volkov/kostenlose_strategieanalyse" style="min-width:320px;height:700px;"></div>
+          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+          <!-- Calendly inline widget end -->
         </div>
       </div>
 

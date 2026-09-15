@@ -972,6 +972,39 @@ twenty.
      gefragt. Trap 39 nennt jetzt die konkrete Technik statt nur des Symptoms.
      **Beide Dateien sind bewusst nicht committet**, das Repository ist öffentlich.
 
+## 2026-09-15 — Calendly on the Kontakt page
+
+107. **Booking is live.** The "Termin Buchen" tab now embeds KIBH's existing
+     Calendly (`calendly.com/ilya-den-volkov/kostenlose_strategieanalyse`), the
+     same setup the old site used — bookings go to their inbox as before. The
+     snippet is Calendly's own, unchanged; only a `.calendly` wrapper is ours.
+108. **Shown bare, like the original.** The old site frames the widget in
+     nothing — no card, no border — while the contact form on the other tab
+     sits in one. Kept that split. The wrapper's only job is `min-height:
+     700px`, so the tab strip does not sit against the headline and then jump
+     down when the async iframe lands.
+109. `.booking` placeholder CSS deleted, plus its `.booking__mail a` entries in
+     the three link-underline selector lists. No dead rules left.
+110. **Verified in the frame, not just around it.** A page screenshot shows
+     white where the iframe is — cross-origin content does not paint in a
+     headless capture, same as the old site's baseline. Playwright's frame API
+     reached inside: title "Select a Date & Time - Calendly", H1 "Kostenloses
+     Erstgespräch", 59 buttons, a calendar. Desktop 1140×700, phone 358×700,
+     no horizontal scroll, `widget.js` HTTP 200.
+111. Form tab untouched: 4 fields, `data-inert` still blocks submit, no
+     navigation. Calendly survives a tab round-trip.
+112. One console line on the phone run — `requestStorageAccess: Permission
+     denied` — is Calendly's iframe asking the browser for third-party storage
+     and being refused. Their code, and the widget renders regardless.
+113. **Privacy gap, flagged not fixed.** `/vertraulichkeit/` names no third-party
+     service at all, and its section 7 says "Keine Übertragung außerhalb der
+     Europäischen Union". Calendly is US-hosted, loads before any consent, and
+     shows its own cookie banner mentioning marketing cookies and screen
+     recordings. The old site had the same gap. Legal text is not mine to edit —
+     recorded under Open, waiting on Willy.
+114. `CLAUDE.md`: booking marked done, the Formspree contact form stays
+     pending as a separate task. `tests/qa.py` green.
+
 ## Open — waiting on Hari
 
 - `main_prompt.md` und `CLAUDE_TEMPLATE.md` liegen wieder im Projektordner, sind aber weiterhin **nicht** unter Versionskontrolle, weil das GitHub-Repository öffentlich ist. Sagen, falls sie doch hinein sollen — dann sollte das Repo vorher privat werden.
@@ -1094,7 +1127,8 @@ twenty.
 
 ## Open — waiting on Willy
 
-- Booking backend for "Kostenloses Erstgespräch": Calendly embed vs. serverless form.
+- **Datenschutz vs. Calendly.** `/vertraulichkeit/` nennt keinen einzigen Drittanbieter und sagt in Abschnitt 7 ausdrücklich „Keine Übertragung außerhalb der Europäischen Union". Das eingebettete Calendly ist US-gehostet, lädt vor jeder Einwilligung und zeigt einen eigenen Cookie-Banner (Marketing, Screen Recordings). Der Widerspruch bestand schon auf der alten Seite. Rechtstext braucht Willys Freigabe — nicht von mir geändert.
+- Contact-form backend (Formspree) for the "Erstmal Kontakt aufnehmen" tab — separate task, still pending.
 
 ## Deferred
 

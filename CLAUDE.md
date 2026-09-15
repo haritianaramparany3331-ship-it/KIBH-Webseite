@@ -74,9 +74,13 @@ to use before publishing. Don't invent claims or numbers not in the drafts.
 ## Tech stack
 - Static HTML/CSS/JS — no framework
 - Deployment target: Vercel
-- "Kostenloses Erstgespräch" (booking) flow: not yet decided — options are an
-  embedded booking tool (e.g. Calendly) or a small contact form via a Vercel
-  serverless function / form service. Don't build until decided.
+- "Kostenloses Erstgespräch" flow, two parts:
+  - **Booking — done.** The "Termin Buchen" tab embeds KIBH's existing Calendly
+    (`calendly.com/ilya-den-volkov/kostenlose_strategieanalyse`), the same setup
+    the old site used. Its configuration is theirs; don't modify it.
+  - **Contact form — still pending.** The "Erstmal Kontakt aufnehmen" tab is a
+    placeholder with `data-inert`; the backend (Formspree) is a separate, later
+    task. Don't build it until asked.
 
 ## Assets
 Logos/photos to be uploaded by Hari later. Use placeholders until then —
@@ -87,5 +91,5 @@ don't scrape/reuse images from the live site without asking.
 - Local commits are fine and encouraged (useful for the Phase 3 documentation trail)
 
 ## Open questions
-- Booking/contact backend: not yet decided
+- Contact-form backend (Formspree) for the "Erstmal Kontakt aufnehmen" tab: pending. Booking is done (Calendly).
 - Final DRE section wording: pending Willy's sign-off

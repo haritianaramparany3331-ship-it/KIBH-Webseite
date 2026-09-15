@@ -3409,32 +3409,17 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   .kform { padding: var(--sp-5); }
 }
 
-/* --- Booking placeholder ------------------------------------------------ */
+/* --- Calendly booking widget -------------------------------------------- */
 
-.booking {
-  display: grid;
-  place-items: center;
-  gap: var(--sp-4);
-  min-height: 26rem;
-  padding: var(--sp-8) var(--sp-5);
-  text-align: center;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      var(--c-surface-alt) 0 12px,
-      var(--c-surface) 12px 24px
-    );
-  border: 2px dashed var(--c-accent);
-  border-radius: var(--radius-lg);
-}
-.booking h3 { font-size: var(--fs-h4); }
-.booking p {
-  max-width: 34rem;
-  font-size: var(--fs-small);
-  color: var(--c-text-muted);
-}
-.booking__mail {
-  font-weight: 600;
+/*
+  The original shows the widget bare -- no card, no border, unlike the
+  contact form on the other tab -- so this wrapper only reserves the space.
+  Reserving it matters: the widget arrives async, and without a floor the
+  tab strip below would sit up against the headline until the iframe lands,
+  then jump 700px down. The height matches Calendly's own inline style.
+*/
+.calendly {
+  min-height: 700px;
 }
 
 /* --- CTA band ----------------------------------------------------------- */
@@ -3768,7 +3753,6 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 */
 .prose a,
 .case-body a,
-.booking__mail a,
 .site-footer li a,
 .case__more,
 .er-card__more,
@@ -3798,8 +3782,7 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   links inside a block of text. The hover bar wipes across on top of it.
 */
 .prose a,
-.case-body a,
-.booking__mail a {
+.case-body a {
   --ul-rest: 100%;
 }
 
@@ -3810,7 +3793,6 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 */
 .prose a:focus-visible,
 .case-body a:focus-visible,
-.booking__mail a:focus-visible,
 .site-footer li a:focus-visible,
 .case__more:focus-visible,
 .er-card__more:focus-visible,
@@ -3822,7 +3804,6 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
 @media (hover: hover) {
   .prose a:hover,
   .case-body a:hover,
-  .booking__mail a:hover,
   .site-footer li a:hover,
   .case__more:hover,
   .er-card__more:hover,
