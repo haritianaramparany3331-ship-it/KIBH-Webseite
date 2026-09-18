@@ -1005,6 +1005,33 @@ twenty.
 114. `CLAUDE.md`: booking marked done, the Formspree contact form stays
      pending as a separate task. `tests/qa.py` green.
 
+## 2026-09-18 — contact form wired to Formspree
+
+115. **The "Erstmal Kontakt aufnehmen" form sends.** `action` points at
+     `formspree.io/f/mzezzekg`, `method="POST"`. That alone works with
+     JavaScript off — Formspree then shows its own thank-you page. With JS on,
+     `main.js` intercepts the submit, posts the same fields with `fetch` and
+     `Accept: application/json`, and shows the outcome in the form instead.
+116. **Three states, all exercised against the real endpoint or a stubbed one:**
+     - success: HTTP 200, `{"next":"/thanks","ok":true}` — form cleared,
+       „Danke, wir melden uns bald!" under the button, page stays put;
+     - network gone (request aborted): error line, **inputs preserved**, button
+       re-enabled;
+     - Formspree rejects (stubbed 422 with `errors[]`): their message is passed
+       through, then the fallback e-mail address.
+     While in flight the button reads „Wird gesendet…" and is disabled, so a
+     double-click cannot send twice.
+117. One real submission went to Formspree during testing — name „Claude Code
+     Testlauf", sender `hari-testlauf@example.com`, message says it is a test
+     and to ignore it. It will show up in the Formspree inbox and probably as
+     an e-mail; that is the proof it works.
+118. Fields, labels, floating-label behaviour and `novalidate` untouched, as
+     asked. The old `data-inert` stopper is gone from HTML and JS.
+119. Calendly tab re-checked on the same page: iframe present, title „Select a
+     Date & Time - Calendly", survives a tab round-trip. `tests/qa.py` green.
+120. `CLAUDE.md`: the whole "Kostenloses Erstgespräch" flow is marked done,
+     Calendly and Formspree. The open question is removed.
+
 ## Open — waiting on Hari
 
 - `main_prompt.md` und `CLAUDE_TEMPLATE.md` liegen wieder im Projektordner, sind aber weiterhin **nicht** unter Versionskontrolle, weil das GitHub-Repository öffentlich ist. Sagen, falls sie doch hinein sollen — dann sollte das Repo vorher privat werden.
@@ -1020,7 +1047,6 @@ twenty.
 - `ergebnisse/torsten-krueger.jpg` (the wide crop) is now unused — the square one reads better at avatar size. Kept in case it is wanted somewhere.
 - The logo's "HESSEN" line is drawn in a light grey meant for a white ground, so it goes faint on the dark footer. A light-on-dark variant of the file would fix it; not filtered in CSS because that shifts the brand colour.
 - The 🙂 inside Martin Kraus's quoted testimonial on `/ergebnisse/`. Left in — it is a customer's own words.
-- The Kontakt form is silent when submitted: `data-inert` stops it navigating, but nothing tells the visitor it is not connected yet. A note there would be text the original does not have, so it was left out — say if it should be added.
 - The live Martin Kraus card on `/ergebnisse/` carries a heading, "Rechnungsverarbeitung"; ours has none. Adding it is copy, so it was left alone.
 - The teal section headings on the four case-study pages sit at 2.56:1 against white, under the 3:1 WCAG needs for large text. That colour is the U2care original's and Hari asked for it, so it was not changed. `--c-accent-dark` (#5f9295) would clear it at ~3.6:1 if he wants.
 13. Entropia and Business Elegance wordmarks added afterwards, commits `7040b1d`, `8323f08`. Both are wide lockups rather than square marks. A stacked chip above the attribution was built first, then dropped on Hari's call: all ten slots use the same 57px circle as the photo avatars, with the wordmarks contained inside (Entropia lands at 43×15, Business Elegance at 43×36). Small on purpose — the company name is spelled out beside the circle, so the mark only holds the place.
@@ -1128,7 +1154,6 @@ twenty.
 ## Open — waiting on Willy
 
 - **Datenschutz vs. Calendly.** `/vertraulichkeit/` nennt keinen einzigen Drittanbieter und sagt in Abschnitt 7 ausdrücklich „Keine Übertragung außerhalb der Europäischen Union". Das eingebettete Calendly ist US-gehostet, lädt vor jeder Einwilligung und zeigt einen eigenen Cookie-Banner (Marketing, Screen Recordings). Der Widerspruch bestand schon auf der alten Seite. Rechtstext braucht Willys Freigabe — nicht von mir geändert.
-- Contact-form backend (Formspree) for the "Erstmal Kontakt aufnehmen" tab — separate task, still pending.
 
 ## Deferred
 

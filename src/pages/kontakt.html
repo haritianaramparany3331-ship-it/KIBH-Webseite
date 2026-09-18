@@ -66,10 +66,14 @@
           one, and that is what keeps the label up after focus moves away. The
           label follows its input so a sibling combinator can reach it.
 
-          No backend yet, so `data-inert` stops the submit rather than posting
-          the page to itself.
+          Submissions go to Formspree. The form carries a real action, so it
+          still delivers with JavaScript off (Formspree then shows its own
+          thank-you page); with JavaScript on, main.js intercepts the submit,
+          posts the same fields with fetch, and shows the states below in place.
+          `novalidate` is the original's -- it had no validation either.
         -->
-        <form class="kform" data-inert novalidate>
+        <form class="kform" action="https://formspree.io/f/mzezzekg" method="POST"
+              data-formspree novalidate>
           <p class="kform__row">
             <input class="kform__field" id="k-name" name="name" type="text"
                    placeholder=" " autocomplete="name">
@@ -93,6 +97,7 @@
           <p class="kform__row">
             <button class="kform__submit" type="submit">Senden</button>
           </p>
+          <p class="kform__status" role="status" aria-live="polite" hidden></p>
         </form>
       </div>
 

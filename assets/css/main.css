@@ -3392,6 +3392,18 @@ html:not(.js-anim) .hero__mark-line path { stroke-dashoffset: 0; }
   transition: background-color var(--transition);
 }
 .kform__submit:hover { background: var(--c-accent-dark); }
+.kform__submit:disabled { opacity: 0.7; cursor: progress; }
+
+/* Outcome line under the button. Same voice as the rest of the form; the
+   colour is the only thing that says which way it went. */
+.kform__status {
+  margin: 14px 0 0;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  text-align: center;
+}
+.kform__status--ok { color: var(--c-accent-dark); font-weight: 600; }
+.kform__status--error { color: #a13d2d; }
 
 /* Under 768px the original puts the strip above the panel and runs the
    buttons full width. */

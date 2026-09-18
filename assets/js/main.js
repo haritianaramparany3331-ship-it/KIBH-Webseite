@@ -291,12 +291,60 @@
 
 /* Forms with no backend yet. Without this a submit posts the page to itself
    and looks like a successful send. */
+/* --------------------------------------------------------------------------
+   Contact form -> Formspree.
+
+   The form's own action works without this block. With it, the submit is
+   posted by fetch so the visitor stays on the page and sees the outcome in
+   the form itself instead of on Formspree's thank-you page. The Accept
+   header is what makes Formspree answer with JSON rather than a redirect.
+   -------------------------------------------------------------------------- */
 (function () {
   "use strict";
 
-  var forms = document.querySelectorAll("form[data-inert]");
+  var forms = document.querySelectorAll("form[data-formspree]");
   Array.prototype.forEach.call(forms, function (form) {
-    form.addEventListener("submit", function (e) { e.preventDefault(); });
+    var status = form.querySelector(".kform__status");
+    var button = form.querySelector('[type="submit"]');
+    var idle = button ? button.textContent : "";
+
+    function show(kind, text) {
+      if (!status) return;
+      status.textContent = text;
+      status.className = "kform__status kform__status--" + kind;
+      status.hidden = false;
+    }
+
+    form.addEventListener("submit", function (e) {
+      if (!window.fetch || !window.FormData) return; // let the action handle it
+      e.preventDefault();
+      if (button) { button.disabled = true; button.textContent = "Wird gesendet…"; }
+      if (status) status.hidden = true;
+
+      fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { "Accept": "application/json" }
+      }).then(function (res) {
+        if (res.ok) {
+          form.reset();
+          show("ok", "Danke, wir melden uns bald!");
+        } else {
+          return res.json().then(function (data) {
+            var msg = data && data.errors && data.errors.length
+              ? data.errors.map(function (er) { return er.message; }).join(" ")
+              : "Das hat leider nicht geklappt.";
+            show("error", msg + " Bitte versuchen Sie es erneut oder schreiben Sie an kontakt@kiberatunghessen.com.");
+          }, function () {
+            show("error", "Das hat leider nicht geklappt. Bitte versuchen Sie es erneut oder schreiben Sie an kontakt@kiberatunghessen.com.");
+          });
+        }
+      }).catch(function () {
+        show("error", "Keine Verbindung. Bitte prüfen Sie Ihr Netz und versuchen Sie es erneut.");
+      }).then(function () {
+        if (button) { button.disabled = false; button.textContent = idle; }
+      });
+    });
   });
 })();
 
